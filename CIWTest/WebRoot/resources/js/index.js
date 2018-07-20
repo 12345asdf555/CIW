@@ -1,6 +1,6 @@
 $(function(){
 	getUserInsframework();
-	addWelcom("欢迎使用","welcome.jsp");
+	addTab("欢迎使用","welcome.jsp");
 	tabsIncident();
 	$("#persondiv").hide();
 	$("#junctiondiv").hide();
