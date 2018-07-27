@@ -130,6 +130,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							</ul>
 						</div>
 					</li>
+					<li onclick="changeColor(this)"><a href="javascript:openAndroid()"><div><img src="" />&nbsp;&nbsp;安卓数据上传统计</div></a></li>
 				    <li onclick="changeColor(this)"><a href="javascript:openMaxMin()"><div><img src="resources/images/s-11.png" />&nbsp;&nbsp;对照分析</div></a></li>
 				</ul>
 			</div>

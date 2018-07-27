@@ -32,6 +32,18 @@
 		SELECT `fair_flow_volume` fafv,`fspeed` fspeed FROM tb_parameter 
 	</select>
 	
+	<select id="getAndroidData" resultType="Report">
+		SELECT numbers id,endtime time FROM tb_androidtask where 1=1
+		<if test="dto!=null and dto!=''">
+			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
+				and starttime &gt;= #{dto.dtoTime1}
+			</if>
+			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
+				and endtime &lt;= #{dto.dtoTime2}
+			</if>
+		</if>
+	</select>
+	
 	<select id="findAllWelder" resultType="Report">
 		SELECT w.fwelder_no fweldernum,w.fname fname,w.FCellPhone num3,w.Fback fback,m.fequipment_no fmachineid,m.fmodel fmachinemodel,SUM(o.fworktime) result1 FROM tb_welder w LEFT JOIN tb_work o ON w.fwelder_no=o.fwelder_id LEFT JOIN tb_welding_machine m ON o.fmachine_id=m.fid WHERE 1=1
 		<if test="dto!=null and dto!=''">

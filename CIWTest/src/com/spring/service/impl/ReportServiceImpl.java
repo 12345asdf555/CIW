@@ -46,6 +46,11 @@ public class ReportServiceImpl implements ReportService{
 		return mapper.findAllWelder(dto);
 	}
 
+	@Override
+	public List<Report> getAndroidData(WeldDto dto) {
+		return mapper.getAndroidData(dto);
+	}
+	
 	public long getWeldingTime(WeldDto dto, BigInteger machid,String weldid) {
 		// TODO Auto-generated method stub
 		return mapper.getWeldingTime(dto, machid,weldid);
