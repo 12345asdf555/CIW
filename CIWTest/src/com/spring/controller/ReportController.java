@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
+import com.spring.dto.ModelDto;
 import com.spring.dto.WeldDto;
+import com.spring.model.LiveData;
 import com.spring.model.Report;
 import com.spring.page.Page;
 import com.spring.service.DictionaryService;
@@ -73,6 +75,11 @@ public class ReportController {
 	@RequestMapping("/historyJunction")
 	public String HistoryJunction(HttpServletRequest request){
 		return "td/HistoryJunction";
+	}
+	
+	@RequestMapping("/android")
+	public String android(HttpServletRequest request){
+		return "report/Android";
 	}
 
 /*	@RequestMapping("/getWeldPara")
@@ -460,6 +467,43 @@ public class ReportController {
 		return obj.toString();
 		}
 	
+	@RequestMapping("/AndroidReport")
+	@ResponseBody
+	public String AndroidReport(HttpServletRequest request){
+/*		MyUser myuser = (MyUser) SecurityContextHolder.getContext()  
+			    .getAuthentication()  
+			    .getPrincipal();
+		System.out.println(myuser.getId());*/
+		String time1 = request.getParameter("dtoTime1");
+		String time2 = request.getParameter("dtoTime2");
+		WeldDto dto = new WeldDto();
+		dto.setDtoStatus(1);
+		BigInteger parent = null;
+		if(iutil.isNull(time1)){
+			dto.setDtoTime1(time1);
+		}
+		if(iutil.isNull(time2)){
+			dto.setDtoTime2(time2);
+		}
+		List<Report> list = reportService.getAndroidData(dto);
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		JSONObject obj = new JSONObject();
+		try{
+			for(Report repo:list){
+				json.put("count", repo.getId());
+				json.put("time", repo.getTime());
+				ary.add(json);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		obj.put("rows", ary);
+		return obj.toString();
+	}
+	
+	
+	
 	@RequestMapping("/getWelderReport")
 	@ResponseBody
 	public String getWelderReport(HttpServletRequest request){
@@ -572,6 +616,7 @@ public class ReportController {
 		obj.put("rows", ary);
 		return obj.toString();
 	}
+	
 	
 	@RequestMapping("/historyCurve")
 	@ResponseBody

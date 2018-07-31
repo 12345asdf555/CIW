@@ -234,6 +234,10 @@ function openHistoryJunction(){
 	addTab("历史曲线.","rep/historyJunction");
 }
 
+function openAndroid(){
+	addTab("安卓上传数据统计","rep/android");
+}
+
 function addWelcom(title,url){
 	//该面板是否已打开
 	if(!$("#tabs").tabs('exists',title)){
