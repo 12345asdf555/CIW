@@ -420,7 +420,9 @@ function loadchart(){
 		}],
 		series:[]
 	}
-	option.series = Series;
+	option.series = Series;	
+	//彻底清理图表
+	charts.clear();
 	//为echarts对象加载数据
 	charts.setOption(option);
 	//隐藏动画加载效果
