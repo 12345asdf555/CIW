@@ -142,7 +142,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            	<table>
 	            		<tr>
 			  				<td class="leftTd"><lable><span class="required">*</span>点焊时间：</lable></td>
-			  				<td class="rightTd"><input name="ftime" id="ftime" class="easyui-numberbox" data-options="precision:1">(0.1s)</td>
+			  				<td class="rightTd"><input name="ftime" id="ftime" value="30.0" class="easyui-numberbox" data-options="precision:1">(0.1s)</td>
 			  				<td class="leftTd"><lable><span class="required">*</span>焊丝材质：</lable></td>
 			  				<td class="rightTd">
 			  					<select class="easyui-combobox" name="fmaterial" id="fmaterial" data-options="editable:false">
@@ -192,13 +192,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            	<table>
 	            		<tr>
 			  				<td class="leftTd"><lable><span class="required">*</span>初期电流：</lable></td>
-			  				<td class="rightTd"><input name="fini_ele" id="fini_ele" class="easyui-numberbox" data-options="required:true">(A)</td>
+			  				<td class="rightTd"><input name="fini_ele" id="fini_ele" class="easyui-numberbox" value="100.0" data-options="required:true">(A)</td>
 			  				<td class="leftTd"><lable><span class="required">*</span>焊接电流：</lable></td>
-			  				<td class="rightTd"><input name="fweld_ele" id="fweld_ele" class="easyui-numberbox" data-options="required:true">(A)</td>
+			  				<td class="rightTd"><input name="fweld_ele" id="fweld_ele" class="easyui-numberbox" data-options="required:true" >(A)</td>
 			  			</tr>
 	            		<tr>
 			  				<td class="leftTd"><lable><lable><span class="required">*</span>收弧电流：</lable></td>
-			  				<td class="rightTd"><input name="farc_ele" id="farc_ele" class="easyui-numberbox" data-options="required:true">(A)</td>
+			  				<td class="rightTd"><input name="farc_ele" id="farc_ele" class="easyui-numberbox" value="100.0" data-options="required:true">(A)</td>
 			  				<td class="leftTd"></td>
 			  				<td class="rightTd"></td>
 			  			</tr>
@@ -208,13 +208,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            	<table>
 	            		<tr>
 			  				<td class="leftTd"><lable><span class="required">*</span>初期电压：</lable></td>
-			  				<td class="rightTd"><input name="fini_vol" id="fini_vol" class="easyui-numberbox" data-options="required:true,precision:1">(V)</td>
+			  				<td class="rightTd"><input name="fini_vol" id="fini_vol" class="easyui-numberbox" value="19.0" data-options="required:true,precision:1">(V)</td>
 			  				<td class="leftTd"><lable><span class="required">*</span>焊接电压：</lable></td>
 			  				<td class="rightTd"><input name="fweld_vol" id="fweld_vol" class="easyui-numberbox" data-options="required:true,precision:1">(V)</td>
 			  			</tr>
 	            		<tr>
 			  				<td class="leftTd"><lable><span class="required">*</span>收弧电压：</lable></td>
-			  				<td class="rightTd"><input name="farc_vol" id="farc_vol" class="easyui-numberbox" data-options="required:true,precision:1">(V)</td>
+			  				<td class="rightTd"><input name="farc_vol" id="farc_vol" class="easyui-numberbox" value="19.0" data-options="required:true,precision:1">(V)</td>
 			  				<td class="leftTd"></td>
 			  				<td class="rightTd"></td>
 			  			</tr>
@@ -226,11 +226,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			  				<td class="leftTd"><lable><span class="required">*</span>焊接电压（一元）：</lable></td>
 			  				<td class="rightTd"><input name="fweld_vol1" id="fweld_vol1" class="easyui-numberbox" data-options="required:true">(±1)</td>
 			  				<td class="leftTd"><lable><span class="required">*</span>收弧电压（一元）：</lable></td>
-			  				<td class="rightTd"><input name="farc_vol1" id="farc_vol1" class="easyui-numberbox" data-options="required:true">(±1)</td>
+			  				<td class="rightTd"><input name="farc_vol1" id="farc_vol1" class="easyui-numberbox" value="0" data-options="required:true">(±1)</td>
 			  			</tr>
 			  			<tr>
 			  				<td class="leftTd"><lable><span class="required">*</span>初期电压（一元）：</lable></td>
-			  				<td class="rightTd"><input name="fini_vol1" id="fini_vol1" class="easyui-numberbox" data-options="required:true">(±1)</td>
+			  				<td class="rightTd"><input name="fini_vol1" id="fini_vol1" class="easyui-numberbox" value="0" data-options="required:true">(±1)</td>
 			  				<td class="leftTd"></td>
 			  				<td class="rightTd"></td>
 			  			</tr>
@@ -242,7 +242,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			  				<td class="leftTd"><lable><span class="required">*</span>焊接电流微调：</lable></td>
 			  				<td class="rightTd"><input name="fweld_tuny_ele" id="fweld_tuny_ele" class="easyui-numberbox" data-options="required:true">(A)</td>
 			  				<td class="leftTd"><lable><span class="required">*</span>收弧电流微调：</lable></td>
-			  				<td class="rightTd"><input name="farc_tuny_ele" id="farc_tuny_ele" class="easyui-numberbox" data-options="required:true">(A)</td>
+			  				<td class="rightTd"><input name="farc_tuny_ele" id="farc_tuny_ele" class="easyui-numberbox" value="0.0" data-options="required:true">(A)</td>
 			  			</tr>
 		            </table>
 	            </div>
@@ -252,7 +252,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			  				<td class="leftTd"><lable><span class="required">*</span>焊接电压微调：</lable></td>
 			  				<td class="rightTd"><input name="fweld_tuny_vol" id="fweld_tuny_vol" class="easyui-numberbox" data-options="required:true,precision:1">(V)</td>
 			  				<td class="leftTd"><lable><span class="required">*</span>收弧电压微调：</lable></td>
-			  				<td class="rightTd"><input name="farc_tuny_vol" id="farc_tuny_vol" class="easyui-numberbox" data-options="required:true,precision:1">(V)</td>
+			  				<td class="rightTd"><input name="farc_tuny_vol" id="farc_tuny_vol" class="easyui-numberbox" value="0.0" data-options="required:true,precision:1">(V)</td>
 			  			</tr>
 	            	</table>
 	            </div>
@@ -262,7 +262,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			  				<td class="leftTd"><lable><span class="required">*</span>焊接电压微调(一元)：</lable></td>
 			  				<td class="rightTd"><input name="fweld_tuny_vol1" id="fweld_tuny_vol1" class="easyui-numberbox" data-options="required:true">(%)</td>
 			  				<td class="leftTd"><lable><span class="required">*</span>收弧电压微调（一元）：</lable></td>
-			  				<td class="rightTd"><input name="farc_tuny_vol1" id="farc_tuny_vol1" class="easyui-numberbox" data-options="required:true">(%)</td>
+			  				<td class="rightTd"><input name="farc_tuny_vol1" id="farc_tuny_vol1" class="easyui-numberbox" value="0" data-options="required:true">(%)</td>
 			  			</tr>
 	            	</table>
 	            </div>
