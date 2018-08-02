@@ -24,26 +24,14 @@ function showCompanyLoadsChart(){
 	});
 	option = {
 		title:{
-			text: "Android采集转发结果表"//焊接工艺超标统计
+			text: "离线采集导入表"//焊接工艺超标统计
 		},
 		tooltip:{
 			trigger: 'axis'//坐标轴触发，即是否跟随鼠标集中显示数据
 		},
 		legend:{
-			data:"android上传记录"
+			data:"数据采集"
 		},
-		 dataZoom: [
-             {
-                 type: 'slider',	//支持鼠标滚轮缩放
-                 start: 0,			//默认数据初始缩放范围为10%到90%
-                 end: 100
-             },
-             {
-                 type: 'inside',	//支持单独的滑动条缩放
-                 start: 0,			//默认数据初始缩放范围为10%到90%
-                 end: 100
-             }
-        ],
 		grid:{
 			left:'50',//组件距离容器左边的距离
 			right:'4%',
@@ -58,30 +46,27 @@ function showCompanyLoadsChart(){
 		},
 		xAxis:{
 			type:'category',
-			data: array1
+			data: array1,
+			name : "时间"
 		},
 		yAxis:{
 			type: 'value',//value:数值轴，category:类目轴，time:时间轴，log:对数轴
-			axisLabel: { 
-				  name:'数值大小',
-                  show: true,  
-                  interval: 'auto',  
-                  formatter: '{value}%'  
-            },  
+			name : "单位(条)",
+//			axisLabel: { 
+//				  name:'数值大小',
+//                  show: true,  
+//                  interval: 'auto',  
+//                  formatter: '{value}'  
+//            },  
             show: true  
 		},
 		series:[{
 			name : "android上传记录",
-      		type :'line',//折线图
+      		//type :'line',//折线图
+      		type :'bar',//柱状图
       		data : array2,
-      		itemStyle : {
-      			normal: {
-      				label : {
-      					show: true,//显示每个折点的值
-      					formatter: '{c}%'  
-      				}
-      			}
-      		}
+      		formatter: '{value}条' ,
+            barMaxWidth:30//最大宽度
 		}]
 	}
 	//为echarts对象加载数据
@@ -93,7 +78,7 @@ function showCompanyLoadsChart(){
 
 function CompanyloadsDatagrid(){
 	setParam();
-	var column = new Array();
+//	var column = new Array();
 	 $.ajax({  
          type : "post",  
          async : false,
@@ -103,6 +88,7 @@ function CompanyloadsDatagrid(){
          success : function(result) {  
              if (result) {
             	 for(var i=0;i<result.rows.length;i++){
+//            		column.push({field:"a"+i,title:result.rows[i].count,width:150,halign : "center",align : "left"});
                    	 array1.push(result.rows[i].time);
                 	 array2.push(result.rows[i].count);
              	 }
@@ -119,12 +105,24 @@ function CompanyloadsDatagrid(){
 			idField : 'id',
 			pageSize : 10,
 			pageList : [ 10, 20, 30, 40, 50],
-			url : "companyChart/getCompanyLoads"+chartStr,
+			url : "rep/AndroidReport"+chartStr,
 			singleSelect : true,
 			rownumbers : true,
 			showPageList : false,
 			pagination : true,
-			columns :[column],
+			columns : [ [ {
+				field : 'time',
+				title : '时间',
+				width : 100,
+				halign : "center",
+				align : "left"
+			}, {
+				field : 'count',
+				title : '数据',
+				width : 150,
+				halign : "center",
+				align : "left"
+			}] ],
 			rowStyler: function(index,row){
 	            if ((index % 2)!=0){
                 	//处理行代背景色后无法选中
@@ -135,7 +133,6 @@ function CompanyloadsDatagrid(){
 	        }
 	 })
 }
-
 function serachCompanyloads(){
 	$("#chartLoading").show();
 	array1 = new Array();
@@ -147,7 +144,6 @@ function serachCompanyloads(){
 		showCompanyLoadsChart();
 	},500);
 }
-
 //监听窗口大小变化
 window.onresize = function() {
 	setTimeout(domresize, 500);

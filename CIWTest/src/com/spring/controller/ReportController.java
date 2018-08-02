@@ -478,12 +478,27 @@ public class ReportController {
 		String time2 = request.getParameter("dtoTime2");
 		WeldDto dto = new WeldDto();
 		dto.setDtoStatus(1);
+		dto.setDay("day");
 		BigInteger parent = null;
 		if(iutil.isNull(time1)){
 			dto.setDtoTime1(time1);
 		}
 		if(iutil.isNull(time2)){
 			dto.setDtoTime2(time2);
+		}
+		List<ModelDto> time = null;
+		if(iutil.isNull(request.getParameter("page")) && iutil.isNull(request.getParameter("rows"))){
+			pageIndex = Integer.parseInt(request.getParameter("page"));
+			pageSize = Integer.parseInt(request.getParameter("rows"));
+			page = new Page(pageIndex,pageSize,total);
+			time = lm.getAllTime(page,dto);
+		}else{
+			time = lm.getAllTimes(dto);
+		}
+		long total = 0;
+		if(time != null){
+			PageInfo<ModelDto> pageinfo = new PageInfo<ModelDto>(time);
+			total = pageinfo.getTotal();
 		}
 		List<Report> list = reportService.getAndroidData(dto);
 		JSONObject json = new JSONObject();
@@ -495,6 +510,18 @@ public class ReportController {
 				json.put("time", repo.getTime());
 				ary.add(json);
 			}
+
+//			JSONObject object = new JSONObject();
+//			for(int i=0;i<time.size();i++){
+//				for(int j=0;j<ary.size();j++){
+//					JSONObject js = (JSONObject)ary.get(j);
+//					String overproof = js.getString("loads").substring(1, js.getString("loads").length()-1);
+//					String[] str = overproof.split(",");
+//					object.put("a"+j, str[i]+"%");
+//				}
+				//object.put("w",time.get(i).getWeldTime());
+//				ary.add(object);
+//			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}

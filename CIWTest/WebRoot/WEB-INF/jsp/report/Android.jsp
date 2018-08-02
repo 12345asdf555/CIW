@@ -30,7 +30,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script type="text/javascript" src="resources/js/easyui-lang-zh_CN.js"></script>
 	<script type="text/javascript" src="resources/js/echarts.js"></script>
 	<script type="text/javascript" src="resources/js/session-overdue.js"></script>
-	<script type="text/javascript" src="resources/js/getTimeADay.js"></script>
+	<script type="text/javascript" src="resources/js/getTime.js"></script>
 	<script type="text/javascript" src="resources/js/report/android.js"></script>
   </head>
   
@@ -55,8 +55,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <!-- 		负荷率=设备正常焊接时间/(8*60*60)/正常焊接焊机数量<br/> -->
 		X轴:日期<br/>
 		Y轴:数值<br/></div>
-		<div id="companyLoadsChart" style="height:80%;width:75%;margin-left:21%;margin-right:21%;margin-bottom:10px;"></div>
-<!--   <table id="companyLoadsTable" style="table-layout: fixed; width:100%;"></table> --> -->
+		<div id="companyLoadsChart" style="height:60%;width:65%;margin-left:21%;margin-right:21%;margin-bottom:10px;"></div>
+  		<table id="companyLoadsTable" style="table-layout: fixed; width:100%;"></table>
 	</div>
   </body>
 </html>
