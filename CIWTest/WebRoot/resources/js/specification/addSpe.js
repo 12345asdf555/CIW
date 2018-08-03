@@ -91,15 +91,6 @@ function ws() {
 $(document).ready(function () {
 	$("#chanel").combobox({
 		onSelect: function (record) {
-    		$("#fadvance").numberbox('clear');
-    		$("#fweld_vol").numberbox('clear');
-    		$("#fweld_vol1").numberbox('clear');
-    		$("#fweld_ele").numberbox('clear');
-    		$("#fhysteresis").numberbox('clear');
-    		$("#fcharacter").numberbox('clear');
-    		$("#fweld_tuny_ele").numberbox('clear');
-    		$("#fweld_tuny_vol").numberbox('clear');
-    		$("#fweld_tuny_vol1").numberbox('clear');
     		$('#fgas').combobox('unselect');
     		$('#fdiameter').combobox('unselect');
     		$('#fmaterial').combobox('unselect');
