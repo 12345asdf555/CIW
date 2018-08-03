@@ -286,6 +286,8 @@ $(document).ready(function () {
 				$('#fini_ele').numberbox("disable",true);
 				$('#fini_vol').numberbox("disable",true);
 				$('#fini_vol1').numberbox("disable",true);
+				$('#ftime').numberbox("enable",true);
+				$('#ftime').numberbox("enable",true);
 			}
 		}
 	});
