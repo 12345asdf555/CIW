@@ -135,7 +135,8 @@ $(document).ready(function () {
 			    			$("#fmode").prop("checked",true);
 			    		}
 			        	}else{
-			        		alert("未查询到相关数据，请尝试索取。");
+			        		chushihua();
+			        		alert("未查询到相关数据，已初始化，也可尝试索取。");
 			        	}
 			          }
 			      },
