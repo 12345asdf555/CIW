@@ -369,7 +369,10 @@
 					if(redata.substring(4+i, 8+i)==document.getElementById("in2").value){
 						ele.push(parseInt(redata.substring(12+i, 16+i)));
 						vol.push(parseFloat((parseInt(redata.substring(16+i, 20+i))/10).toFixed(2)));
-						time.push(Date.parse(redata.substring(20+i, 39+i)));
+						var ttme = redata.substring(20+i, 39+i);
+//						time.push(Date.parse(redata.substring(20+i, 39+i)));
+						ttme=ttme.replace(/-/g, '/');
+						time.push(Date.parse(new Date(ttme))); 
 						machstatus.push(redata.substring(0+i, 2+i));
 						maxele = parseInt(redata.substring(41+i, 44+i));
 						minele = parseInt(redata.substring(44+i, 47+i));
