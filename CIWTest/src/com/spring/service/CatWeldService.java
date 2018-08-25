@@ -4,20 +4,16 @@ import java.math.BigInteger;
 import java.util.List;
 
 import com.spring.dto.WeldDto;
+import com.spring.model.CatWeld;
 import com.spring.model.WeldedJunction;
 import com.spring.page.Page;
 
-public interface WeldedJunctionService {
+public interface CatWeldService {
 	
 	/**
 	 * 查询所有焊口
 	 */
-	List<WeldedJunction> getWeldedJunctionAll(Page page, String str);
-	
-	/**
-	 * 查询所有邮件
-	 */
-	List<WeldedJunction> getweldmainAll(Page page, String str);
+	List<CatWeld> getCatWeldAll(Page page, String str);
 	
 	/**
 	 * 根据id查询
@@ -41,23 +37,31 @@ public interface WeldedJunctionService {
 	 */
 	int getWeldedjunctionByNo(String wjno);
 	
+	
+	/**
+	 * 判断CAT焊工工号是否存在
+	 * @param eno
+	 * @return
+	 */
+	int getweldnumCount(String eno);
+	
 	/**
 	 * 新增焊缝
 	 * @param wj
 	 */
-	boolean addJunction(WeldedJunction wj);
+	boolean addCatweld(CatWeld cwm);
 
 	/**
 	 * 修改焊缝
 	 * @param wj
 	 */
-	boolean updateJunction(WeldedJunction wj);
+	boolean updateCatweld(CatWeld cwm);
 
 	/**
 	 * 删除焊缝
 	 * @param wj
 	 */
-	boolean deleteJunction(BigInteger id);
+	boolean deleteCatweld(BigInteger id);
 	
 	/**
 	 * 焊工对应的焊机焊缝信息

@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
 import com.spring.dto.WeldDto;
+import com.spring.model.CatWeld;
 import com.spring.model.MyUser;
 import com.spring.model.WeldedJunction;
 import com.spring.page.Page;
+import com.spring.service.CatWeldService;
 import com.spring.service.InsframeworkService;
 import com.spring.service.LiveDataService;
 import com.spring.service.WeldedJunctionService;
@@ -27,13 +29,16 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @Controller
-@RequestMapping(value = "/weldedjunction", produces = { "text/json;charset=UTF-8" })
-public class WeldedJunctionControll {
+@RequestMapping(value = "/catweld", produces = { "text/json;charset=UTF-8" })
+public class CatWeldController {
 	private Page page;
 	private int pageIndex = 1;
 	private int pageSize = 10;
 	private int total = 0;
 
+	@Autowired
+	private CatWeldService cw;
+	
 	@Autowired
 	private WeldedJunctionService wjm;
 	@Autowired
@@ -46,6 +51,81 @@ public class WeldedJunctionControll {
 	public String goWeldedJunction(){
 		return "weldingjunction/weldedjunction";
 	}
+	@RequestMapping("/goCatMail")
+	public String goCatMail(){
+		return "catmail/catmail";
+	}
+	@RequestMapping("/goCatWeld")
+	public String goCatWeld(){
+		return "catweld/catweld";
+	}
+	
+	@RequestMapping("/getCatWeldList")
+	@ResponseBody
+	public String getCatWeldList(HttpServletRequest request){
+		pageIndex = Integer.parseInt(request.getParameter("page"));
+		pageSize = Integer.parseInt(request.getParameter("rows"));
+		String serach = request.getParameter("searchStr");
+		
+		page = new Page(pageIndex,pageSize,total);
+		List<CatWeld> list = cw.getCatWeldAll(page, serach);
+		long total = 0;
+		
+		if(list != null){
+			PageInfo<CatWeld> pageinfo = new PageInfo<CatWeld>(list);
+			total = pageinfo.getTotal();
+		}
+		
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		JSONObject obj = new JSONObject();
+		try{
+			for(CatWeld w:list){
+				json.put("id", w.getId());
+				json.put("weldnum", w.getWeldNum());
+				json.put("checkintime", w.getCheckintime());
+				json.put("ssnum", w.getSSnum());
+				json.put("firstsuretime", w.getFirstsuretime());
+				json.put("department", w.getDepartment());
+				json.put("workship", w.getWorkship());
+				json.put("workmaintime", w.getWorkmaintime());
+				json.put("workkmainname", w.getWorkkmainname());
+				json.put("workfirsttime", w.getWorkfirsttime());
+				json.put("workfirstname", w.getWorkfirstname());
+				json.put("worksecondtime", w.getWorksecondtime());
+				json.put("worksecondname", w.getWorksecondname());
+				json.put("ifwelding", w.getIfwelding());
+				json.put("classify", w.getClassify());
+				json.put("specification", w.getSpecification());
+				json.put("weldername", w.getWeldername());
+				json.put("level", w.getLevel());
+				json.put("score", w.getScore());
+				json.put("ifpass", w.getIfpass());
+				json.put("icworkime", w.getIcworkime());
+				json.put("halfyearsure", w.getHalfyearsure());
+				json.put("yearsure", w.getYearsure());
+				if( w.getItemid()!=null && !"".equals( w.getItemid())){
+					json.put("itemname", w.getItemid().getName());
+					json.put("itemid", w.getItemid().getId());
+				}
+				json.put("endTime", w.getEndTime());
+				json.put("creatTime", w.getCreatTime());
+				json.put("updateTime", w.getUpdateTime());
+				json.put("updatecount", w.getUpdatecount());
+				json.put("nextwall_thickness", w.getNextwall_thickness());
+				json.put("next_material", w.getNext_material());
+				json.put("electricity_unit", w.getElectricity_unit());
+				json.put("valtage_unit", w.getValtage_unit());
+				ary.add(json);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		obj.put("total", total);
+		obj.put("rows", ary);
+		return obj.toString();
+	}
+	
 	@RequestMapping("/goAddWeldedJunction")
 	public String goAddWeldedJunction(){
 		return "weldingjunction/addweldedjunction";
@@ -203,50 +283,49 @@ public class WeldedJunctionControll {
 		return obj.toString();
 	}
 
-	@RequestMapping("/addWeldedJunction")
+	@RequestMapping("/addCatweld")
 	@ResponseBody
-	public String addWeldedJunction(HttpServletRequest request){
-		WeldedJunction wj = new WeldedJunction();
+	public String addCatweld(HttpServletRequest request){
+		CatWeld cwm = new CatWeld();
 		JSONObject obj = new JSONObject();
 		try{
 			MyUser user = (MyUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			wj.setCreater(new BigInteger(user.getId()+""));
-			wj.setUpdater(new BigInteger(user.getId()+""));
-			wj.setWeldedJunctionno("00"+request.getParameter("weldedJunctionno"));
-			wj.setSerialNo(request.getParameter("serialNo"));
-			wj.setUnit(request.getParameter("unit"));
-			wj.setArea(request.getParameter("area"));
-			wj.setSystems(request.getParameter("systems"));
-			wj.setChildren(request.getParameter("children"));
-			wj.setDyne(0);
-			wj.setSpecification(request.getParameter("specification"));
-			wj.setPipelineNo(request.getParameter("pipelineNo"));
-			wj.setRoomNo(request.getParameter("roomNo"));
-			wj.setExternalDiameter(request.getParameter("externalDiameter"));
-			wj.setNextexternaldiameter(request.getParameter("nextexternaldiameter"));
-			wj.setWallThickness(request.getParameter("wallThickness"));
-			wj.setNextwall_thickness(request.getParameter("nextwall_thickness"));
-			wj.setMaterial(request.getParameter("material"));
-			wj.setNext_material(request.getParameter("next_material"));
-			wj.setMaxElectricity(Double.parseDouble(request.getParameter("maxElectricity")));
-			wj.setMinElectricity(Double.parseDouble(request.getParameter("minElectricity")));
-			wj.setMaxValtage(Double.parseDouble(request.getParameter("maxValtage")));
-			wj.setMinValtage(Double.parseDouble(request.getParameter("minValtage")));
-			wj.setElectricity_unit(request.getParameter("electricity_unit"));
-			wj.setValtage_unit(request.getParameter("valtage_unit"));
+			cwm.setCreater(new BigInteger(user.getId()+""));
+			cwm.setUpdater(new BigInteger(user.getId()+""));
+			cwm.setWeldNum(request.getParameter("weldnum"));
+			cwm.setCheckintime(request.getParameter("checkintime"));
+			cwm.setSSnum(request.getParameter("ssnum"));
+			cwm.setFirstsuretime(request.getParameter("firstsuretime"));
+			cwm.setDepartment(request.getParameter("department"));
+			cwm.setWorkship(request.getParameter("workship"));
+			cwm.setWorkmaintime(request.getParameter("workmaintime"));
+			cwm.setWorkkmainname(request.getParameter("workkmainname"));
+			cwm.setWorkfirsttime(request.getParameter("workfirsttime"));
+			cwm.setWorkfirstname(request.getParameter("workfirstname"));
+			cwm.setWorksecondtime(request.getParameter("worksecondtime"));
+			cwm.setWorksecondname(request.getParameter("worksecondname"));
+			cwm.setIfwelding(request.getParameter("ifwelding"));
+			cwm.setClassify(request.getParameter("classify"));
+			cwm.setWeldername(request.getParameter("weldername"));
+			cwm.setLevel(request.getParameter("level"));
+			cwm.setScore(request.getParameter("score"));
+			cwm.setIfpass(request.getParameter("ifpass"));
+			cwm.setIcworkime(request.getParameter("icworkime"));
+			cwm.setHalfyearsure(request.getParameter("halfyearsure"));
+			cwm.setYearsure(request.getParameter("yearsure"));
 			String starttime = request.getParameter("startTime");
 			String endtime = request.getParameter("endTime");
 			if(iutil.isNull(starttime)){
-				wj.setStartTime(starttime);
+				//cw.setStartTime(starttime);
 			}
 			if(iutil.isNull(endtime)){
-				wj.setEndTime(endtime);
+				cwm.setEndTime(endtime);
 			}
 			String itemid = request.getParameter("itemid");
 			if(iutil.isNull(itemid)){
-				wj.setInsfid(new BigInteger(itemid));
+				cwm.setInsfid(new BigInteger(itemid));
 			}
-			wjm.addJunction(wj);
+			cw.addCatweld(cwm);
 			obj.put("success", true);
 		}catch(Exception e){
 			e.printStackTrace();
@@ -257,50 +336,50 @@ public class WeldedJunctionControll {
 	}
 	
 
-	@RequestMapping("/editWeldedJunction")
+	@RequestMapping("/editCatweld")
 	@ResponseBody
-	public String editWeldedJunction(HttpServletRequest request){
-		WeldedJunction wj = new WeldedJunction();
+	public String editCatweld(HttpServletRequest request){
+		CatWeld cwm = new CatWeld();
 		JSONObject obj = new JSONObject();
 		try{
 			MyUser user = (MyUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			wj.setUpdater(new BigInteger(user.getId()+""));
-			wj.setId(new BigInteger(request.getParameter("id")));
-			wj.setWeldedJunctionno("00"+request.getParameter("weldedJunctionno"));
-			wj.setSerialNo(request.getParameter("serialNo"));
-			wj.setUnit(request.getParameter("unit"));
-			wj.setArea(request.getParameter("area"));
-			wj.setSystems(request.getParameter("systems"));
-			wj.setChildren(request.getParameter("children"));
-			wj.setDyne(0);
-			wj.setSpecification(request.getParameter("specification"));
-			wj.setPipelineNo(request.getParameter("pipelineNo"));
-			wj.setRoomNo(request.getParameter("roomNo"));
-			wj.setExternalDiameter(request.getParameter("externalDiameter"));
-			wj.setNextexternaldiameter(request.getParameter("nextexternaldiameter"));
-			wj.setWallThickness(request.getParameter("wallThickness"));
-			wj.setNextwall_thickness(request.getParameter("nextwall_thickness"));
-			wj.setMaterial(request.getParameter("material"));
-			wj.setNext_material(request.getParameter("next_material"));
-			wj.setMaxElectricity(Double.parseDouble(request.getParameter("maxElectricity")));
-			wj.setMinElectricity(Double.parseDouble(request.getParameter("minElectricity")));
-			wj.setMaxValtage(Double.parseDouble(request.getParameter("maxValtage")));
-			wj.setMinValtage(Double.parseDouble(request.getParameter("minValtage")));
-			wj.setElectricity_unit(request.getParameter("electricity_unit"));
-			wj.setValtage_unit(request.getParameter("valtage_unit"));
+			cwm.setCreater(new BigInteger(user.getId()+""));
+			cwm.setUpdater(new BigInteger(user.getId()+""));
+			cwm.setId(new BigInteger(request.getParameter("id")));
+			cwm.setWeldNum(request.getParameter("weldnum"));
+			cwm.setCheckintime(request.getParameter("checkintime"));
+			cwm.setSSnum(request.getParameter("ssnum"));
+			cwm.setFirstsuretime(request.getParameter("firstsuretime"));
+			cwm.setDepartment(request.getParameter("department"));
+			cwm.setWorkship(request.getParameter("workship"));
+			cwm.setWorkmaintime(request.getParameter("workmaintime"));
+			cwm.setWorkkmainname(request.getParameter("workkmainname"));
+			cwm.setWorkfirsttime(request.getParameter("workfirsttime"));
+			cwm.setWorkfirstname(request.getParameter("workfirstname"));
+			cwm.setWorksecondtime(request.getParameter("worksecondtime"));
+			cwm.setWorksecondname(request.getParameter("worksecondname"));
+			cwm.setIfwelding(request.getParameter("ifwelding"));
+			cwm.setClassify(request.getParameter("classify"));
+			cwm.setWeldername(request.getParameter("weldername"));
+			cwm.setLevel(request.getParameter("level"));
+			cwm.setScore(request.getParameter("score"));
+			cwm.setIfpass(request.getParameter("ifpass"));
+			cwm.setIcworkime(request.getParameter("icworkime"));
+			cwm.setHalfyearsure(request.getParameter("halfyearsure"));
+			cwm.setYearsure(request.getParameter("yearsure"));
 			String starttime = request.getParameter("startTime");
 			String endtime = request.getParameter("endTime");
 			if(iutil.isNull(starttime)){
-				wj.setStartTime(starttime);
+				//cw.setStartTime(starttime);
 			}
 			if(iutil.isNull(endtime)){
-				wj.setEndTime(endtime);
+				cwm.setEndTime(endtime);
 			}
 			String itemid = request.getParameter("itemid");
 			if(iutil.isNull(itemid)){
-				wj.setInsfid(new BigInteger(itemid));
+				cwm.setInsfid(new BigInteger(itemid));
 			}
-			wjm.updateJunction(wj);
+			cw.updateCatweld(cwm);
 			obj.put("success", true);
 		}catch(Exception e){
 			e.printStackTrace();
@@ -311,12 +390,12 @@ public class WeldedJunctionControll {
 	}
 	
 
-	@RequestMapping("/removeWeldedJunction")
+	@RequestMapping("/removeCatweld")
 	@ResponseBody
 	public String removeWeldedJunction(HttpServletRequest request){
 		JSONObject obj = new JSONObject();
 		try{
-			wjm.deleteJunction(new BigInteger(request.getParameter("id")));
+			cw.deleteCatweld(new BigInteger(request.getParameter("id")));
 			obj.put("success", true);
 		}catch(Exception e){
 			e.printStackTrace();

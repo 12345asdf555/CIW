@@ -202,6 +202,87 @@ public class WeldingMachineController {
 	}
 	
 	/**
+	 * cat焊机列表
+	 * @return
+	 */
+	@RequestMapping("/getcatMachineList")
+	@ResponseBody
+	public String getcatMachine(HttpServletRequest request){
+		pageIndex = Integer.parseInt(request.getParameter("page"));
+		pageSize = Integer.parseInt(request.getParameter("rows"));
+		String searchStr = request.getParameter("searchStr");
+		String parentId = request.getParameter("parent");
+		BigInteger parent = null;
+		if(iutil.isNull(parentId)){
+			parent = new BigInteger(parentId);
+		}
+		request.getSession().setAttribute("searchStr", searchStr);
+		page = new Page(pageIndex,pageSize,total);
+		List<WeldingMachine> list = wmm.getcatMachineAll(page,parent,searchStr);
+		long total = 0;
+		
+		if(list != null){
+			PageInfo<WeldingMachine> pageinfo = new PageInfo<WeldingMachine>(list);
+			total = pageinfo.getTotal();
+		}
+		
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		JSONObject obj = new JSONObject();
+		try{
+			for(WeldingMachine wm:list){
+				json.put("id", wm.getId());
+				json.put("ip", wm.getIp());
+				json.put("equipmentNo", wm.getFmachingnumber());
+				json.put("equipmentName", wm.getFmachingname());
+				json.put("typename", wm.getFmachingtype());
+				json.put("manufacturername", wm.getFmanufacturers());
+				json.put("manufacturerNo", wm.getFmanunumbers());
+				json.put("usedata", wm.getFusedata());
+				json.put("fplace", wm.getFplace());
+				json.put("action", wm.getFsection());
+				json.put("inspectTime", wm.getFauthentication());
+				json.put("nextTime", wm.getFtest());
+				json.put("maintainTime", wm.getFprevention());
+				json.put("position", wm.getPosition());
+				json.put("gatherId", wm.getGatherId());
+				if(wm.getIsnetworking()==0){
+					json.put("isnetworking", "是");
+				}else{
+					json.put("isnetworking", "否");
+				}
+				json.put("isnetworkingId", wm.getIsnetworking());
+				json.put("joinTime", wm.getJoinTime());
+				json.put("typeName",wm.getTypename());
+				json.put("typeId", wm.getTypeId());
+				json.put("statusName", wm.getStatusname());
+				json.put("statusId", wm.getStatusId());
+				json.put("manufacturerName", wm.getMvaluename());
+				json.put("manuno", wm.getMvalueid());
+				if( wm.getInsframeworkId()!=null && !"".equals(wm.getInsframeworkId())){
+					json.put("insframeworkName", wm.getInsframeworkId().getName());
+					json.put("iId", wm.getInsframeworkId().getId());
+				}
+				json.put("model",wm.getModel());
+				if(wm.getGatherId()!=null && !("").equals(wm.getGatherId())){
+					json.put("gatherId", wm.getGatherId().getGatherNo());
+					json.put("gid", wm.getGatherId().getId());
+				}else{
+					json.put("gatherId", null);
+					json.put("gid", null);
+				}
+				ary.add(json);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		obj.put("total", total);
+		obj.put("rows", ary);
+		return obj.toString();
+	}
+	
+	
+	/**
 	 * 获取设备类型
 	 * @return
 	 */
@@ -475,6 +556,118 @@ public class WeldingMachineController {
 			data = false;
 		}
 		return data + "";
+	}
+	
+	/**
+	 *CAT 新增
+	 * @return
+	 */
+	@RequestMapping("/addcatMachine")
+	@ResponseBody
+	public String addcatMachine(HttpServletRequest request){
+		WeldingMachine wm = new WeldingMachine();
+		JSONObject obj = new JSONObject();
+		try{
+			MyUser user = (MyUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			wm.setCreater(new BigInteger(user.getId()+""));
+			System.out.println(request.getParameter("equipmentNo"));
+			wm.setFmachingnumber(request.getParameter("equipmentNo"));
+			System.out.println(request.getParameter("equipmentName"));
+			wm.setFmachingname(request.getParameter("equipmentName"));
+			System.out.println(request.getParameter("typename"));
+			wm.setFmachingtype(request.getParameter("typename"));
+			System.out.println(request.getParameter("manufacturername"));
+			wm.setFmanufacturers(request.getParameter("manufacturername"));
+			System.out.println(request.getParameter("manufacturerNo"));
+			wm.setFmanunumbers(request.getParameter("manufacturerNo"));
+			System.out.println(request.getParameter("usedata"));
+			wm.setFusedata(request.getParameter("usedata"));
+			System.out.println(request.getParameter("fplace"));
+			wm.setFplace(request.getParameter("fplace"));
+			System.out.println(request.getParameter("action"));
+			wm.setFsection(request.getParameter("action"));
+			System.out.println(request.getParameter("inspectTime"));
+			wm.setFauthentication(request.getParameter("inspectTime"));
+			System.out.println(request.getParameter("nextTime"));
+			wm.setFtest(request.getParameter("nextTime"));
+			System.out.println(request.getParameter("maintainTime"));
+			wm.setFprevention(request.getParameter("maintainTime"));
+			//wm.setFprevention(Integer.parseInt(request.getParameter("maintainTime")));
+			wmm.addcatMachine(wm);
+			obj.put("success", true);
+		}catch(Exception e){
+			e.printStackTrace();
+			obj.put("success", false);
+			obj.put("errorMsg", e.getMessage());
+		}
+		return obj.toString();
+	}
+	
+	/**
+	 *CAT 修改
+	 * @return
+	 */
+	@RequestMapping("/editcatMachine")
+	@ResponseBody
+	public String editcatMachine(HttpServletRequest request){
+		WeldingMachine wm = new WeldingMachine();
+		JSONObject obj = new JSONObject();
+		try{
+			MyUser user = (MyUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			wm.setCreater(new BigInteger(user.getId()+""));
+			wm.setId(new BigInteger(request.getParameter("wid")));
+			System.out.println(request.getParameter("wid"));
+			System.out.println(request.getParameter("equipmentNo"));
+			wm.setFmachingnumber(request.getParameter("equipmentNo"));
+			System.out.println(request.getParameter("equipmentName"));
+			wm.setFmachingname(request.getParameter("equipmentName"));
+			System.out.println(request.getParameter("typename"));
+			wm.setFmachingtype(request.getParameter("typename"));
+			System.out.println(request.getParameter("manufacturername"));
+			wm.setFmanufacturers(request.getParameter("manufacturername"));
+			System.out.println(request.getParameter("manufacturerNo"));
+			wm.setFmanunumbers(request.getParameter("manufacturerNo"));
+			System.out.println(request.getParameter("usedata"));
+			wm.setFusedata(request.getParameter("usedata"));
+			System.out.println(request.getParameter("fplace"));
+			wm.setFplace(request.getParameter("fplace"));
+			System.out.println(request.getParameter("action"));
+			wm.setFsection(request.getParameter("action"));
+			System.out.println(request.getParameter("inspectTime"));
+			wm.setFauthentication(request.getParameter("inspectTime"));
+			System.out.println(request.getParameter("nextTime"));
+			wm.setFtest(request.getParameter("nextTime"));
+			System.out.println(request.getParameter("maintainTime"));
+			wm.setFprevention(request.getParameter("maintainTime"));
+			//wm.setFprevention(Integer.parseInt(request.getParameter("maintainTime")));
+			wmm.editcatMachine(wm);
+			obj.put("success", true);
+		}catch(Exception e){
+			e.printStackTrace();
+			obj.put("success", false);
+			obj.put("errorMsg", e.getMessage());
+		}
+		return obj.toString();
+	}
+	
+	
+	/**
+	 * CAT删除焊机
+	 * @param wid
+	 * @return
+	 */
+	@RequestMapping("/removecatMachine")
+	@ResponseBody
+	private String removecatMachine(@RequestParam String wid){
+		JSONObject obj = new JSONObject();
+		try{
+			wmm.deletecatChine(new BigInteger(wid));
+			obj.put("success", true);
+		}catch(Exception e){
+			obj.put("success", true);
+			obj.put("msg", e.getMessage());
+		}
+		return obj.toString();
 	}
 	
 }

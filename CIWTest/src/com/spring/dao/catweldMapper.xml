@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.spring.dao.WeldedJunctionMapper">
+<mapper namespace="com.spring.dao.CatWeldMapper">
 
-	<resultMap id="wjMap" type="com.spring.model.WeldedJunction">
+	<resultMap id="catMap" type="com.spring.model.CatWeld">
         <id property="id" column="fid"></id> 
-        <result property="machid" column="machid"></result>  
-        <result property="counts" column="counts"></result>  
-        <result property="machine_num" column="fequipment_no"></result> 
-        <result property="weldedJunctionno" column="fwelded_junction_no"></result>  
-        <result property="serialNo" column="fserial_no"></result>
-        <result property="pipelineNo" column="fpipeline_no"></result>
-        <result property="roomNo" column="froom_no"></result>
-        <result property="unit" column="funit"></result>
-        <result property="area" column="farea"></result>
-        <result property="systems" column="fsystems"></result>
-        <result property="children" column="fchildren"></result>
-        <result property="externalDiameter" column="fexternal_diameter"></result>
-        <result property="wallThickness" column="fwall_thickness"></result>
-        <result property="dyne" column="fdyne"></result>
+<!--         <result property="id" column="fid"></result>   -->
+        <result property="weldnum" column="fweldnum"></result>  
+        <result property="checkintime" column="fcheckintime"></result> 
+        <result property="ssnum" column="fssnum"></result>  
+        <result property="firstsuretime" column="ffirstsuretime"></result>
+        <result property="department" column="fdepartment"></result>
+        <result property="workship" column="fworkship"></result>
+        <result property="workmaintime" column="fworkmaintime"></result>
+        <result property="workkmainname" column="fworkkmainname"></result>
+        <result property="workfirsttime" column="fworkfirsttime"></result>
+        <result property="workfirstname" column="fworkfirstname"></result>
+        <result property="worksecondtime" column="fworksecondtime"></result>
+        <result property="worksecondname" column="fworksecondname"></result>
+        <result property="ifwelding" column="fifwelding"></result>
+        <result property="classify" column="fclassify"></result>
         <result property="specification" column="fspecification"></result>
-        <result property="maxElectricity" column="fmax_electricity"></result>
-        <result property="minElectricity" column="fmin_electricity"></result>
-        <result property="maxValtage" column="fmax_valtage"></result>
-        <result property="minValtage" column="fmin_valtage"></result>
-        <result property="startTime" column="fstart_time"></result>
-        <result property="endTime" column="fend_time"></result>
-        <result property="material" column="fmaterial"></result>
-        <result property="nextexternaldiameter" column="fnextExternal_diameter"></result>
+        <result property="weldername" column="fweldername"></result>
+        <result property="level" column="flevel"></result>
+        <result property="score" column="fscore"></result>
+        <result property="ifpass" column="fifpass"></result>
+        <result property="icworkime" column="ficworkime"></result>
+        <result property="halfyearsure" column="fhalfyearsure"></result>
+        <result property="yearsure" column="fyearsure"></result>
         <result property="nextwall_thickness" column="fnextwall_thickness"></result>
         <result property="next_material" column="fnext_material"></result>
         <result property="creatTime" column="fcreatetime"></result>
@@ -60,21 +60,21 @@
         <result property="minValtage" column="fmin_valtage"></result>
 	</resultMap>
 	
-	<select id="getWeldedJunctionAll" resultMap="wjMap" parameterType="java.lang.String">
+	<select id="getCatWeldAll" resultMap="catMap" parameterType="java.lang.String">
+		SELECT * FROM tb_catweldinf WHERE 1 = 1
+		<if test="str!=null and str!=''">
+			and ${str}
+		</if>
+	</select>
+	
+	<select id="getWeldedJunctionAll" resultMap="catMap" parameterType="java.lang.String">
 		SELECT j. * , i.fid iid, i.fname iname FROM tb_welded_junction j LEFT JOIN tb_insframework i ON j.fitemId = i.fid WHERE 1 =1
 		<if test="str!=null and str!=''">
 			and ${str}
 		</if>
 	</select>
 	
-	<select id="getweldmainAll" resultMap="wjMap" parameterType="java.lang.String">
-		SELECT c.fid iid,c.femailname counts,c.femailaddress fequipment_no,c.femailtext froom_no,c.femailstatus fpipeline_no,c.femailtime fupdatetime FROM tb_catemailcheck c WHERE 1=1
-		<if test="str!=null and str!=''">
-			and ${str}
-		</if>
-	</select>
-	
-	<select id="getJunctionByWelder" resultMap="wjMap">
+	<select id="getJunctionByWelder" resultMap="catMap">
 		select fwelded_junction_no,i.fname iname ,fmax_electricity,fmin_electricity,fmax_valtage,fmin_valtage,fwall_thickness,fnextwall_thickness,Fmaterial,Fnext_material,fexternal_diameter,fnextExternal_diameter from tb_live_data l 
 		INNER join tb_welder w on l.fwelder_id = w.fwelder_no 
 		INNER join tb_welded_junction j on l.fjunction_id = j.fwelded_junction_no
@@ -122,6 +122,10 @@
 		AND `tb_live_data`.`fstatus`='3' ORDER BY `FWeldTime` DESC LIMIT 0,1
 	</select>
 	
+	<select id="getweldnumCount" resultType="java.lang.Integer">
+		SELECT count(*) FROM tb_catweldinf WHERE fweldnum = #{eno}
+	</select>
+	
 	<select id="getJMByWelder" resultMap="wmMap">
 		select COUNT(l.fid) counts,m.fequipment_no,m.fid machid,fwelded_junction_no,fdyne,fmax_electricity,fmin_electricity,fmax_valtage,fmin_valtage from tb_live_data l 
 		INNER join tb_welded_junction j on l.fjunction_id = j.fwelded_junction_no
@@ -143,7 +147,7 @@
 		</if>and l.fstatus='3' group by m.fequipment_no,fwelded_junction_no
 	</select>
 	
-	<select id="getWeldedJunctionById" resultMap="wjMap" parameterType="java.lang.String">
+	<select id="getWeldedJunctionById" resultMap="catMap" parameterType="java.lang.String">
 		SELECT j. * , i.fid iid, i.fname iname FROM tb_welded_junction j INNER JOIN tb_insframework i ON j.fitemId = i.fid WHERE j.fid = #{id}
 	</select>
 	
@@ -151,17 +155,17 @@
 		SELECT COUNT(fid) FROM `tb_welded_junction` WHERE fwelded_junction_no = #{wjno}
 	</select>
 	
-	<insert id="addJunction" parameterType="com.spring.model.WeldedJunction">
-		insert into tb_welded_junction(fwelded_junction_no,fserial_no,fpipeline_no,froom_no,funit,farea,fsystems,fchildren,fexternal_diameter,fwall_thickness,fdyne,fspecification,fmax_electricity,fmin_electricity,felectricity_unit,fmax_valtage,fmin_valtage,fvaltage_unit,fitemId,Fmaterial,fnextExternal_diameter,fnextwall_thickness,Fnext_material,fstart_time,fend_time, fcreater, fcreatedate,fupdater,fupdatedate,fupdatecount) 
-		values(#{weldedJunctionno},#{serialNo},#{pipelineNo},#{roomNo},#{unit},#{area},#{systems},#{children},#{externalDiameter},#{wallThickness},#{dyne},#{specification},#{maxElectricity},#{minElectricity},#{electricity_unit},#{maxValtage},#{minValtage},#{valtage_unit},#{insfid},#{material},#{nextexternaldiameter},#{nextwall_thickness},#{next_material},#{startTime},#{endTime},#{creater},now(),#{updater},now(),0);
+	<insert id="addCatweld" parameterType="com.spring.model.CatWeld">
+		insert into tb_catweldinf(fweldnum,fcheckintime,fssnum,ffirstsuretime,fdepartment,fworkship,fworkmaintime,fworkkmainname,fworkfirsttime,fworkfirstname,fworksecondtime,fworksecondname,fifwelding,fclassify,fweldername,flevel,fscore,fifpass,ficworkime,fhalfyearsure,fyearsure) 
+		values(#{weldnum},#{checkintime},#{ssnum},#{firstsuretime},#{department},#{workship},#{workmaintime},#{workkmainname},#{workfirsttime},#{workfirstname},#{worksecondtime},#{worksecondname},#{ifwelding},#{classify},#{weldername},#{level},#{score},#{ifpass},#{icworkime},#{halfyearsure},#{yearsure});
 	</insert>
 	
-	<update id="updateJunction" parameterType="com.spring.model.WeldedJunction">
-		update tb_welded_junction set fwelded_junction_no=#{weldedJunctionno},fserial_no=#{serialNo},fpipeline_no=#{pipelineNo},froom_no=#{roomNo},funit=#{unit},farea=#{area},fsystems=#{systems},fchildren=#{children},fexternal_diameter=#{externalDiameter},fwall_thickness=#{wallThickness},fdyne=#{dyne},
-		fspecification=#{specification},fmax_electricity=#{maxElectricity},fmin_electricity=#{minElectricity},felectricity_unit=#{electricity_unit},fmax_valtage=#{maxValtage},fmin_valtage=#{minValtage},fvaltage_unit=#{valtage_unit},fitemId=#{insfid},Fmaterial=#{material},fnextExternal_diameter=#{nextexternaldiameter},fnextwall_thickness=#{nextwall_thickness},Fnext_material=#{next_material},fstart_time=#{startTime},fend_time=#{endTime},fupdater=#{updater},fupdatedate=now(),fupdatecount=fupdatecount+1 where fid=#{id};
+	<update id="updateCatweld" parameterType="com.spring.model.CatWeld">
+		update tb_catweldinf set fweldnum=#{weldnum},fcheckintime=#{checkintime},fssnum=#{ssnum},ffirstsuretime=#{firstsuretime},fdepartment=#{department},fworkship=#{workship},fworkmaintime=#{workmaintime},fworkkmainname=#{workkmainname},fworkfirsttime=#{workfirsttime},fworkfirstname=#{workfirstname},fworksecondtime=#{worksecondtime},
+		fworksecondname=#{worksecondname},fifwelding=#{ifwelding},fclassify=#{classify},fweldername=#{weldername},flevel=#{level},fscore=#{score},fifpass=#{ifpass},ficworkime=#{icworkime},fhalfyearsure=#{halfyearsure},fyearsure=#{yearsure} where fid=#{id};
 	</update>
 	
-	<delete id="deleteJunction" parameterType="java.math.BigInteger">
-		delete from tb_welded_junction where fid=#{id}
+	<delete id="deleteCatweld" parameterType="java.math.BigInteger">
+		delete from tb_catweldinf where fid=#{id}
 	</delete>
 </mapper>

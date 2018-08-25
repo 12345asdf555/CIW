@@ -41,6 +41,8 @@ import com.spring.model.Insframework;
 import com.spring.model.MaintenanceRecord;
 import com.spring.model.MyUser;
 import com.spring.model.Person;
+import com.spring.dao.CatWeldMapper;
+import com.spring.model.CatWeld;
 import com.spring.model.WeldedJunction;
 import com.spring.model.WeldingMachine;
 import com.spring.model.WeldingMaintenance;
@@ -48,11 +50,11 @@ import com.spring.service.DictionaryService;
 import com.spring.service.GatherService;
 import com.spring.service.MaintainService;
 import com.spring.service.PersonService;
+import com.spring.service.CatWeldService;
 import com.spring.service.WeldedJunctionService;
 import com.spring.service.WeldingMachineService;
 import com.spring.util.IsnullUtil;
 import com.spring.util.UploadUtil;
-
 import net.sf.json.JSONObject;
 
 /**
@@ -76,7 +78,8 @@ public class ImportExcelController {
 	private DictionaryService dm;
 	@Autowired
 	private WeldedJunctionService wjs;
-	
+	@Autowired
+	private CatWeldService cw;
 	IsnullUtil iutil = new IsnullUtil();
 	
 	/**
@@ -99,11 +102,11 @@ public class ImportExcelController {
 			File file  = new File(path);
 			file.delete();
 			for(WeldingMachine wm : list){
-				wm.setTypeId(dm.getvaluebyname(4,wm.getTypename()));
-				wm.setStatusId(dm.getvaluebyname(3,wm.getStatusname()));
-				wm.setMvalueid(dm.getvaluebyname(14, wm.getMvaluename()));
-				String name = wm.getInsframeworkId().getName();
-				wm.getInsframeworkId().setId(wmm.getInsframeworkByName(name));
+//				wm.setTypeId(dm.getvaluebyname(4,wm.getTypename()));
+//				wm.setStatusId(dm.getvaluebyname(3,wm.getStatusname()));
+//				wm.setMvalueid(dm.getvaluebyname(14, wm.getMvaluename()));
+//				String name = wm.getInsframeworkId().getName();
+//				wm.getInsframeworkId().setId(wmm.getInsframeworkByName(name));
 				Gather gather = wm.getGatherId();
 				int count2 = 0;
 				if(gather!=null){
@@ -117,18 +120,20 @@ public class ImportExcelController {
 					wm.setGatherId(gather);
 					count2 = wmm.getGatheridCount(wm.getInsframeworkId().getId(),gather.getGatherNo());
 				}
-				if(isInteger(wm.getEquipmentNo())){
-					wm.setEquipmentNo(wm.getEquipmentNo());
+				if(isInteger(wm.getFmachingnumber())){
+					wm.setFmachingnumber(wm.getFmachingnumber());
 				}
 				wm.setGatherId(gather);
 				//编码唯一
-				int count1 = wmm.getEquipmentnoCount(wm.getEquipmentNo());
-				if(count1>0 || count2>0){
+//				int count1 = wmm.getEquipmentnoCount(wm.getEquipmentNo());
+				int count1 = wmm.getFmachingnumberCount(wm.getFmachingnumber());
+				if(count1>0){
 					obj.put("msg","导入失败，请检查您的设备编码、采集序号是否已存在！");
 					obj.put("success",false);
 					return obj.toString();
 				}
-				wmm.addWeldingMachine(wm);
+				wmm.addcatMachine(wm);
+				//wmm.addWeldingMachine(wm);
 			};
 			obj.put("success",true);
 			obj.put("msg","导入成功！");
@@ -195,35 +200,36 @@ public class ImportExcelController {
 		JSONObject obj = new JSONObject();
 		try{
 			String path = u.uploadFile(request, response);
-			List<Person> we = xlsxWelder(path);
+			List<CatWeld> cwd = xlsxWelder(path);
 			//删除已保存的excel文件
 			File file  = new File(path);
 			file.delete();
-			for(Person w:we){
-				w.setLeveid(dm.getvaluebyname(8,w.getLevename()));
-				w.setQuali(dm.getvaluebyname(7, w.getQualiname()));
-				w.setOwner(wmm.getInsframeworkByName(w.getInsname()));
+			for(CatWeld w:cwd){
+//				w.setLeveid(dm.getvaluebyname(8,w.getLevename()));
+//				w.setQuali(dm.getvaluebyname(7, w.getQualiname()));
+//				w.setOwner(wmm.getInsframeworkByName(w.getInsname()));
 				MyUser user = (MyUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 				w.setCreater(new BigInteger(user.getId()+""));
 				w.setUpdater(new BigInteger(user.getId()+""));
-				w.setWelderno(w.getWelderno());
-				String phone = w.getCellphone();
-				if(iutil.isNull(phone)){
-					if(!phone.matches("^1[3-8]\\d{9}$")){
-						obj.put("msg","导入失败，请检查您的手机号码是否正确！");
-						obj.put("success",false);
-						return obj.toString();
-					}
-				}
+				w.setWeldNum(w.getWeldNum());
+//				String phone = w.getCellphone();
+//				if(iutil.isNull(phone)){
+//					if(!phone.matches("^1[3-8]\\d{9}$")){
+//						obj.put("msg","导入失败，请检查您的手机号码是否正确！");
+//						obj.put("success",false);
+//						return obj.toString();
+//					}
+//				}
 				//编码唯一
-				int count1 = ps.getUsernameCount(w.getWelderno());
+				//int count1 = cw.getUsernameCount(w.getWelderno());
+				int count1 = cw.getweldnumCount(w.getWeldNum());
 				if(count1>0){
 //					obj.put("msg","导入失败，请检查您的焊工编号是否已存在！");
 //					obj.put("success",false);
 //					return obj.toString();
 					continue;
 				}else{
-					ps.save(w);
+				cw.addCatweld(w);
 				}
 			};
 			obj.put("success",true);
@@ -411,7 +417,7 @@ public class ImportExcelController {
 	}
 	
 	/**
-	 * 导入Wedlingmachine表数据
+	 * 导入catmachine表数据
 	 * @param path
 	 * @return
 	 * @throws IOException
@@ -438,9 +444,11 @@ public class ImportExcelController {
 				Cell cell = row.getCell(k);
 				if(null == cell){
 					continue;
+					
 				}
 				
 				String cellValue = "";
+				
 				
 				switch (cell.getCellType()){
 				case HSSFCell.CELL_TYPE_NUMERIC://数字
@@ -467,70 +475,61 @@ public class ImportExcelController {
 		            	 cellValue = big.toString();
                     }
 					if(k == 0){
-						dit.setEquipmentNo(cellValue);//设备编码
+						dit.setFmachingnumber(cellValue);//设备编码
 						break;
 					}
-					else if(k == 2){
-						dit.setJoinTime(cellValue);//入厂时间
+				
+					if(k == 4){
+						dit.setFmanunumbers(cellValue);//出厂编码
 						break;
 					}
-					//采集序号机设备序号只能是数字
-					else if(k == 7){
-						Gather g = new Gather();
-						g.setGatherNo(cellValue);
-						dit.setGatherId(g);//采集序号
+					if(k == 5){
+						dit.setFusedata(cellValue);//使用日期
+						break;
+					}
+					else if(k == 8){
+						dit.setFauthentication(cellValue);//上度认证时间
+						break;
+					}
+					
+					else if(k == 10){
+						dit.setFprevention(cellValue);//预防性维护日期
 						break;
 					}
 					break;
 				case HSSFCell.CELL_TYPE_STRING://字符串
 					cellValue = cell.getStringCellValue();
 					if(k == 0){
-						dit.setEquipmentNo(cellValue);//设备编码
+						dit.setFmachingnumber(cellValue);//设备编号
 						break;
 					}
 					else if(k == 1){
-						dit.setTypename(cellValue);//设备类型
+						dit.setFmachingname(cellValue);//设备名称
+						break;
+					}
+					else if(k == 2){
+						dit.setFmachingtype(cellValue);//设备型号
 						break;
 					}
 					else if(k == 3){
- 						Insframework ins = new Insframework();
- 						ins.setName(cellValue);
- 						dit.setInsframeworkId(ins);//所属项目
-						break;
-	    			}
-					else if(k == 4){
-			        	dit.setStatusname(cellValue);//状态
-						break;
- 					}
-					else if(k == 5){
- 						dit.setMvaluename(cellValue);//厂家
-						break;
- 					}
-					else if(k == 6){
-						if(cellValue.equals("是")){
-	 						dit.setIsnetworking(0);//是否在网
-						}else{
-	 						dit.setIsnetworking(1);
-						}
-						break;
- 					}
-					//采集序号机设备序号只能是数字
-					else if(k == 7){
-						Gather g = new Gather();
-						g.setGatherNo(cellValue);
-						dit.setGatherId(g);//采集序号
+						dit.setFmanufacturers(cellValue);//制造厂家
 						break;
 					}
-					else if(k == 8){
-						dit.setPosition(cellValue);//位置
+					else if(k == 4){
+			        	dit.setFmanunumbers(cellValue);//出厂编号
+						break;
+ 					}
+					
+					else if(k == 6){
+						dit.setFplace(cellValue);//存放地点
+						break;
+					}
+					else if(k == 7){
+						dit.setFsection(cellValue);//使用工段
 						break;
 					}
 					else if(k == 9){
-						dit.setIp(cellValue);//ip地址
-						break;
-					}
-					else if(k == 10){
-						dit.setModel(cellValue);//设备型号
+						dit.setFtest(cellValue);//下次效验日期
 						break;
 					}
 					break;
@@ -553,24 +552,171 @@ public class ImportExcelController {
 			}
 			wm.add(dit);
 		}
-		
 		return wm;
 	}
 	
 	/**
-	 * 导入Welder表数据
+	 * 导入Wedlingmachine表数据
 	 * @param path
 	 * @return
 	 * @throws IOException
 	 * @throws InvalidFormatException
 	 */
-	public static List<Person> xlsxWelder(String path) throws IOException, InvalidFormatException{
-		List<Person> welder = new ArrayList<Person>();
+//	public static List<WeldingMachine> xlsxWm(String path) throws IOException, InvalidFormatException{
+//		List<WeldingMachine> wm = new ArrayList<WeldingMachine>();
+//		InputStream stream = new FileInputStream(path);
+//		Workbook workbook = create(stream);
+//		Sheet sheet = workbook.getSheetAt(0);
+//		
+//		int rowstart = sheet.getFirstRowNum()+1;
+//		int rowEnd = sheet.getLastRowNum();
+//	    
+//		for(int i=rowstart;i<=rowEnd;i++){
+//			Row row = sheet.getRow(i);
+//			if(null == row){
+//				continue;
+//			}
+//			int cellStart = row.getFirstCellNum();
+//			int cellEnd = row.getLastCellNum();
+//			WeldingMachine dit = new WeldingMachine();
+//			for(int k = cellStart; k<= cellEnd;k++){
+//				Cell cell = row.getCell(k);
+//				if(null == cell){
+//					continue;
+//				}
+//				
+//				String cellValue = "";
+//				
+//				switch (cell.getCellType()){
+//				case HSSFCell.CELL_TYPE_NUMERIC://数字
+//					if (HSSFDateUtil.isCellDateFormatted(cell)) {// 处理日期格式、时间格式  
+//		                SimpleDateFormat sdf = null;  
+//		                if (cell.getCellStyle().getDataFormat() == HSSFDataFormat  
+//		                        .getBuiltinFormat("h:mm")) {  
+//		                    sdf = new SimpleDateFormat("HH:mm");  
+//		                } else {// 日期  
+//		                    sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+//		                }  
+//		                Date date = cell.getDateCellValue();  
+//		                cellValue = sdf.format(date);  
+//		            } else if (cell.getCellStyle().getDataFormat() == 58) {  
+//		                // 处理自定义日期格式：m月d日(通过判断单元格的格式id解决，id的值是58)  
+//		                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+//		                double value = cell.getNumericCellValue();  
+//		                Date date = org.apache.poi.ss.usermodel.DateUtil  
+//		                        .getJavaDate(value);  
+//		                cellValue = sdf.format(date);  
+//		            } else {
+//		            	 //处理数字过长时出现x.xxxE9
+//		            	 BigDecimal big=new BigDecimal(cell.getNumericCellValue());  
+//		            	 cellValue = big.toString();
+//                    }
+//					if(k == 0){
+//						dit.setEquipmentNo(cellValue);//设备编码
+//						break;
+//					}
+//					else if(k == 2){
+//						dit.setJoinTime(cellValue);//入厂时间
+//						break;
+//					}
+//					//采集序号机设备序号只能是数字
+//					else if(k == 7){
+//						Gather g = new Gather();
+//						g.setGatherNo(cellValue);
+//						dit.setGatherId(g);//采集序号
+//						break;
+//					}
+//					break;
+//				case HSSFCell.CELL_TYPE_STRING://字符串
+//					cellValue = cell.getStringCellValue();
+//					if(k == 0){
+//						dit.setEquipmentNo(cellValue);//设备编码
+//						break;
+//					}
+//					else if(k == 1){
+//						dit.setTypename(cellValue);//设备类型
+//						break;
+//					}
+//					else if(k == 3){
+// 						Insframework ins = new Insframework();
+// 						ins.setName(cellValue);
+// 						dit.setInsframeworkId(ins);//所属项目
+//						break;
+//	    			}
+//					else if(k == 4){
+//			        	dit.setStatusname(cellValue);//状态
+//						break;
+// 					}
+//					else if(k == 5){
+// 						dit.setMvaluename(cellValue);//厂家
+//						break;
+// 					}
+//					else if(k == 6){
+//						if(cellValue.equals("是")){
+//	 						dit.setIsnetworking(0);//是否在网
+//						}else{
+//	 						dit.setIsnetworking(1);
+//						}
+//						break;
+// 					}
+//					//采集序号机设备序号只能是数字
+//					else if(k == 7){
+//						Gather g = new Gather();
+//						g.setGatherNo(cellValue);
+//						dit.setGatherId(g);//采集序号
+//						break;
+//					}
+//					else if(k == 8){
+//						dit.setPosition(cellValue);//位置
+//						break;
+//					}
+//					else if(k == 9){
+//						dit.setIp(cellValue);//ip地址
+//						break;
+//					}
+//					else if(k == 10){
+//						dit.setModel(cellValue);//设备型号
+//						break;
+//					}
+//					break;
+//				case HSSFCell.CELL_TYPE_BOOLEAN: // Boolean
+//					cellValue = String.valueOf(cell.getBooleanCellValue());
+//					break;
+//				case HSSFCell.CELL_TYPE_FORMULA: // 公式
+//					cellValue = String.valueOf(cell.getCellFormula());
+//					break;
+//				case HSSFCell.CELL_TYPE_BLANK: // 空值
+//					cellValue = "";
+//					break;
+//				case HSSFCell.CELL_TYPE_ERROR: // 故障
+//					cellValue = "";
+//					break;
+//				default:
+//					cellValue = cell.toString().trim();
+//					break;
+//				}
+//			}
+//			wm.add(dit);
+//		}
+//		
+//		return wm;
+//	}
+	
+	
+	/**
+	 * 导入CATWelder表数据
+	 * @param path
+	 * @return
+	 * @throws IOException
+	 * @throws InvalidFormatException
+	 */
+	public static List<CatWeld> xlsxWelder(String path) throws IOException, InvalidFormatException{
+		List<CatWeld> welder = new ArrayList<CatWeld>();
 		InputStream stream = new FileInputStream(path);
 		Workbook workbook = create(stream);
 		Sheet sheet = workbook.getSheetAt(0);
 		
-		int rowstart = sheet.getFirstRowNum()+1;
+		int rowstart = sheet.getFirstRowNum()+3;
 		int rowEnd = sheet.getLastRowNum();
 	    
 		for(int i=rowstart;i<=rowEnd;i++){
@@ -580,7 +726,7 @@ public class ImportExcelController {
 			}
 			int cellStart = row.getFirstCellNum();
 			int cellEnd = row.getLastCellNum();
-			Person p = new Person();
+			CatWeld p = new CatWeld();
 			for(int k = cellStart; k<= cellEnd;k++){
 				Cell cell = row.getCell(k);
 				if(null == cell){
@@ -613,51 +759,99 @@ public class ImportExcelController {
 		            	 BigDecimal big=new BigDecimal(cell.getNumericCellValue());  
 		            	 cellValue = big.toString();
                    }
-					if(k == 1){
-						p.setWelderno(cellValue);//焊工编号
+					if(k == 2){
+						p.setCheckintime(cellValue);//入职时间
 						break;
 					}
-					else if(k == 2){
-						p.setCellphone(cellValue);//手机
+					else if(k == 17){
+						p.setScore(cellValue);//理论考试结果
 						break;
  					}
-					else if(k == 4){
-						p.setCardnum(cellValue);//卡号
-						break;
- 					}
+					
 					break;
 				case HSSFCell.CELL_TYPE_STRING://字符串
 					cellValue = cell.getStringCellValue();
-					if(k == 0){
-						p.setName(cellValue);//姓名
+					if (cellValue=="N/A"){
+						cellValue=null;
+					}
+					if(k == 1){
+						p.setWeldNum(cellValue);//焊工工号
 						break;
 					}
-					else if(k == 1){
-						p.setWelderno(cellValue);//焊工编号
-						break;
-					}
-					else if(k == 2){
-						p.setCellphone(cellValue);//手机
-						break;
- 					}
+					
 					else if(k == 3){
-						p.setLevename(cellValue);//级别
+						p.setSSnum(cellValue);//钢印号
 						break;
  					}
 					else if(k == 4){
-						p.setCardnum(cellValue);//卡号
+						p.setFirstsuretime(cellValue);//首次认证日期
 						break;
  					}
 					else if(k == 5){
-						p.setQualiname(cellValue);//资质
+						p.setDepartment(cellValue);//部门
 						break;
  					}
 					else if(k == 6){
-						p.setInsname(cellValue);//部门
+						p.setWorkship(cellValue);//车间
 						break;
  					}
 					else if(k == 7){
-						p.setBack(cellValue);//备注
+						p.setWorkmaintime(cellValue);//主岗位上岗时间
+						break;
+ 					}
+					else if(k == 8){
+						p.setWorkkmainname(cellValue);//主岗位岗位名称
+						break;
+ 					}
+					else if(k == 9){
+						p.setWorkfirsttime(cellValue);//岗位一上岗时间
+						break;
+ 					}
+					else if(k == 10){
+						p.setWorkfirstname(cellValue);//岗位一名称
+						break;
+ 					}
+					else if(k == 11){
+						p.setWorksecondtime(cellValue);//岗位二上岗时间
+						break;
+ 					}
+					else if(k == 12){
+						p.setWorksecondname(cellValue);//岗位二上岗名称
+						break;
+ 					}
+					else if(k == 13){
+						p.setIfwelding(cellValue);//从事IE2111焊接
+						break;
+ 					}
+					else if(k == 14){
+						p.setClassify(cellValue);//分类
+						break;
+ 					}
+					else if(k == 15){
+						p.setWeldername(cellValue);//姓名
+						break;
+ 					}
+					else if(k == 16){
+						p.setLevel(cellValue);//技能等级
+						break;
+ 					}
+					else if(k == 18){
+						p.setIfpass(cellValue);//认证状态
+						if(cellValue.equals("N/A")){
+							cellValue=null;
+						}
+						break;
+ 					}
+					else if(k == 19){
+						p.setIcworkime(cellValue);//IC卡有效期
+						break;
+ 					}
+					else if(k == 20){
+						p.setHalfyearsure(cellValue);//半年认证时间
+						break;
+ 					}
+					else if(k == 21){
+						p.setYearsure(cellValue);//年度确认
 						break;
  					}
 					break;
@@ -669,6 +863,14 @@ public class ImportExcelController {
 					break;
 				case HSSFCell.CELL_TYPE_BLANK: // 空值
 					cellValue = "";
+					if(k == 20){
+						p.setHalfyearsure(cellValue);//半年认证时间
+						break;
+ 					}
+					else if(k == 21){
+						p.setYearsure(cellValue);//年度确认
+						break;
+ 					}
 					break;
 				case HSSFCell.CELL_TYPE_ERROR: // 故障
 					cellValue = "";
@@ -683,6 +885,135 @@ public class ImportExcelController {
 		
 		return welder;
 	}
+	
+	
+	
+//	/**
+//	 * 导入Welder表数据
+//	 * @param path
+//	 * @return
+//	 * @throws IOException
+//	 * @throws InvalidFormatException
+//	 */
+//	public static List<Person> xlsxWelder(String path) throws IOException, InvalidFormatException{
+//		List<Person> welder = new ArrayList<Person>();
+//		InputStream stream = new FileInputStream(path);
+//		Workbook workbook = create(stream);
+//		Sheet sheet = workbook.getSheetAt(0);
+//		
+//		int rowstart = sheet.getFirstRowNum()+1;
+//		int rowEnd = sheet.getLastRowNum();
+//	    
+//		for(int i=rowstart;i<=rowEnd;i++){
+//			Row row = sheet.getRow(i);
+//			if(null == row){
+//				continue;
+//			}
+//			int cellStart = row.getFirstCellNum();
+//			int cellEnd = row.getLastCellNum();
+//			Person p = new Person();
+//			for(int k = cellStart; k<= cellEnd;k++){
+//				Cell cell = row.getCell(k);
+//				if(null == cell){
+//					continue;
+//				}
+//				
+//				String cellValue = "";
+//				
+//				switch (cell.getCellType()){
+//				case HSSFCell.CELL_TYPE_NUMERIC://数字
+//					if (HSSFDateUtil.isCellDateFormatted(cell)) {// 处理日期格式、时间格式  
+//		                SimpleDateFormat sdf = null;  
+//		                if (cell.getCellStyle().getDataFormat() == HSSFDataFormat  
+//		                        .getBuiltinFormat("h:mm")) {  
+//		                    sdf = new SimpleDateFormat("HH:mm");  
+//		                } else {// 日期  
+//		                    sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+//		                }  
+//		                Date date = cell.getDateCellValue();  
+//		                cellValue = sdf.format(date);  
+//		            } else if (cell.getCellStyle().getDataFormat() == 58) {  
+//		                // 处理自定义日期格式：m月d日(通过判断单元格的格式id解决，id的值是58)  
+//		                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+//		                double value = cell.getNumericCellValue();  
+//		                Date date = org.apache.poi.ss.usermodel.DateUtil  
+//		                        .getJavaDate(value);  
+//		                cellValue = sdf.format(date);  
+//		            } else {
+//		            	 //处理数字过长时出现x.xxxE9
+//		            	 BigDecimal big=new BigDecimal(cell.getNumericCellValue());  
+//		            	 cellValue = big.toString();
+//                   }
+//					if(k == 1){
+//						p.setWelderno(cellValue);//焊工编号
+//						break;
+//					}
+//					else if(k == 2){
+//						p.setCellphone(cellValue);//手机
+//						break;
+// 					}
+//					else if(k == 4){
+//						p.setCardnum(cellValue);//卡号
+//						break;
+// 					}
+//					break;
+//				case HSSFCell.CELL_TYPE_STRING://字符串
+//					cellValue = cell.getStringCellValue();
+//					if(k == 0){
+//						p.setName(cellValue);//姓名
+//						break;
+//					}
+//					else if(k == 1){
+//						p.setWelderno(cellValue);//焊工编号
+//						break;
+//					}
+//					else if(k == 2){
+//						p.setCellphone(cellValue);//手机
+//						break;
+// 					}
+//					else if(k == 3){
+//						p.setLevename(cellValue);//级别
+//						break;
+// 					}
+//					else if(k == 4){
+//						p.setCardnum(cellValue);//卡号
+//						break;
+// 					}
+//					else if(k == 5){
+//						p.setQualiname(cellValue);//资质
+//						break;
+// 					}
+//					else if(k == 6){
+//						p.setInsname(cellValue);//部门
+//						break;
+// 					}
+//					else if(k == 7){
+//						p.setBack(cellValue);//备注
+//						break;
+// 					}
+//					break;
+//				case HSSFCell.CELL_TYPE_BOOLEAN: // Boolean
+//					cellValue = String.valueOf(cell.getBooleanCellValue());
+//					break;
+//				case HSSFCell.CELL_TYPE_FORMULA: // 公式
+//					cellValue = String.valueOf(cell.getCellFormula());
+//					break;
+//				case HSSFCell.CELL_TYPE_BLANK: // 空值
+//					cellValue = "";
+//					break;
+//				case HSSFCell.CELL_TYPE_ERROR: // 故障
+//					cellValue = "";
+//					break;
+//				default:
+//					cellValue = cell.toString().trim();
+//					break;
+//				}
+//			}
+//			welder.add(p);
+//		}
+//		
+//		return welder;
+//	}
 	
 	
 	/**

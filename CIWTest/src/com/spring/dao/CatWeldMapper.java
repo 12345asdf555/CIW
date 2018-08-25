@@ -6,24 +6,25 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.spring.dto.WeldDto;
+import com.spring.model.CatWeld;
 import com.spring.model.WeldedJunction;
 
 import tk.mybatis.mapper.common.Mapper;
 
-public interface WeldedJunctionMapper extends Mapper<WeldedJunction>{
-	List<WeldedJunction> getWeldedJunctionAll(@Param("str")String str);
-	
-	List<WeldedJunction> getweldmainAll(@Param("str")String str);
+public interface CatWeldMapper extends Mapper<CatWeld>{
+	List<CatWeld> getCatWeldAll(@Param("str")String str);
 	
 	List<WeldedJunction> getJunctionByWelder(@Param("welder")String welder,@Param("dto")WeldDto dto);
 	
 	WeldedJunction getWeldedJunctionById(@Param("id")BigInteger id);
 	
-	boolean addJunction(WeldedJunction wj);
+	boolean addCatweld(CatWeld cwm);
 
-	boolean updateJunction(WeldedJunction wj);
+	int getweldnumCount(@Param("eno")String eno);
+	
+	boolean updateCatweld(CatWeld cwm);
 
-	boolean deleteJunction(@Param("id")BigInteger id);
+	boolean deleteCatweld(@Param("id")BigInteger id);
 	
 	int getWeldedjunctionByNo(@Param("wjno")String wjno);
 	

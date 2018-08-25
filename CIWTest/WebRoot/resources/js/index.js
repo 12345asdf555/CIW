@@ -97,6 +97,15 @@ function openWeldPersonData(){
 	addTab("人员焊接数据","datastatistics/goWeldPersonData");
 }
 
+function opencatmail(){
+	addTab("CAT邮件管理","catweld/goCatMail");
+}
+
+function openCatWeld(){
+	addTab("CAT焊工管理","catweld/goCatWeld");
+}
+
+
 function openWeldWorkpieceData(){
 	addTab("工件焊接数据","datastatistics/goWeldWorkpieceData");
 }

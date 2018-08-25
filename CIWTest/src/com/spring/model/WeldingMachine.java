@@ -15,6 +15,17 @@ import org.springframework.stereotype.Component;
 public class WeldingMachine {
 	private BigInteger id;
 	private String ip;
+	private String fmachingnumber;
+	private String fmachingname;
+	private String fmachingtype;
+	private String fmanufacturers;
+	private String fmanunumbers;
+	private String fusedata;
+	private String fplace;
+	private String fsection;
+	private String fauthentication;
+	private String ftest;
+	private String fprevention;
 	private String equipmentNo;
 	private String position;
 	private int isnetworking;
@@ -138,5 +149,70 @@ public class WeldingMachine {
 	public void setModel(String model) {
 		this.model = model;
 	}
-	
+	public String getFmachingnumber() {
+		return fmachingnumber;
+	}
+	public void setFmachingnumber(String fmachingnumber) {
+		this.fmachingnumber = fmachingnumber;
+	}
+	public String getFmachingname() {
+		return fmachingname;
+	}
+	public void setFmachingname(String fmachingname) {
+		this.fmachingname = fmachingname;
+	}
+	public String getFmachingtype() {
+		return fmachingtype;
+	}
+	public void setFmachingtype(String fmachingtype) {
+		this.fmachingtype = fmachingtype;
+	}
+	public String getFmanufacturers() {
+		return fmanufacturers;
+	}
+	public void setFmanufacturers(String fmanufacturers) {
+		this.fmanufacturers = fmanufacturers;
+	}
+	public String getFmanunumbers() {
+		return fmanunumbers;
+	}
+	public void setFmanunumbers(String fmanunumbers) {
+		this.fmanunumbers = fmanunumbers;
+	}
+	public String getFsection() {
+		return fsection;
+	}
+	public void setFsection(String fsection) {
+		this.fsection = fsection;
+	}
+	public String getFplace() {
+		return fplace;
+	}
+	public void setFplace(String fplace) {
+		this.fplace = fplace;
+	}
+	public String getFusedata() {
+		return fusedata;
+	}
+	public void setFusedata(String fusedata) {
+		this.fusedata = fusedata;
+	}
+	public String getFauthentication() {
+		return fauthentication;
+	}
+	public void setFauthentication(String fauthentication) {
+		this.fauthentication = fauthentication;
+	}
+	public String getFtest() {
+		return ftest;
+	}
+	public void setFtest(String ftest) {
+		this.ftest = ftest;
+	}
+	public String getFprevention() {
+		return fprevention;
+	}
+	public void setFprevention(String fprevention) {
+		this.fprevention = fprevention;
+	}
 }

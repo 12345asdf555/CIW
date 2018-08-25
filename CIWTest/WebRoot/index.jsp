@@ -136,17 +136,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 			<div title="生产过程管理" data-options="iconCls:'icon-statement'">
 				<ul>
-			        <li onclick="changeColor(this)"><a href="javascript:openPerson()" ><div><img src="resources/images/c-6.png" />&nbsp;&nbsp;焊工管理</div></a></li>
+			         <li onclick="changeColor(this)"><a href="javascript:openCatWeld()"><div><img src="resources/images/c-7.png" />&nbsp;&nbsp;CAT焊工管理</div></a></li>
 			        <li onclick="changeColor(this)"><a href="javascript:openWedJunction()"><div><img src="resources/images/c-7.png" />&nbsp;&nbsp;焊缝管理</div></a></li>
 			        <li onclick="changeColor(this)"><a href="javascript:openProduct()"><div><img src="resources/images/c-8.png" />&nbsp;&nbsp;产品管理</div></a></li>
 			        <li onclick="changeColor(this)"><a href="javascript:openWps()"><div><img src="resources/images/c-9.png" />&nbsp;&nbsp;工艺管理</div></a></li>
 			        <li class="libottom" onclick="changeColor(this)"><a href="javascript:openSpe()"><div><img src="resources/images/c-14.png" />&nbsp;&nbsp;焊机参数管理</div></a></li>
+<!-- 			        <li onclick="changeColor(this)"><a href="javascript:opencatmail()"><div><img src="resources/images/c-7.png" />&nbsp;&nbsp;CAT邮件管理</div></a></li> -->
+<!-- 			       <li onclick="changeColor(this)"><a href="javascript:openPerson()" ><div><img src="resources/images/c-6.png" />&nbsp;&nbsp;焊工管理</div></a></li> -->
 				</ul>
 			</div>
 			<div title="系统配置管理" data-options="iconCls:'icon-sys'">
 				<ul>
 					<li onclick="changeColor(this)"><a href="javascript:openUser()"><div><img src="resources/images/c-1.png" />&nbsp;&nbsp;用户管理</div></a></li>
-					<li onclick="changeColor(this)"><a href="javascript:openRole()"><div><img src="resources/images/c-2.png" />&nbsp;&nbsp;角色管理</div></a></li>
+					<li onclick="(this)"><a href="javascript:openRole()"><div><img src="resources/images/c-2.png" />&nbsp;&nbsp;角色管理</div></a></li>
 					<li onclick="changeColor(this)"><a href="javascript:openAuthority()"><div><img src="resources/images/c-3.png" />&nbsp;&nbsp;权限管理</div></a></li>
 					<li onclick="changeColor(this)"><a href="javascript:openResource()"><div><img src="resources/images/c-4.png" />&nbsp;&nbsp;资源管理</div></a></li>
 			        <li onclick="changeColor(this)"><a href="javascript:openDictionary()"><div><img src="resources/images/c-5.png" />&nbsp;&nbsp;字典管理</div></a></li>

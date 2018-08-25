@@ -12,19 +12,29 @@ import tk.mybatis.mapper.common.Mapper;
 public interface WeldingMachineMapper extends Mapper<WeldingMachine>{
 	List<WeldingMachine> getWeldingMachineAll(@Param("parent") BigInteger parent,@Param("str") String str);
 	
+	List<WeldingMachine> getcatMachineAll(@Param("parent") BigInteger parent,@Param("str") String str);
+	
 	List<WeldingMachine> AllMachine(@Param("wid")BigInteger wid);
 	
 	List<WeldingMachine> getEquipmentno();
 	
 	void addWeldingMachine(WeldingMachine wm);
 	
+	void addcatMachine(WeldingMachine wm);
+	
 	void editWeldingMachine(WeldingMachine wm);
 	
+	void editcatMachine(WeldingMachine wm);
+	
 	void deleteWeldingMachine(@Param("wid")BigInteger wid);
+	
+	void deletecatMachine(@Param("wid")BigInteger wid);
 	
 	BigInteger getWeldingMachineByEno(@Param("eno")String eno);
 	
 	int getEquipmentnoCount(@Param("eno")String eno);
+	
+	int getFmachingnumberCount(@Param("eno")String eno);
 	
 	int getEquipmentidCount(@Param("eid")String eid);
 	
@@ -49,4 +59,6 @@ public interface WeldingMachineMapper extends Mapper<WeldingMachine>{
 	List<WeldingMachine> getAllMachine();
 	
 	List<WeldingMachine> getMachineByIns(@Param("id")BigInteger id);
+
+	
 }

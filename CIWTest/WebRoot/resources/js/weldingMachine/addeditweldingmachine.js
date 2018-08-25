@@ -33,11 +33,7 @@ function addWeldingMachine(){
 		modal : true
 	});
 	$('#dlg').window('open');
-	var isnetworkingId = document.getElementsByName("isnetworkingId");
-	var statusId = document.getElementsByName("statusId");
-	isnetworkingId[0].checked =  'checked';
-	statusId[0].checked =  'checked';
-	url = "weldingMachine/addWeldingMachine";
+	url = "weldingMachine/addcatMachine";
 }
 
 function editWeldingMachine(){
@@ -54,26 +50,27 @@ function editWeldingMachine(){
 		$('#validgid').val(row.gatherId);
 		$('#validinsf').val(row.iId);
 		$('#fm').form('load', row);
-		url = "weldingMachine/editWeldingMachine?wid="+row.id;
+		url = "weldingMachine/editcatMachine?wid="+row.id;
+		//url = "weldingMachine/editcatMachine";
 	}
 }
 
 //提交
 function saveWeldingMachine(){
-	var tid = $('#tId').combobox('getValue');
-	var iid = $('#iId').combobox('getValue');
-	var gatherId = $('#gid').combobox('getValue');
-	var manuno = $('#manuno').combobox('getValue');
-	var sid = $("input[name='statusId']:checked").val();
-	var isnetworking = $("input[name='isnetworking']:checked").val();
+//	var tid = $('#tId').combobox('getValue');
+//	var iid = $('#iId').combobox('getValue');
+//	var gatherId = $('#gid').combobox('getValue');
+//	var manuno = $('#manuno').combobox('getValue');
+//	var sid = $("input[name='statusId']:checked").val();
+//	var isnetworking = $("input[name='isnetworking']:checked").val();
 	var messager = "";
 	var url2 = "";
 	if(flag==1){
 		messager = "新增成功！";
-		url2 = url+"?tId="+tid+"&iId="+iid+"&sId="+sid+"&isnetworking="+isnetworking+"&manuno="+manuno;
+		url2 = url;
 	}else{
 		messager = "修改成功！";
-		url2 = url+"&tId="+tid+"&iId="+iid+"&sId="+sid+"&isnetworking="+isnetworking+"&manuno="+manuno+"&gatherId="+gatherId;
+		url2 = url;
 	}
 	$('#fm').form('submit', {
 		url : url2,

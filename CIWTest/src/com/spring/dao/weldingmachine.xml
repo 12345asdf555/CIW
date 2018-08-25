@@ -4,8 +4,19 @@
 <mapper namespace="com.spring.dao.WeldingMachineMapper">
 
 	<resultMap id="wmMap" type="com.spring.model.WeldingMachine">
-		<id column="fid" property="id" />
+		<id property="id" column="fid"></id>
 		<result property="ip" column="fIP" />
+		<result property="fmachingnumber" column="fmachingnumber_no" />
+		<result property="fmachingname" column="fmachingname_no" />
+		<result property="fmachingtype" column="fmachingtype_no" />
+		<result property="fmanufacturers" column="fmanufacturers_no" />
+		<result property="fmanunumbers" column="fmanunumbers_no" />
+		<result property="fsection" column="fsection_no" />
+		<result property="fplace" column="fplace_no" />
+		<result property="fusedata" column="fusedata_no" />
+		<result property="fauthentication" column="fauthentication_no" />
+		<result property="ftest" column="ftest_no" />
+		<result property="fprevention" column="fprevention_no" />
 		<result property="model" column="model" />
 		<result property="equipmentNo" column="fequipment_no" />		
 		<result property="position" column="fposition" />
@@ -58,6 +69,19 @@
 		ORDER BY w.fid
 	</select>
 	
+	<select id="getcatMachineAll" resultMap="wmMap"  parameterType="java.lang.String">
+		SELECT 
+		m.fid fid,m.fIP fIP,m.fmachingnumber fmachingnumber_no,m.fmachingname fmachingname_no,m.fmachingtype fmachingtype_no,m.fprevention fprevention_no,m.ftest ftest_no
+		,m.fmanufacturers fmanufacturers_no,m.fmanunumbers fmanunumbers_no,m.fsection fsection_no,m.fplace fplace_no,m.fusedata fusedata_no,m.fauthentication fauthentication_no
+		FROM tb_catweldmachine m where 1=1
+		<if test="parent!=null and parent!=''">
+			and i.fid=#{parent}
+		</if>
+		<if test="str!=null and str!=''">
+			and ${str}
+		</if>
+	</select>
+	
 	<select id="getAllMachine" resultMap="wmMap">
 		SELECT 
 		w.fid fid,w.fIP fIP,w.fmodel model,fstatus_id, i.fid iid,ftype_id,g.fid gid,dic.fvalue mid, fequipment_no,fgather_no ,fjoin_time,i.fname iname
@@ -107,6 +131,10 @@
 		SELECT count(*) FROM tb_welding_machine WHERE fequipment_no = #{eno}
 	</select>
 	
+	<select id="getFmachingnumberCount" resultType="java.lang.Integer">
+		SELECT count(*) FROM tb_catweldmachine WHERE fmachingnumber = #{eno}
+	</select>
+	
 	<select id="getGatheridCount" resultType="java.lang.Integer">
 		SELECT count(*) FROM tb_welding_machine m 
 		inner join tb_gather g on m.fgather_id = g.fid where m.finsframework_id=#{itemid} and g.fgather_no=#{gather}
@@ -131,6 +159,12 @@
 		(#{ip},#{typeId},#{equipmentNo},#{statusId},#{position},#{insframeworkId.id},#{mvalueid},#{gatherId.id},#{isnetworking},#{joinTime},#{model},#{creater},now())
 	</insert>
 	
+	<insert id="addcatMachine" parameterType="com.spring.model.WeldingMachine" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tb_catweldmachine(fmachingnumber, fmachingname, fmachingtype, fmanufacturers, fmanunumbers, 
+		fsection,fplace, fusedata, fauthentication, ftest, fprevention) VALUES 
+		(#{fmachingnumber},#{fmachingname},#{fmachingtype},#{fmanufacturers},#{fmanunumbers},#{fsection},#{fplace},#{fusedata},#{fauthentication},#{ftest},#{fprevention})
+	</insert>
+	
 	<update id="editGatherid"  parameterType="java.math.BigInteger">
 		UPDATE tb_welding_machine SET fgather_id=null  where fid = #{wid}
 	</update>
@@ -141,12 +175,22 @@
 		fisnetworking=#{isnetworking},fjoin_time=#{joinTime},fmodel=#{model},fupdater=#{updater},fupdatedate=now() where fid = #{id}
 	</update>
 	
+	<update id="editcatMachine"  parameterType="com.spring.model.WeldingMachine">
+		UPDATE tb_catweldmachine SET fmachingnumber=#{fmachingnumber},fmachingname=#{fmachingname},fmachingtype=#{fmachingtype},fmanufacturers=#{fmanufacturers},
+		fmanunumbers=#{fmanunumbers},fsection=#{fsection},fplace=#{fplace},fusedata=#{fusedata},
+		fauthentication=#{fauthentication},ftest=#{ftest},fprevention=#{fprevention} where fid = #{id}
+	</update>
+	
 	<update id="editstatus"  parameterType="com.spring.model.WeldingMachine">
 		UPDATE tb_welding_machine SET fstatus_id=#{status}  where fid = #{wid}
 	</update>
 	
 	<delete id="deleteWeldingMachine" parameterType="java.math.BigInteger">
 		DELETE FROM tb_welding_machine WHERE fid = #{wid}
+	</delete>
+	
+	<delete id="deletecatMachine" parameterType="java.math.BigInteger">
+		DELETE FROM tb_catweldmachine WHERE fid = #{wid}
 	</delete>
 	
 	<delete id="deleteHistory" parameterType="java.math.BigInteger">

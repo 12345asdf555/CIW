@@ -10,83 +10,120 @@ function weldingMachineDatagrid(){
 		idField : 'id',
 		pageSize : 10,
 		pageList : [ 10, 20, 30, 40, 50 ],
-		url : "weldingMachine/getWedlingMachineList",
+		url : "weldingMachine/getcatMachineList",
 		singleSelect : true,
 		rownumbers : true,
 		showPageList : false, 
-        columns : [ [ {
+       columns : [ [ 
+    	 		{
 			field : 'id',
 			title : '序号',
 			width : 50,
 			halign : "center",
 			align : "left",
 			hidden:true
-		}, {
+		}, 
+    	   {
 			field : 'equipmentNo',
-			title : '固定资产编号',
+			title : '设备编号',
 //			width : 80,
 			halign : "center",
 			align : "left"
 		}, {
-			field : 'typeName',
+			field : 'equipmentName',
+			title : '设备名称',
+//			width : 80,
+			halign : "center",
+			align : "left"
+		},{
+			field : 'typename',
 			title : '设备类型',
 //			width : 80,
 			halign : "center",
 			align : "left"
 		}, {
-			field : 'joinTime',
-			title : '入厂时间',
+			field : 'manufacturername',
+			title : '制造厂家',
 //			width : 150,
 			halign : "center",
 			align : "left"
 		}, {
-			field : 'insframeworkName',
-			title : '所属项目',
+			field : 'manufacturerNo',
+			title : '出厂编号',
 //			width : 80,
 			halign : "center",
 			align : "left"
 		}, {
-			field : 'statusName',
-			title : '状态',
-//			width : 80,
-			halign : "center",
-			align : "left"
-		} , {
-			field : 'manufacturerName',
-			title : '厂家',
-//			width : 150,
+			field : 'usedata',
+			title : '使用日期',
+//			width : 100,
 			halign : "center",
 			align : "left"
 		}, {
+			field : 'fplace',
+			title : '存放地点',
+//			width : 80,
+			halign : "center",
+			align : "left"
+		}, {
+			field : 'action',
+			title : '使用工段',
+//			width : 80,
+			halign : "center",
+			align : "left"
+		} ,{
+			field : 'inspectTime',
+			title : '上度认证时间',
+//			width : 100,
+			halign : "center",
+			align : "left"
+		},{
+			field : 'nextTime',
+			title : '下次校验日期',
+//			width : 100,
+			halign : "center",
+			align : "left"
+		},{
+			field : 'maintainTime',
+			title : '预防性维护日期',
+//			width : 100,
+			halign : "center",
+			align : "left"
+		},{
 			field : 'isnetworking',
 			title : '是否在网',
 //			width : 80,
 			halign : "center",
-			align : "left"
+			align : "left",
+			hidden: true	
 		}, {
 			field : 'gatherId',
 			title : '采集序号',
 //			width : 100,
 			halign : "center",
-			align : "left"
+			align : "left",
+			hidden: true
 		}, {
 			field : 'position',
 			title : '位置',
 //			width : 100,
 			halign : "center",
-			align : "left"
+			align : "left",
+			hidden: true
 		}, {
 			field : 'ip',
 			title : 'ip地址',
 //			width : 100,
 			halign : "center",
-			align : "left"
+			align : "left",
+			hidden: true
 		}, {
 			field : 'model',
 			title : '设备型号',
 //			width : 100,
 			halign : "center",
-			align : "left"
+			align : "left",
+			hidden: true
 		}, {
 			field : 'statusId',
 			title : '状态id',
@@ -137,9 +174,9 @@ function weldingMachineDatagrid(){
 			align : "left",
 			formatter:function(value,row,index){
 				var str = "";
-				str += '<a id="edit" class="easyui-linkbutton" href="javascript:editMachine('+row.iId+','+row.id+','+true+')"/>';
-				str += '<a id="remove" class="easyui-linkbutton" href="javascript:editMachine('+row.iId+','+row.id+','+false+')"/>';
-				str += '<a id="maintain" class="easyui-linkbutton" href="weldingMachine/goMaintain?wid='+row.id+'"/>';
+				str += '<a id="edit" class="easyui-linkbutton" href="javascript:editWeldingMachine()"/>';
+				str += '<a id="remove" class="easyui-linkbutton" href="javascript:removeWeldingMachine()"/>';
+//				str += '<a id="maintain" class="easyui-linkbutton" href="weldingMachine/goMaintain?wid='+row.id+'"/>';
 				return str;
 			}
 		}
@@ -157,7 +194,7 @@ function weldingMachineDatagrid(){
 		onLoadSuccess:function(data){
 	        $("a[id='edit']").linkbutton({text:'修改',plain:true,iconCls:'icon-update'});
 	        $("a[id='remove']").linkbutton({text:'删除',plain:true,iconCls:'icon-delete'});
-	        $("a[id='maintain']").linkbutton({text:'维修记录',plain:true,iconCls:'icon-update'});
+//	        $("a[id='maintain']").linkbutton({text:'维修记录',plain:true,iconCls:'icon-update'});
 		}
 	});
 }

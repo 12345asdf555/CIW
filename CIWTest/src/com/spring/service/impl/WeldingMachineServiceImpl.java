@@ -31,6 +31,12 @@ public class WeldingMachineServiceImpl implements WeldingMachineService {
 	}
 	
 	@Override
+	public List<WeldingMachine> getcatMachineAll(Page page,BigInteger parent,String str) {
+		PageHelper.startPage(page.getPageIndex(),page.getPageSize());
+		return wmm.getcatMachineAll(parent,str);
+	}
+	
+	@Override
 	public List<WeldingMachine> AllMachine(Page page,BigInteger parent) {
 		PageHelper.startPage(page.getPageIndex(),page.getPageSize());
 		return wmm.AllMachine(parent);
@@ -42,10 +48,20 @@ public class WeldingMachineServiceImpl implements WeldingMachineService {
 	}
 
 	@Override
+	public void addcatMachine(WeldingMachine wm) {
+		wmm.addcatMachine(wm);
+	}
+	
+	@Override
 	public void editWeldingMachine(WeldingMachine wm) {
 		wmm.editWeldingMachine(wm);
 	}
 
+	@Override
+	public void editcatMachine(WeldingMachine wm) {
+		wmm.editcatMachine(wm);
+	}
+	
 	@Override
 	public List<WeldingMachine> getWeldingMachine(String str) {
 		return wmm.getWeldingMachineAll(null,str);
@@ -62,6 +78,11 @@ public class WeldingMachineServiceImpl implements WeldingMachineService {
 	}
 
 	@Override
+	public int getFmachingnumberCount(String eno) {
+		return wmm.getFmachingnumberCount(eno);
+	}
+	
+	@Override
 	public int getGatheridCount(BigInteger itemid,String gather) {
 		return wmm.getGatheridCount(itemid,gather);
 	}
@@ -76,6 +97,11 @@ public class WeldingMachineServiceImpl implements WeldingMachineService {
 		wmm.deleteWeldingMachine(wid);
 	}
 
+	@Override
+	public void deletecatChine(BigInteger wid) {
+		wmm.deletecatMachine(wid);
+	}
+	
 	@Override
 	public BigInteger getInsframeworkByName(String name) {
 		return im.getInsframeworkByName(name);

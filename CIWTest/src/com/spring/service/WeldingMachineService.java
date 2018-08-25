@@ -13,6 +13,13 @@ public interface WeldingMachineService {
 	 */
 	List<WeldingMachine> getWeldingMachineAll(Page page,BigInteger parent,String str);
 	List<WeldingMachine> AllMachine(Page page,BigInteger parent);
+	
+	/**
+	 * 查询cat焊机信息:分页
+	 */
+	List<WeldingMachine> getcatMachineAll(Page page,BigInteger parent,String str);
+	/**
+	
 	/**
 	 * 查询所有焊机信息
 	 */
@@ -24,15 +31,29 @@ public interface WeldingMachineService {
 	void addWeldingMachine(WeldingMachine wm);
 	
 	/**
+	 * CAT新增设备
+	 */
+	void addcatMachine(WeldingMachine wm);
+	/**
 	 * 修改设备
 	 */
 	void editWeldingMachine(WeldingMachine wm);
 	
 	/**
+	 * CAT修改设备
+	 */
+	void editcatMachine(WeldingMachine wm);
+	/**
 	 * 删除设备
 	 * @param wid
 	 */
 	void deleteWeldingChine(BigInteger wid);
+	
+	/**
+	 * CAT删除设备
+	 * @param wid
+	 */
+	void deletecatChine(BigInteger wid);
 	/**
 	 * 删除对应的工艺记录
 	 */
@@ -49,6 +70,15 @@ public interface WeldingMachineService {
 	 * @return
 	 */
 	int getEquipmentnoCount(String eno);
+	
+	/**
+	 * 判断CAT设备编号是否存在
+	 * @param eno
+	 * @return
+	 */
+	int getFmachingnumberCount(String eno);
+	
+	
 	
 	/**
 	 * 判断采集序号是否存在
