@@ -17,6 +17,7 @@
 		<result property="fauthentication" column="fauthentication_no" />
 		<result property="ftest" column="ftest_no" />
 		<result property="fprevention" column="fprevention_no" />
+		<result property="fgather" column="gather_no" />
 		<result property="model" column="model" />
 		<result property="equipmentNo" column="fequipment_no" />		
 		<result property="position" column="fposition" />
@@ -71,7 +72,7 @@
 	
 	<select id="getcatMachineAll" resultMap="wmMap"  parameterType="java.lang.String">
 		SELECT 
-		m.fid fid,m.fIP fIP,m.fmachingnumber fmachingnumber_no,m.fmachingname fmachingname_no,m.fmachingtype fmachingtype_no,m.fprevention fprevention_no,m.ftest ftest_no
+		m.fid fid,m.fIP fIP,m.fmachingnumber fmachingnumber_no,m.fmachingname fmachingname_no,m.fmachingtype fmachingtype_no,m.fprevention fprevention_no,m.ftest ftest_no,m.fgather_no gather_no
 		,m.fmanufacturers fmanufacturers_no,m.fmanunumbers fmanunumbers_no,m.fsection fsection_no,m.fplace fplace_no,m.fusedata fusedata_no,m.fauthentication fauthentication_no
 		FROM tb_catweldmachine m where 1=1
 		<if test="parent!=null and parent!=''">
@@ -161,8 +162,8 @@
 	
 	<insert id="addcatMachine" parameterType="com.spring.model.WeldingMachine" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO tb_catweldmachine(fmachingnumber, fmachingname, fmachingtype, fmanufacturers, fmanunumbers, 
-		fsection,fplace, fusedata, fauthentication, ftest, fprevention) VALUES 
-		(#{fmachingnumber},#{fmachingname},#{fmachingtype},#{fmanufacturers},#{fmanunumbers},#{fsection},#{fplace},#{fusedata},#{fauthentication},#{ftest},#{fprevention})
+		fsection,fplace, fusedata, fauthentication, ftest, fprevention, fgather_no) VALUES 
+		(#{fmachingnumber},#{fmachingname},#{fmachingtype},#{fmanufacturers},#{fmanunumbers},#{fsection},#{fplace},#{fusedata},#{fauthentication},#{ftest},#{fprevention},#{fgather})
 	</insert>
 	
 	<update id="editGatherid"  parameterType="java.math.BigInteger">
@@ -178,7 +179,7 @@
 	<update id="editcatMachine"  parameterType="com.spring.model.WeldingMachine">
 		UPDATE tb_catweldmachine SET fmachingnumber=#{fmachingnumber},fmachingname=#{fmachingname},fmachingtype=#{fmachingtype},fmanufacturers=#{fmanufacturers},
 		fmanunumbers=#{fmanunumbers},fsection=#{fsection},fplace=#{fplace},fusedata=#{fusedata},
-		fauthentication=#{fauthentication},ftest=#{ftest},fprevention=#{fprevention} where fid = #{id}
+		fauthentication=#{fauthentication},ftest=#{ftest},fprevention=#{fprevention},fgather_no=#{fgather} where fid = #{id}
 	</update>
 	
 	<update id="editstatus"  parameterType="com.spring.model.WeldingMachine">

@@ -14,16 +14,22 @@ function weldingMachineDatagrid(){
 		singleSelect : true,
 		rownumbers : true,
 		showPageList : false, 
-       columns : [ [ 
-    	 		{
+       columns : [ [ {
 			field : 'id',
 			title : '序号',
 			width : 50,
 			halign : "center",
 			align : "left",
 			hidden:true
-		}, 
-    	   {
+		},{
+			field : 'fgather',
+			title : '采集编号',
+//			width : 80,
+			halign : "center",
+			align : "left",
+//			hidden:true
+			
+		},{
 			field : 'equipmentNo',
 			title : '设备编号',
 //			width : 80,

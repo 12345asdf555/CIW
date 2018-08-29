@@ -11,10 +11,14 @@ import com.spring.page.Page;
 public interface CatWeldService {
 	
 	/**
-	 * 查询所有焊口
+	 * 查询CAT焊工
 	 */
 	List<CatWeld> getCatWeldAll(Page page, String str);
 	
+	/**
+	 * 查询CAT邮件
+	 */
+	List<CatWeld> getCatmail(Page page, String str);
 	/**
 	 * 根据id查询
 	 * @param id 焊缝id

@@ -43,6 +43,8 @@ function editCatweld(){
 		});
 		$('#dlg').window('open');
 		$('#fm').form('load', row);
+		oldic = $("#icworkime").textbox('getValue');
+		oldck = $("#checkintime").textbox('getValue');
 		$('#oldno').val(row.weldedJunctionno);
 		url = "catweld/editCatweld?id="+ row.id;
 	}
@@ -50,6 +52,16 @@ function editCatweld(){
 
 //提交
 function save(){
+	var symbol=0;
+	var newic = $("#icworkime").textbox('getValue');
+	var newck = $("#checkintime").textbox('getValue');
+	if(oldic!=newic&&oldck==newck){
+		symbol=1;
+	}else if(oldic==newic&&oldck!=newck){
+		symbol=2;
+	}else if(oldic!=newic&&oldck!=newck){
+		symbol=3;
+	}
 	var messager = "";
 	var url2 = "";
 	if(flag==1){
@@ -57,7 +69,7 @@ function save(){
 		url2 = url;
 	}else{
 		messager = "修改成功！";
-		url2 = url;
+		url2 = url+"&symbol="+symbol;
 	}
 	$('#fm').form('submit', {
 		url : url2,

@@ -10,7 +10,7 @@ function weldedJunctionDatagrid(){
 		idField : 'id',
 		pageSize : 10,
 		pageList : [ 10, 20, 30, 40, 50 ],
-		url : "weldedjunction/getweldmain",
+		url : "catweld/getCatmail",
 		singleSelect : true,
 		rownumbers : true,
 		showPageList : false,
@@ -22,33 +22,40 @@ function weldedJunctionDatagrid(){
 			align : "left",
 			hidden:true
 		}, {
-			field : 'mailName',
+			field : 'emailname',
 			title : '邮件名',
 //			width : 90,
 			halign : "center",
 			align : "left"
 		}, {
-			field : 'mailAddress',
+			field : 'emailaddress',
 			title : '邮件地址',
 //			width : 90,
 			halign : "center",
 			align : "left",
 //			hidden:true
 		}, {
-			field : 'mailDesc',
+			field : 'emailtext',
 			title : '邮件描述',
 //			width : 90,
 			halign : "center",
 			align : "left",
 //			hidden:true
 		}, {
-			field : 'radios',
+			field : 'emailstatus',
 			title : '状态',
 //			width : 90,
 			halign : "center",
 			align : "left",
+			hidden:true
+		}, {
+			field : 'emailtime',
+			title : '发送时间',
+//			width : 90,
+			halign : "center",
+			align : "left",
 //			hidden:true
-		},  {
+		},{
 			field : 'mailed',
 			title : '邮件id',
 //			width : 90,
@@ -76,13 +83,6 @@ function weldedJunctionDatagrid(){
 			halign : "center",
 			align : "left",
 			hidden:true
-		}, {
-			field : 'leavetime',
-			title : '发送时间',
-//			width : 90,
-			halign : "center",
-			align : "left",
-//			hidden:true
 		}] ],
 		pagination : true,
 		rowStyler: function(index,row){

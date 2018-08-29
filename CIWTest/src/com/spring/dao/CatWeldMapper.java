@@ -14,6 +14,8 @@ import tk.mybatis.mapper.common.Mapper;
 public interface CatWeldMapper extends Mapper<CatWeld>{
 	List<CatWeld> getCatWeldAll(@Param("str")String str);
 	
+	List<CatWeld> getCatmail(@Param("str")String str);
+	
 	List<WeldedJunction> getJunctionByWelder(@Param("welder")String welder,@Param("dto")WeldDto dto);
 	
 	WeldedJunction getWeldedJunctionById(@Param("id")BigInteger id);

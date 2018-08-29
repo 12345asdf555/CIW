@@ -245,6 +245,7 @@ public class WeldingMachineController {
 				json.put("nextTime", wm.getFtest());
 				json.put("maintainTime", wm.getFprevention());
 				json.put("position", wm.getPosition());
+				json.put("fgather", wm.getFgather());
 				json.put("gatherId", wm.getGatherId());
 				if(wm.getIsnetworking()==0){
 					json.put("isnetworking", "是");
@@ -588,6 +589,7 @@ public class WeldingMachineController {
 			wm.setFsection(request.getParameter("action"));
 			System.out.println(request.getParameter("inspectTime"));
 			wm.setFauthentication(request.getParameter("inspectTime"));
+			wm.setFgather(request.getParameter("fgather"));
 			System.out.println(request.getParameter("nextTime"));
 			wm.setFtest(request.getParameter("nextTime"));
 			System.out.println(request.getParameter("maintainTime"));
@@ -637,6 +639,7 @@ public class WeldingMachineController {
 			wm.setFauthentication(request.getParameter("inspectTime"));
 			System.out.println(request.getParameter("nextTime"));
 			wm.setFtest(request.getParameter("nextTime"));
+			wm.setFgather(request.getParameter("fgather"));
 			System.out.println(request.getParameter("maintainTime"));
 			wm.setFprevention(request.getParameter("maintainTime"));
 			//wm.setFprevention(Integer.parseInt(request.getParameter("maintainTime")));

@@ -496,6 +496,10 @@ public class ImportExcelController {
 						dit.setFprevention(cellValue);//预防性维护日期
 						break;
 					}
+					else if(k == 9){
+						dit.setFtest(cellValue);//下次效验日期
+						break;
+					}
 					break;
 				case HSSFCell.CELL_TYPE_STRING://字符串
 					cellValue = cell.getStringCellValue();
@@ -716,7 +720,7 @@ public class ImportExcelController {
 		Workbook workbook = create(stream);
 		Sheet sheet = workbook.getSheetAt(0);
 		
-		int rowstart = sheet.getFirstRowNum()+3;
+		int rowstart = sheet.getFirstRowNum()+2;
 		int rowEnd = sheet.getLastRowNum();
 	    
 		for(int i=rowstart;i<=rowEnd;i++){
@@ -737,12 +741,14 @@ public class ImportExcelController {
 				
 				switch (cell.getCellType()){
 				case HSSFCell.CELL_TYPE_NUMERIC://数字
+					System.out.println(cell.getCellStyle().getDataFormat()+"*****");
+					
 					if (HSSFDateUtil.isCellDateFormatted(cell)) {// 处理日期格式、时间格式  
 		                SimpleDateFormat sdf = null;  
 		                if (cell.getCellStyle().getDataFormat() == HSSFDataFormat  
 		                        .getBuiltinFormat("h:mm")) {  
 		                    sdf = new SimpleDateFormat("HH:mm");  
-		                } else {// 日期  
+		                }  else {// 日期  
 		                    sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
 		                }  
 		                Date date = cell.getDateCellValue();  
@@ -753,7 +759,11 @@ public class ImportExcelController {
 		                double value = cell.getNumericCellValue();  
 		                Date date = org.apache.poi.ss.usermodel.DateUtil  
 		                        .getJavaDate(value);  
-		                cellValue = sdf.format(date);  
+		                cellValue = sdf.format(date);
+		                if(k == 21){
+							p.setYearsure(cellValue);//年度确认
+							break;
+	 					}
 		            } else {
 		            	 //处理数字过长时出现x.xxxE9
 		            	 BigDecimal big=new BigDecimal(cell.getNumericCellValue());  
@@ -763,17 +773,33 @@ public class ImportExcelController {
 						p.setCheckintime(cellValue);//入职时间
 						break;
 					}
+					else if(k == 19){
+						p.setIcworkime(cellValue);//IC卡有效期
+						break;
+ 					}
+					else if(k == 7){
+						p.setWorkmaintime(cellValue);//主岗位上岗时间
+						break;
+ 					}
 					else if(k == 17){
 						p.setScore(cellValue);//理论考试结果
 						break;
  					}
-					
+					if(k == 20){
+						p.setHalfyearsure(cellValue);//半年认证时间
+						break;
+ 					}
+					else if(k == 21){
+						p.setYearsure(cellValue);//年度确认
+						break;
+ 					}
+					else if(k == 22){
+						p.setNextyear(cellValue);//年度确认
+						break;
+ 					}
 					break;
 				case HSSFCell.CELL_TYPE_STRING://字符串
 					cellValue = cell.getStringCellValue();
-					if (cellValue=="N/A"){
-						cellValue=null;
-					}
 					if(k == 1){
 						p.setWeldNum(cellValue);//焊工工号
 						break;
@@ -837,21 +863,22 @@ public class ImportExcelController {
  					}
 					else if(k == 18){
 						p.setIfpass(cellValue);//认证状态
-						if(cellValue.equals("N/A")){
-							cellValue=null;
-						}
 						break;
  					}
 					else if(k == 19){
 						p.setIcworkime(cellValue);//IC卡有效期
 						break;
  					}
-					else if(k == 20){
+					if(k == 20){
 						p.setHalfyearsure(cellValue);//半年认证时间
 						break;
  					}
 					else if(k == 21){
 						p.setYearsure(cellValue);//年度确认
+						break;
+ 					}
+					else if(k == 22){
+						p.setNextyear(cellValue);//年度确认
 						break;
  					}
 					break;
@@ -863,14 +890,7 @@ public class ImportExcelController {
 					break;
 				case HSSFCell.CELL_TYPE_BLANK: // 空值
 					cellValue = "";
-					if(k == 20){
-						p.setHalfyearsure(cellValue);//半年认证时间
-						break;
- 					}
-					else if(k == 21){
-						p.setYearsure(cellValue);//年度确认
-						break;
- 					}
+					
 					break;
 				case HSSFCell.CELL_TYPE_ERROR: // 故障
 					cellValue = "";

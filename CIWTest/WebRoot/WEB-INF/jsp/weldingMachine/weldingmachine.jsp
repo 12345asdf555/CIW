@@ -39,8 +39,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<div>
 				<a href="javascript:addWeldingMachine();" class="easyui-linkbutton" iconCls="icon-newadd">新增</a>&nbsp;&nbsp;&nbsp;&nbsp;
 				<a href="javascript:importclick();" class="easyui-linkbutton" iconCls="icon-import">导入</a>&nbsp;&nbsp;&nbsp;&nbsp;
-				<a href="javascript:exportWeldingMachine();" class="easyui-linkbutton" iconCls="icon-export">导出</a>&nbsp;&nbsp;&nbsp;&nbsp;	
-				<a href="javascript:insertSearchWeldingMachine();" class="easyui-linkbutton"iconCls="icon-select" >查找</a>
+<!-- 				<a href="javascript:exportWeldingMachine();" class="easyui-linkbutton" iconCls="icon-export">导出</a>&nbsp;&nbsp;&nbsp;&nbsp;	 -->
+<!-- 				<a href="javascript:insertSearchWeldingMachine();" class="easyui-linkbutton"iconCls="icon-select" >查找</a> -->
 			</div>
 		</div>
 		<div id="importdiv" class="easyui-dialog" style="width:300px; height:200px;" closed="true">
@@ -71,6 +71,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    <!-- 添加修改 -->
 		<div id="dlg" class="easyui-dialog" style="width: 400px; height: 530px; padding:10px 20px" closed="true" buttons="#dlg-buttons">
 			<form id="fm" class="easyui-form" method="post" data-options="novalidate:true">
+				<div class="fitem">
+					<lable><span class="required">*</span>采集编号</lable>
+					<input class="easyui-combobox" name="gid" id="gid"  />
+				</div>
 				<div class="fitem">
 					<lable><span class="required">*</span>设备编号</lable>
 					<input class="easyui-textbox" name="equipmentNo" id="equipmentNo"  />

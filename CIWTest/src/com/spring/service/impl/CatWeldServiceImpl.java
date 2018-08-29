@@ -28,11 +28,17 @@ public class CatWeldServiceImpl implements CatWeldService{
 	}
 
 	@Override
+	public List<CatWeld> getCatmail(Page page, String str) {
+		PageHelper.startPage(page.getPageIndex(), page.getPageSize());
+		return cw.getCatmail(str);
+	}
+
+	
+	@Override
 	public int getWeldedjunctionByNo(String wjno) {
 		return cw.getWeldedjunctionByNo(wjno);
 	}
 
-	
 	@Override
 	public int getweldnumCount(String eno) {
 		return cw.getweldnumCount(eno);

@@ -26,6 +26,7 @@ public class WeldingMachine {
 	private String fauthentication;
 	private String ftest;
 	private String fprevention;
+	private String fgather;
 	private String equipmentNo;
 	private String position;
 	private int isnetworking;
@@ -208,6 +209,12 @@ public class WeldingMachine {
 	}
 	public void setFtest(String ftest) {
 		this.ftest = ftest;
+	}
+	public String getFgather() {
+		return fgather;
+	}
+	public void setFgather(String fgather) {
+		this.fgather = fgather;
 	}
 	public String getFprevention() {
 		return fprevention;

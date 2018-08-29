@@ -5,7 +5,7 @@
 
 	<resultMap id="catMap" type="com.spring.model.CatWeld">
         <id property="id" column="fid"></id> 
-<!--         <result property="id" column="fid"></result>   -->
+        <result property="id" column="fid"></result>  
         <result property="weldnum" column="fweldnum"></result>  
         <result property="checkintime" column="fcheckintime"></result> 
         <result property="ssnum" column="fssnum"></result>  
@@ -28,6 +28,12 @@
         <result property="icworkime" column="ficworkime"></result>
         <result property="halfyearsure" column="fhalfyearsure"></result>
         <result property="yearsure" column="fyearsure"></result>
+        <result property="nextyear" column="fnextyear"></result>
+        <result property="femailname" column="femailname_no"></result>
+        <result property="femailaddress" column="femailaddress_no"></result>
+        <result property="femailtext" column="femailtext_no"></result>
+        <result property="femailstatus" column="femailstatus_no"></result>
+        <result property="femailtime" column="femailtime_no"></result>
         <result property="nextwall_thickness" column="fnextwall_thickness"></result>
         <result property="next_material" column="fnext_material"></result>
         <result property="creatTime" column="fcreatetime"></result>
@@ -62,6 +68,13 @@
 	
 	<select id="getCatWeldAll" resultMap="catMap" parameterType="java.lang.String">
 		SELECT * FROM tb_catweldinf WHERE 1 = 1
+		<if test="str!=null and str!=''">
+			and ${str}
+		</if>
+	</select>
+	
+	<select id="getCatmail" resultMap="catMap" parameterType="java.lang.String">
+		SELECT k.fid fid,k.femailname femailname_no,k.femailaddress femailaddress_no,k.femailtext femailtext_no,k.femailstatus femailstatus_no,k.femailtime femailtime_no FROM tb_catemailcheck k WHERE 1 = 1
 		<if test="str!=null and str!=''">
 			and ${str}
 		</if>
@@ -156,13 +169,13 @@
 	</select>
 	
 	<insert id="addCatweld" parameterType="com.spring.model.CatWeld">
-		insert into tb_catweldinf(fweldnum,fcheckintime,fssnum,ffirstsuretime,fdepartment,fworkship,fworkmaintime,fworkkmainname,fworkfirsttime,fworkfirstname,fworksecondtime,fworksecondname,fifwelding,fclassify,fweldername,flevel,fscore,fifpass,ficworkime,fhalfyearsure,fyearsure) 
-		values(#{weldnum},#{checkintime},#{ssnum},#{firstsuretime},#{department},#{workship},#{workmaintime},#{workkmainname},#{workfirsttime},#{workfirstname},#{worksecondtime},#{worksecondname},#{ifwelding},#{classify},#{weldername},#{level},#{score},#{ifpass},#{icworkime},#{halfyearsure},#{yearsure});
+		insert into tb_catweldinf(fweldnum,fcheckintime,fssnum,ffirstsuretime,fdepartment,fworkship,fworkmaintime,fworkkmainname,fworkfirsttime,fworkfirstname,fworksecondtime,fworksecondname,fifwelding,fclassify,fweldername,flevel,fscore,fifpass,ficworkime,fhalfyearsure,fyearsure,fnextyear) 
+		values(#{weldnum},#{checkintime},#{ssnum},#{firstsuretime},#{department},#{workship},#{workmaintime},#{workkmainname},#{workfirsttime},#{workfirstname},#{worksecondtime},#{worksecondname},#{ifwelding},#{classify},#{weldername},#{level},#{score},#{ifpass},#{icworkime},#{halfyearsure},#{yearsure},#{nextyear});
 	</insert>
 	
 	<update id="updateCatweld" parameterType="com.spring.model.CatWeld">
 		update tb_catweldinf set fweldnum=#{weldnum},fcheckintime=#{checkintime},fssnum=#{ssnum},ffirstsuretime=#{firstsuretime},fdepartment=#{department},fworkship=#{workship},fworkmaintime=#{workmaintime},fworkkmainname=#{workkmainname},fworkfirsttime=#{workfirsttime},fworkfirstname=#{workfirstname},fworksecondtime=#{worksecondtime},
-		fworksecondname=#{worksecondname},fifwelding=#{ifwelding},fclassify=#{classify},fweldername=#{weldername},flevel=#{level},fscore=#{score},fifpass=#{ifpass},ficworkime=#{icworkime},fhalfyearsure=#{halfyearsure},fyearsure=#{yearsure} where fid=#{id};
+		fworksecondname=#{worksecondname},fifwelding=#{ifwelding},fclassify=#{classify},fweldername=#{weldername},flevel=#{level},fscore=#{score},fifpass=#{ifpass},ficworkime=#{icworkime},fhalfyearsure=#{halfyearsure},fyearsure=#{yearsure},fnextyear=#{nextyear} where fid=#{id};
 	</update>
 	
 	<delete id="deleteCatweld" parameterType="java.math.BigInteger">

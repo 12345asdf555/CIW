@@ -39,7 +39,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<div>
 				<a href="javascript:addCatweld();" class="easyui-linkbutton" iconCls="icon-newadd">新增</a>&nbsp;&nbsp;&nbsp;&nbsp;
 				<a href="javascript:importclick();" class="easyui-linkbutton" iconCls="icon-import">导入</a>&nbsp;&nbsp;&nbsp;&nbsp;
-				<a href="javascript:insertsearchWJ();" class="easyui-linkbutton" iconCls="icon-select" >查找</a>
+<!-- 				<a href="javascript:insertsearchWJ();" class="easyui-linkbutton" iconCls="icon-select" >查找</a> -->
 			</div>
 		</div>
 		
@@ -140,6 +140,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<div class="fitem">
 					<lable>年度认证</lable>
 					<input class="easyui-datetimebox" id="yearsure"  name="yearsure" readonly="readonly"/>
+					<lable>次年年度认证</lable>
+					<input class="easyui-datetimebox" id="nextyear"  name="nextyear" readonly="readonly"/>
 <!-- 					<lable>完成时间</lable> -->
 <!-- 					<input class="easyui-datetimebox" id="endTime"  name="endTime"/> -->
 				</div>
@@ -221,6 +223,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</div>
 				<div class="fitem">
 					<lable>年度认证</lable>
+					<input class="easyui-textbox" id="yearsure"  name="yearsure" readonly="readonly"/>
+					<lable>次年年度认证</lable>
 					<input class="easyui-textbox" id="yearsure"  name="yearsure" readonly="readonly"/>
 <!-- 					<lable>完成时间</lable> -->
 <!-- 					<input class="easyui-datetimebox" id="endTime"  name="endTime"/> -->

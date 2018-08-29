@@ -37,7 +37,7 @@ function weldedJunctionDatagrid(){
 		}, {
 			field : 'firstsuretime',
 			title : '首次认证时间',
-			width : 140,
+			width : 80,
 			halign : "center",
 			align : "left",
 //			hidden:true
@@ -58,7 +58,7 @@ function weldedJunctionDatagrid(){
 		}, {
 			field : 'workmaintime',
 			title : '主岗位上岗时间',
-			width : 140,
+			width : 100,
 			halign : "center",
 			align : "left",
 //			hidden:true
@@ -72,7 +72,7 @@ function weldedJunctionDatagrid(){
 		}, {
 			field : 'workfirsttime',
 			title : '岗位一上岗时间',
-			width : 140,
+			width : 100,
 			halign : "center",
 			align : "left",
 //			hidden:true
@@ -86,7 +86,7 @@ function weldedJunctionDatagrid(){
 		}, {
 			field : 'worksecondtime',
 			title : '岗位二上岗时间',
-			width : 140,
+			width : 100,
 			halign : "center",
 			align : "left"
 		}, {
@@ -98,13 +98,13 @@ function weldedJunctionDatagrid(){
 		}, {
 			field : 'ifwelding',
 			title : '1E2111焊接',
-			width : 90,
+			width : 50,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'classify',
 			title : '分类',
-			width : 50,
+			width : 80,
 			halign : "center",
 			align : "left"
 		}, {
@@ -116,50 +116,57 @@ function weldedJunctionDatagrid(){
 		}, {
 			field : 'level',
 			title : '技能等级',
-			width : 80,
+			width : 60,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'score',
 			title : '理论考试结果',
-			width : 100,
+			width : 60,
 			halign : "center",
 			align : "left",
 //			hidden:true
 		}, {
 			field : 'ifpass',
 			title : '认证状态',
-			width : 80,
+			width : 60,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'icworkime',
 			title : 'IC卡有效期',
-			width : 140,
+			width : 100,
 			halign : "center",
 			align : "left"
-		}, {
-			field : 'halfyearsure',
-			title : '半年确认时间',
-			width : 140,
-			halign : "center",
-			align : "left",
-//			hidden:true
-		}, {
+		},{
 			field : 'yearsure',
 			title : '年度认证',
-			width : 140,
+			width : 100,
+			halign : "center",
+			align : "left",
+//			hidden:true
+		},  {
+			field : 'halfyearsure',
+			title : '半年确认时间',
+			width : 100,
 			halign : "center",
 			align : "left",
 //			hidden:true
 		}, {
+			field : 'nextyear',
+			title : '次年年度认证',
+			width : 100,
+			halign : "center",
+			align : "left",
+//			hidden:true
+		},{
 			field : 'itemname',
 			title : '所属项目',
 //			width : 150,
 			halign : "center",
 			align : "left",
 			hidden:true
-		}, {
+		},{
 			field : 'startTime',
 			title : '开始时间',
 			width : 90,

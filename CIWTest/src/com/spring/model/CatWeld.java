@@ -36,6 +36,7 @@ public class CatWeld {
 	private String icworkime;
 	private String halfyearsure;
 	private String yearsure;
+	private String nextyear;
 	private String endTime;
 	private String creatTime;
 	private String updateTime;
@@ -47,6 +48,11 @@ public class CatWeld {
 	private BigInteger updater;
 	private BigInteger creater;
 	private BigInteger insfid;
+	private String femailname;
+	private String femailaddress;
+	private String femailtext;
+	private String femailstatus;
+	private String femailtime;
 	@Transient
 	private Insframework itemid;//所属项目（新增字段）
 	
@@ -104,6 +110,7 @@ public class CatWeld {
 	public void setSSnum(String ssnum) {
 		this.ssnum = ssnum;
 	}
+	
 	public String getFirstsuretime() {
 		return firstsuretime;
 	}
@@ -206,6 +213,12 @@ public class CatWeld {
 	public void setYearsure(String yearsure) {
 		this.yearsure = yearsure;
 	}
+	public String getNextyear() {
+		return nextyear;
+	}
+	public void setNextyear(String nextyear) {
+		this.nextyear = nextyear;
+	}
 	public String getEndTime() {
 		return endTime;
 	}
@@ -229,6 +242,37 @@ public class CatWeld {
 	}
 	public void setItemid(Insframework itemid) {
 		this.itemid = itemid;
+	}
+	
+	public String getFemailname() {
+		return femailname;
+	}
+	public void setFemailname(String femailname) {
+		this.femailname = femailname;
+	}
+	public String getFemailaddress() {
+		return femailaddress;
+	}
+	public void setFemailaddress(String femailaddress) {
+		this.femailaddress = femailaddress;
+	}
+	public String getFemailtext() {
+		return femailtext;
+	}
+	public void setFemailtext(String femailtext) {
+		this.femailtext = femailtext;
+	}
+	public String getFemailstatus() {
+		return femailstatus;
+	}
+	public void setFemailstatus(String femailstatus) {
+		this.femailstatus = femailstatus;
+	}
+	public String getFemailtime() {
+		return femailtime;
+	}
+	public void setFemailtime(String femailtime) {
+		this.femailtime = femailtime;
 	}
 	public String getCreatTime() {
 		return creatTime;
