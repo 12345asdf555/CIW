@@ -22,15 +22,21 @@ function weldingMachineDatagrid(){
 			align : "left",
 			hidden:true
 		},{
-			field : 'fgather',
+			field : 'equipmentNo',
+			title : '固定资产编号',
+//			width : 80,
+			halign : "center",
+			align : "left",
+			hidden:true
+		},{
+			field : 'gatherId',
 			title : '采集编号',
 //			width : 80,
 			halign : "center",
 			align : "left",
-//			hidden:true
-			
+			hidden:true
 		},{
-			field : 'equipmentNo',
+			field : 'Fmachingnumber',
 			title : '设备编号',
 //			width : 80,
 			halign : "center",
@@ -102,14 +108,7 @@ function weldingMachineDatagrid(){
 			halign : "center",
 			align : "left",
 			hidden: true	
-		}, {
-			field : 'gatherId',
-			title : '采集序号',
-//			width : 100,
-			halign : "center",
-			align : "left",
-			hidden: true
-		}, {
+		},  {
 			field : 'position',
 			title : '位置',
 //			width : 100,

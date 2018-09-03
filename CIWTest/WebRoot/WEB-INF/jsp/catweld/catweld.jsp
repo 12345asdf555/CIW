@@ -135,13 +135,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<lable>IC卡有效期</lable>
 					<input class="easyui-datetimebox" id="icworkime"  name="icworkime"/>
 					<lable>半年确认时间</lable>
-					<input class="easyui-datetimebox" id="halfyearsure"  name="halfyearsure" readonly="readonly"/>
+					<input class="easyui-datetimebox" id="halfyearsure"  name="halfyearsure"/>
 				</div>
 				<div class="fitem">
 					<lable>年度认证</lable>
-					<input class="easyui-datetimebox" id="yearsure"  name="yearsure" readonly="readonly"/>
+					<input class="easyui-datetimebox" id="yearsure"  name="yearsure"/>
 					<lable>次年年度认证</lable>
-					<input class="easyui-datetimebox" id="nextyear"  name="nextyear" readonly="readonly"/>
+					<input class="easyui-datetimebox" id="nextyear"  name="nextyear"/>
 <!-- 					<lable>完成时间</lable> -->
 <!-- 					<input class="easyui-datetimebox" id="endTime"  name="endTime"/> -->
 				</div>

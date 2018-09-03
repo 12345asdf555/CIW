@@ -77,7 +77,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</div>
 				<div class="fitem">
 					<lable><span class="required">*</span>设备编号</lable>
-					<input class="easyui-textbox" name="equipmentNo" id="equipmentNo"  />
+					<input class="easyui-textbox" name="Fmachingnumber" id="Fmachingnumber"  />
 				</div>
 				<div class="fitem">
 					<lable><span class="required">*</span>设备名称</lable>
@@ -132,7 +132,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<div class="fitem">
 					<lable><span class="required">*</span>设备编号</lable>
 					<input type="hidden" name="wid" readonly="readonly"/>
-					<input class="easyui-textbox" name="equipmentNo" id="equipmentNo" readonly="readonly" />
+					<input class="easyui-textbox" name="Fmachingnumber" id="Fmachingnumber" readonly="readonly" />
 				</div>
 				<div class="fitem">
 					<lable><span class="required">*</span>设备名称</lable>

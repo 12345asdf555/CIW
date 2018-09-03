@@ -200,9 +200,12 @@ function openWelderMin(){
 }
 
 function openWeldingMachine(){
-	addTab("焊机设备管理","weldingMachine/goWeldingMachine");
+	addTab("CAT焊机设备管理","weldingMachine/goWeldingMachine");
 }
 
+function openWeldingMachines(){
+	addTab("焊机设备管理","weldingMachine/goWeldingMachines");
+}
 function openWedJunction(){
 	addTab("焊缝管理","weldedjunction/goWeldedJunction");
 }

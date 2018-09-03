@@ -794,7 +794,7 @@ public class ImportExcelController {
 						break;
  					}
 					else if(k == 22){
-						p.setNextyear(cellValue);//年度确认
+						p.setNextyear(cellValue);//次年年度确认
 						break;
  					}
 					break;

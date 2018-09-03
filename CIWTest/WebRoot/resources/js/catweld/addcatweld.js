@@ -44,7 +44,9 @@ function editCatweld(){
 		$('#dlg').window('open');
 		$('#fm').form('load', row);
 		oldic = $("#icworkime").textbox('getValue');
-		oldck = $("#checkintime").textbox('getValue');
+		oldhys = $("#halfyearsure").textbox('getValue');
+		oldys = $("#yearsure").textbox('getValue');
+		oldny = $("#nextyear").textbox('getValue');
 		$('#oldno').val(row.weldedJunctionno);
 		url = "catweld/editCatweld?id="+ row.id;
 	}
@@ -54,13 +56,17 @@ function editCatweld(){
 function save(){
 	var symbol=0;
 	var newic = $("#icworkime").textbox('getValue');
-	var newck = $("#checkintime").textbox('getValue');
-	if(oldic!=newic&&oldck==newck){
+	var newhys = $("#halfyearsure").textbox('getValue');
+	var newys = $("#yearsure").textbox('getValue');
+	var newny = $("#nextyear").textbox('getValue');
+	if(oldic!=newic){
 		symbol=1;
-	}else if(oldic==newic&&oldck!=newck){
+	}else if(oldhys!=newhys){
 		symbol=2;
-	}else if(oldic!=newic&&oldck!=newck){
+	}else if(oldys!=newys){
 		symbol=3;
+	}else if(oldny!=newny){
+		symbol=4;
 	}
 	var messager = "";
 	var url2 = "";

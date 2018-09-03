@@ -50,6 +50,7 @@ function editWeldingMachine(){
 		$('#validgid').val(row.gatherId);
 		$('#validinsf').val(row.iId);
 		$('#fm').form('load', row);
+		oldnextTime = $("#nextTime").textbox('getValue');
 		url = "weldingMachine/editcatMachine?wid="+row.id;
 		//url = "weldingMachine/editcatMachine";
 	}
@@ -63,6 +64,15 @@ function saveWeldingMachine(){
 //	var manuno = $('#manuno').combobox('getValue');
 //	var sid = $("input[name='statusId']:checked").val();
 //	var isnetworking = $("input[name='isnetworking']:checked").val();
+	
+	var symbol=0;
+	var newnextTime = $("#nextTime").textbox('getValue');
+	if(oldnextTime!=newnextTime){
+		symbol=1;
+	}else{
+		symbol=2;
+	}
+	
 	var messager = "";
 	var url2 = "";
 	if(flag==1){
@@ -70,7 +80,7 @@ function saveWeldingMachine(){
 		url2 = url;
 	}else{
 		messager = "修改成功！";
-		url2 = url;
+		url2 = url+"&symbol="+symbol;
 	}
 	$('#fm').form('submit', {
 		url : url2,
