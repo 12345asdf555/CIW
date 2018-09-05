@@ -53,8 +53,8 @@
 	<select id="getWeldingMachineAll" resultMap="wmMap"  parameterType="java.lang.String">
 		SELECT 
 		w.fid fid,w.fIP fIP,w.fmodel model,fstatus_id, i.fid iid,ftype_id,g.fid gid,dic.fvalue mid, fequipment_no,fgather_no ,fjoin_time,i.fname iname
-		,dic.fvaluename mname,fisnetworking,fposition,d.fvaluename statusname,di.fvaluename typename,fmachingnumber fmachingnumber_no,fmachingname fmachingname_no,fmachingtype fmachingtype_no,fprevention fprevention_no,ftest ftest_no
-		,fmanufacturers fmanufacturers_no,fmanunumbers fmanunumbers_no,fsection fsection_no,fplace fplace_no,fusedata fusedata_no,fauthentication fauthentication_no
+		,dic.fvaluename mname,fisnetworking,fposition,d.fvaluename statusname,di.fvaluename typename,fprevention fprevention_no,ftest ftest_no
+		,fmanunumbers fmanunumbers_no,fsection fsection_no,fauthentication fauthentication_no
 		FROM tb_welding_machine w
 		LEFT JOIN tb_insframework i ON w.finsframework_id = i.fid
         INNER JOIN tb_dictionary d ON d.fvalue = w.fstatus_id
@@ -157,9 +157,9 @@
 	
 	<insert id="addWeldingMachine" parameterType="com.spring.model.WeldingMachine" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO tb_welding_machine(fIP, ftype_id, fequipment_no, fstatus_id, fposition, finsframework_id, 
-		fmanufacturer_id,fgather_id, fisnetworking, fjoin_time, fmodel, fcreater, fcreatedate, fmachingnumber, fmachingname, fmachingtype, fmanufacturers, fmanunumbers, 
-		fsection,fplace, fusedata, fauthentication, ftest, fprevention) VALUES 
-		(#{ip},#{typeId},#{equipmentNo},#{statusId},#{position},#{insframeworkId.id},#{mvalueid},#{gatherId.id},#{isnetworking},#{joinTime},#{model},#{creater},now(),#{fmachingnumber},#{fmachingname},#{fmachingtype},#{fmanufacturers},#{fmanunumbers},#{fsection},#{fplace},#{fusedata},#{fauthentication},#{ftest},#{fprevention})
+		fmanufacturer_id,fgather_id, fisnetworking, fjoin_time, fmodel, fcreater, fcreatedate, fmanunumbers, 
+		fsection,fauthentication, ftest, fprevention) VALUES 
+		(#{ip},#{typeId},#{equipmentNo},#{statusId},#{position},#{insframeworkId.id},#{mvalueid},#{gatherId.id},#{isnetworking},#{joinTime},#{model},#{creater},now(),#{fmanunumbers},#{fsection},#{fauthentication},#{ftest},#{fprevention})
 	</insert>
 	
 	<insert id="addcatMachine" parameterType="com.spring.model.WeldingMachine" useGeneratedKeys="true" keyProperty="id">
@@ -175,8 +175,8 @@
 	<update id="editWeldingMachine"  parameterType="com.spring.model.WeldingMachine">
 		UPDATE tb_welding_machine SET fIP=#{ip},ftype_id=#{typeId},fequipment_no=#{equipmentNo},fstatus_id=#{statusId},
 		fposition=#{position},finsframework_id=#{insframeworkId.id},fmanufacturer_id=#{mvalueid},fgather_id=#{gatherId.id},
-		fisnetworking=#{isnetworking},fjoin_time=#{joinTime},fmodel=#{model},fupdater=#{updater},fupdatedate=now(),fmachingnumber=#{fmachingnumber},fmachingname=#{fmachingname},fmachingtype=#{fmachingtype},fmanufacturers=#{fmanufacturers},
-		fmanunumbers=#{fmanunumbers},fsection=#{fsection},fplace=#{fplace},fusedata=#{fusedata},
+		fisnetworking=#{isnetworking},fjoin_time=#{joinTime},fmodel=#{model},fupdater=#{updater},fupdatedate=now(),
+		fmanunumbers=#{fmanunumbers},fsection=#{fsection},
 		fauthentication=#{fauthentication},ftest=#{ftest},fprevention=#{fprevention} where fid = #{id}
 	</update>
 	
