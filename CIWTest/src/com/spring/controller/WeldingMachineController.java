@@ -189,7 +189,13 @@ public class WeldingMachineController {
 				json.put("id", wm.getId());
 				json.put("ip", wm.getIp());
 				json.put("equipmentNo", wm.getEquipmentNo());
+				//json.put("Fmachingnumber", wm.getFmachingnumber());
+				//json.put("equipmentName", wm.getFmachingname());
+				//json.put("typename", wm.getFmachingtype());
+				//json.put("manufacturername", wm.getFmanufacturers());
 				json.put("manufacturerNo", wm.getFmanunumbers());
+				//json.put("usedata", wm.getFusedata());
+				//json.put("fplace", wm.getFplace());
 				json.put("action", wm.getFsection());
 				json.put("inspectTime", wm.getFauthentication());
 				json.put("nextTime", wm.getFtest());
@@ -567,104 +573,6 @@ public class WeldingMachineController {
 			}
 			wm.setMvalueid(Integer.parseInt(request.getParameter("manuno")));
 			wmm.editWeldingMachine(wm);
-			
-			String symbol = request.getParameter("symbol");
-			String equipmentno = request.getParameter("equipmentNo");
-			String nextTime = request.getParameter("nextTime");
-			if(Integer.valueOf(symbol)==1){
-				//获取焊工以及管理员信息
-				Class.forName("com.mysql.jdbc.Driver");  
-	            conn = DriverManager.getConnection("jdbc:mysql://121.196.222.216:3306/XMWeld?user=db_admin&password=PIJXmcLRa0QgOw2c&useUnicode=true&autoReconnect=true&characterEncoding=UTF8");
-	            stmt= conn.createStatement();
-	            ArrayList<String> listarraymail = new ArrayList<String>();
-				ArrayList<String> listarraymailer = new ArrayList<String>();
-				//String sqlmachine = "SELECT tb_catweldmachine.fmachingnumber,tb_catweldinf.fcheckintime,tb_catweldinf.ficworkime FROM tb_catweldinf";
-				String sqlmailer = "SELECT femailname,femailaddress,femailtype FROM tb_catemailinf";
-				ResultSet rs;
-				try {
-					/*rs = stmt.executeQuery(sqlmachine);
-	            	while (rs.next()) {
-	            		listarraymail.add(rs.getString("fweldername"));
-	            		listarraymail.add(rs.getString("fcheckintime"));
-	            		listarraymail.add(rs.getString("ficworkime"));
-	            	}*/
-	            	rs = stmt.executeQuery(sqlmailer);
-	            	while (rs.next()) {
-	            		listarraymailer.add(rs.getString("femailname"));
-	            		listarraymailer.add(rs.getString("femailaddress"));
-	            		listarraymailer.add(rs.getString("femailtype"));
-	            	}
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				try{
-					for(int j=0;j<listarraymailer.size();j+=3){
-						if(listarraymailer.get(j+2).equals("3")){
-							final Properties props = new Properties();
-							final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
-							props.setProperty("mail.smtp.socketFactory.fallback", "false");
-						    //props.setProperty("mail.transport.protocol", "smtp");
-						    //props.put("mail.smtp.auth", "true");
-						    //props.put("mail.smtp.host","smtpdm.aliyun.com");// smtp服务器地址
-						    props.setProperty("mail.smtp.host","smtp.163.com"); //服务器地址
-						    props.setProperty("mail.smtp.port", "465");
-							props.setProperty("mail.smtp.socketFactory.class", SSL_FACTORY);
-						    props.setProperty("mail.smtp.socketFactory.port", "465");
-						    props.setProperty("mail.smtp.auth", "true");
-							/*props.setProperty("mail.smtp.auth", "true");
-						    props.setProperty("mail.transport.protocol", "smtp");
-						    //props.put("mail.smtp.auth", "true");
-						    props.put("mail.smtp.host","smtpdm.aliyun.com");// smtp服务器地址
-						    props.put("mail.smtp.port", "25");*/
-						    
-						    // 发件人的账号
-					        props.put("mail.user", "jingsudongyu123@163.com");
-					        // 访问SMTP服务时需要提供的密码
-					        props.put("mail.password", "jsdy123456");
-						    
-						 // 构建授权信息，用于进行SMTP进行身份验证
-					        Authenticator authenticator = new Authenticator() {
-					            @Override
-					            protected PasswordAuthentication getPasswordAuthentication() {
-					                // 用户名、密码
-					                String userName = props.getProperty("mail.user");
-					                String password = props.getProperty("mail.password");
-					                return new PasswordAuthentication(userName, password);
-					            }
-					        };
-					        // 使用环境属性和授权信息，创建邮件会话
-						    
-					        Session session = Session.getInstance(props, authenticator);
-						    session.setDebug(true);
-					
-						    Message msg = new MimeMessage(session);
-						    msg.setSubject("焊机校验提醒");
-						    msg.setText(equipmentno + " 下次校验时间为：" + nextTime);
-						    msg.setSentDate(new Date());
-						    msg.setFrom(new InternetAddress("jiangsudongyu123@163.com"));//发件人邮箱
-						    msg.setRecipient(Message.RecipientType.TO,
-						            new InternetAddress(listarraymailer.get(j+1))); //收件人邮箱
-						    //msg.addRecipient(Message.RecipientType.CC, 
-				    		//new InternetAddress("XXXXXXXXXXX@qq.com")); //抄送人邮箱
-						    msg.saveChanges();
-
-						    Transport transport = session.getTransport();
-						    transport.connect("jiangsudongyu123@163.com","qwerasdf12345678");//发件人邮箱,授权码
-						    
-						    transport.sendMessage(msg, msg.getAllRecipients());
-						    transport.close();
-						    
-						}
-					}
-					
-			    }catch(Exception e){
-			    	e.getStackTrace();
-			    }
-				
-			}
-			
-			
 			obj.put("success", true);
 		}catch(Exception e){
 			e.printStackTrace();
