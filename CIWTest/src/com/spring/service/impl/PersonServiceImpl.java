@@ -33,55 +33,52 @@ public class PersonServiceImpl implements PersonService{
 
 	@Override
 	public List<Person> findLeve(int type) {
-		// TODO Auto-generated method stub
 		return mapper.findLeve(type);
 	}
 
 	@Override
 	public void save(Person welder) {
-		// TODO Auto-generated method stub
 		mapper.save(welder);
 	}
 
 	@Override
 	public Person findById(BigInteger fid) {
-		// TODO Auto-generated method stub
 		return mapper.findById(fid);
 	}
 
 	@Override
 	public void update(Person welder) {
-		// TODO Auto-generated method stub
 		mapper.update(welder);
 	}
 
 	@Override
 	public void delete(BigInteger fid) {
-		// TODO Auto-generated method stub
 		mapper.delete(fid);
 	}
 
 	@Override
 	public List<Person> dic() {
-		// TODO Auto-generated method stub
 		return mapper.dic();
 	}
 
 	@Override
 	public List<Person> ins() {
-		// TODO Auto-generated method stub
 		return mapper.ins();
 	}
 
 	@Override
 	public int getUsernameCount(String welderno) {
-		// TODO Auto-generated method stub
 		return mapper.getUsernameCount(welderno);
 	}
 
 	@Override
 	public List<Person> getWelder() {
 		return mapper.findAll(null, null);
+	}
+
+	@Override
+	public List<Person> findAll(BigInteger parent) {
+		return mapper.findAll(parent, null);
 	}
 
 }
