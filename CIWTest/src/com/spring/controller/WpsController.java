@@ -483,10 +483,22 @@ public class WpsController {
 		try{
 	        wps.setFinitial(request.getParameter("finitial"));
 	        wps.setFcontroller(request.getParameter("fcontroller"));
-
 			wps.setFcreater(myuser.getId());
 			wps.setFupdater(myuser.getId());
+			wps.setFwpsnum(request.getParameter("fwn"));
+			wps.setFback(request.getParameter("Fback"));
+	        wps.setFname(request.getParameter("Fname"));
 			wps.setFowner(Long.parseLong(request.getParameter("ins")));
+			wps.setFweld_i( Integer.parseInt(request.getParameter("Fweld_I")));
+	        wps.setFweld_v( Integer.parseInt(request.getParameter("Fweld_V")));
+	        wps.setFweld_i_max(Integer.parseInt(request.getParameter("Fweld_I_MAX")));
+	        wps.setFweld_i_min(Integer.parseInt(request.getParameter("Fweld_I_MIN")));
+	        wps.setFweld_v_max(Integer.parseInt(request.getParameter("Fweld_V_MAX")));
+	        wps.setFweld_v_min(Integer.parseInt(request.getParameter("Fweld_V_MIN")));
+	        wps.setFweld_alter_i(Integer.parseInt(request.getParameter("Fweld_Alter_I")));
+	        wps.setFweld_alter_v(Integer.parseInt(request.getParameter("Fweld_Alter_V")));
+	        wps.setFweld_prechannel(Integer.parseInt(request.getParameter("Fweld_PreChannel")));
+	        wps.setFdiameter(Double.valueOf(request.getParameter("Fdiameter")));
 			wps.setFcreatedate(sdf.parse(sdf.format((new Date()).getTime())));
 			wps.setFupdatedate(sdf.parse(sdf.format((new Date()).getTime())));
 			wpsService.save(wps);

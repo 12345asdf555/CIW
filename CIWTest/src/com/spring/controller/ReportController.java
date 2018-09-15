@@ -537,7 +537,7 @@ public class ReportController {
 /*		MyUser myuser = (MyUser) SecurityContextHolder.getContext()  
 			    .getAuthentication()  
 			    .getPrincipal();
-		System.out.println(myuser.getId());*/
+		System.out.println(myuser.getId());//获取当前用户*/
 		String time1 = request.getParameter("dtoTime1");
 		String time2 = request.getParameter("dtoTime2");
 		String parentId = request.getParameter("parent");

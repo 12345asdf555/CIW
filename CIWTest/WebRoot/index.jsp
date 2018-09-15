@@ -149,7 +149,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<div title="系统配置管理" data-options="iconCls:'icon-sys'">
 				<ul>
 					<li onclick="changeColor(this)"><a href="javascript:openUser()"><div><img src="resources/images/c-1.png" />&nbsp;&nbsp;用户管理</div></a></li>
-					<li onclick="(this)"><a href="javascript:openRole()"><div><img src="resources/images/c-2.png" />&nbsp;&nbsp;角色管理</div></a></li>
+					<li onclick="changeColor(this)"><a href="javascript:openRole()"><div><img src="resources/images/c-2.png" />&nbsp;&nbsp;角色管理</div></a></li>
 					<li onclick="changeColor(this)"><a href="javascript:openAuthority()"><div><img src="resources/images/c-3.png" />&nbsp;&nbsp;权限管理</div></a></li>
 					<li onclick="changeColor(this)"><a href="javascript:openResource()"><div><img src="resources/images/c-4.png" />&nbsp;&nbsp;资源管理</div></a></li>
 			        <li onclick="changeColor(this)"><a href="javascript:openDictionary()"><div><img src="resources/images/c-5.png" />&nbsp;&nbsp;字典管理</div></a></li>

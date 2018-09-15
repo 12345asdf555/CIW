@@ -57,13 +57,15 @@
 		,fmanunumbers fmanunumbers_no,fsection fsection_no,fauthentication fauthentication_no
 		FROM tb_welding_machine w
 		LEFT JOIN tb_insframework i ON w.finsframework_id = i.fid
+		INNER JOIN tb_insframework ins ON ins.fid = i.fparent
+		INNER JOIN tb_insframework insf ON insf.fid = ins.fparent
         INNER JOIN tb_dictionary d ON d.fvalue = w.fstatus_id
         INNER JOIN tb_dictionary di ON di.fvalue = w.ftype_id
         INNER JOIN tb_dictionary dic ON dic.fvalue = w.fmanufacturer_id
 		left JOIN tb_gather g ON g.fid = w.fgather_id
 		where (d.ftypeid=3 and di.ftypeid=4 and dic.ftypeid=14)
 		<if test="parent!=null and parent!=''">
-			and i.fid=#{parent}
+			and (i.fid=#{parent} or ins.fid=#{parent} or insf.fid=#{parent} or insf.fparent=#{parent})
 		</if>
 		<if test="str!=null and str!=''">
 			and ${str}
