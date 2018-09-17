@@ -222,6 +222,8 @@ function classifyDatagrid(){
 		toolbar : '#classify_btn',
 		onLoadSuccess: function(){
 			$("#classify").datagrid("selectRow",0);
+			array1 = new Array();
+			array2 = new Array();
 			CompanyHourDatagrid();
 			showCompanyHourChart();
 		},
