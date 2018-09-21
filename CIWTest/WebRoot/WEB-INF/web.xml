@@ -12,9 +12,6 @@
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
-  <listener>
-   	<listener-class>com.spring.util.ServletContextListener</listener-class>
-  </listener> 
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>classpath:config/spring-common.xml,classpath:config/applicationContext-security.xml</param-value>
@@ -62,4 +59,5 @@
   </context-param>
   <welcome-file-list>
     <welcome-file>/index.jsp</welcome-file>
-  </welcome-file-list>
+   </welcome-file-list>
+</web-app>
