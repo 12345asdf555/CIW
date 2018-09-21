@@ -1013,13 +1013,6 @@ function xiafa(){
 								alert("该焊机未对应采集编号!!!");
 								socketfc.close();
 								return;
-							mach = parseInt(machga[q].gatherId).toString(16);
-							if(mach.length<4){
-								var length = 4 - mach.length;
-						        for(var i=0;i<length;i++){
-						        	mach = "0" + mach;
-						        };
-						        break;
 							}
 						}
 					}
@@ -1078,7 +1071,6 @@ function xiafa(){
 							save(1);
 							alert("下发成功");
 							}
-					}
 					}
 				}
 			}
