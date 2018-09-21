@@ -58,6 +58,14 @@
 		ORDER BY w.fid
 	</select>
 	
+	<select id="getMachineGather"  resultMap="wmMap">
+		SELECT 
+		w.fid fid,g.fid gid,fgather_no
+		FROM tb_welding_machine w
+		left JOIN tb_gather g ON g.fid = w.fgather_id
+		where 1=1
+	</select>
+	
 	<select id="getAllMachine" resultMap="wmMap">
 		SELECT 
 		w.fid fid,w.fIP fIP,w.fmodel model,fstatus_id, i.fid iid,ftype_id,g.fid gid,dic.fvalue mid, fequipment_no,fgather_no ,fjoin_time,i.fname iname
