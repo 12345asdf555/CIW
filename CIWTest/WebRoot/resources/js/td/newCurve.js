@@ -40,6 +40,7 @@ function loadtree() {
 		},
 		//树形菜单点击事件,获取项目部id，默认选择当前组织机构下的第一个
 		onClick : function(node) {
+			showflag = 0;
 			document.getElementById("load").style.display="block";
 			var sh = '<div id="show" style="align="center""><img src="resources/images/load.gif"/>正在加载，请稍等...</div>';
 			$("#bodydiv").append(sh);
@@ -121,7 +122,12 @@ function getMachine(insfid) {
 						'<li style="width:100%;height:19px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">焊接电压：<span id="m5'+machine[i].fid+'">--V</span></li>'+
 						'<li style="width:100%;height:19px;">焊机状态：<span id="m6'+machine[i].fid+'">关机</span></li></ul><input id="status'+machine[i].fid+'" type="hidden" value="3"></div></div>';
 					$("#curve").append(str);
+					var statusnum = $("#status").combobox('getValue');
+					if(showflag==0 && (statusnum==99 || statusnum==3)){
+						$("#machine"+machine[i].fid).show();
+					}
 				}
+				showflag=1;
 			}
 		},
 		error : function(errorMsg) {
@@ -185,6 +191,12 @@ function webclient() {
 	};
 	socket.onmessage = function(msg) {
 		redata = msg.data;
+		if(redata==null || redata=="" || showflag==0){
+			for(var i=0;i<machine.length;i++){
+				$("#machine"+machine[i].fid).show();
+			}
+			showflag = 1;
+		}
 		iview();
 		symbol++;
 	};
