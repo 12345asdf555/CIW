@@ -6,7 +6,6 @@
  */
 var data1;
 var da;
-var socketfc=null;
 var yshu;
 var yshu1;
 var node11;
@@ -563,6 +562,7 @@ $(document).ready(function () {
 });
 
 function suoqu(){
+	var socketfc=null;
 	symbol=0;
 	if(typeof(WebSocket) == "undefined") {
     	WEB_SOCKET_SWF_LOCATION = "resources/js/WebSocketMain.swf";
@@ -767,6 +767,7 @@ function xiafa(){
 		if(($('#fweld_tuny_vol').numberbox('getValue')>5||$('#fweld_tuny_vol').numberbox('getValue')<0)){
 			alert("个别模式下微调电压范围为0~5")
 		}else{
+			var socketfc=null;
 			if(typeof(WebSocket) == "undefined") {
 		    	WEB_SOCKET_SWF_LOCATION = "resources/js/WebSocketMain.swf";
 		    	WEB_SOCKET_DEBUG = true;
@@ -1080,6 +1081,7 @@ function xiafa(){
 		if(($('#fweld_tuny_vol1').numberbox('getValue')>20||$('#fweld_tuny_vol1').numberbox('getValue')<0)){
 			alert("一元模式下微调电压范围为0~20")
 		}else{
+			var socketfc=null;
 			if(typeof(WebSocket) == "undefined") {
 		    	WEB_SOCKET_SWF_LOCATION = "resources/js/WebSocketMain.swf";
 		    	WEB_SOCKET_DEBUG = true;
@@ -1594,7 +1596,7 @@ function savecopy(){
 		}
 		socketfc.onopen = function() {
 			rows1 = $("#ro1").datagrid("getRows");
-			ccp();
+			ccp(rows[0].fequipment_no);
 		}
 		socketfc.onmessage = function(msg) {
 			var fan = msg.data;
@@ -1623,11 +1625,11 @@ function savecopy(){
 							}
 								
 						}else{
-							ccp();
+							ccp(rows[xx].fequipment_no);
 						}
 					}else{
 					$('#ro1').datagrid('refreshRow', xx);
-					ccp();
+					ccp(rows[xx].fequipment_no);
 					}
 				}
 			}
@@ -1637,7 +1639,7 @@ function savecopy(){
 }
 }
 
-function ccp(){
+function ccp(value){
 	if("1-"+x==rows1[xx].num){
 		x=0;
 	}
@@ -1839,20 +1841,14 @@ function ccp(){
         	con1 = "0" + con1;
         }
       }
-	var mach;
-	if(machga!=null){
-		for(var q=0;q<machga.length;q++){
-			if(machga[q].id==node11.id){
-				mach = parseInt(machga[q].gatherId).toString(16);
-				if(mach.length<4){
-					var length = 4 - mach.length;
-			        for(var i=0;i<length;i++){
-			        	mach = "0" + mach;
-			        };
-			        break;
-				}
-			}
-		}
+	var mach="";
+	if(value.length<4){
+		var length = 4 - value.length;
+	    for(var i=0;i<length;i++){
+	    	mach = "0" + value;
+	    };
+	}else{
+		mach=value;
 	}
 	
 var xiafasend1 = "7E0052"+mach+chanel+ftime+fadvance+fini_ele+fini_vol+fini_vol1+fweld_ele+fweld_vol+fweld_vol1+farc_ele+farc_vol+farc_vol1+fhysteresis+fcharacter+fgas
