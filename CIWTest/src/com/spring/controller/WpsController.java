@@ -360,13 +360,13 @@ public class WpsController {
 			wps.setFhysteresis(fhysteresis);
 			wps.setFini_ele(fini_ele);
 			wps.setFini_vol(fini_vol);
-			wps.setFini_vol(fini_vol1);
+			wps.setFini_vol1(fini_vol1);
 			wps.setFweld_ele(fweld_ele);
 			wps.setFweld_vol(fweld_vol);
-			wps.setFweld_vol(fweld_vol1);
+			wps.setFweld_vol1(fweld_vol1);
 			wps.setFarc_ele(farc_ele);
 			wps.setFarc_vol(farc_vol);
-			wps.setFarc_vol(farc_vol1);
+			wps.setFarc_vol1(farc_vol1);
 			wps.setFweld_tuny_ele(fweld_tuny_ele);
 			wps.setFweld_tuny_vol(fweld_tuny_vol);
 			wps.setFarc_tuny_ele(farc_tuny_ele);

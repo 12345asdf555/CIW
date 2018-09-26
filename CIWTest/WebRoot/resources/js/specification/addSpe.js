@@ -372,133 +372,133 @@ function editWps(){
 //提交
 function save(value){
     if($('#fadvance').numberbox('getValue')<0||$('#fadvance').numberbox('getValue')>100){
-   	 alert("提前送气范围：0~100");
-   	 return;
-    }
-    if($('#fini_ele').numberbox('getValue')<30||$('#fini_ele').numberbox('getValue')>550){
-   	 alert("初期电流范围：30~550");
-   	 return;
-    }
-    if($('#fini_vol').numberbox('getValue')<12||$('#fini_vol').numberbox('getValue')>50){
-   	 alert("初期电压范围：12~50");
-   	 return;
-    }
-    if($('#fini_vol1').numberbox('getValue')<(-30)||$('#fini_vol1').numberbox('getValue')>(30)){
-   	 alert("初期电压一元范围：-30~30");
-   	 return;
-    }
-    if($('#fweld_ele').numberbox('getValue')<30||$('#fweld_ele').numberbox('getValue')>550){
-   	 alert("焊接电流范围：30~550");
-   	 return;
-    }
-    if($('#fweld_vol').numberbox('getValue')<12||$('#fweld_vol').numberbox('getValue')>50){
-   	 alert("焊接电压范围：12~50");
-   	 return;
-    }
-    if($('#fweld_vol1').numberbox('getValue')<(-30)||$('#fweld_vol1').numberbox('getValue')>(30)){
-   	 alert("焊接电压一元范围：-30~30");
-   	 return;
-    }
-    if($('#farc_ele').numberbox('getValue')<30||$('#farc_ele').numberbox('getValue')>550){
-   	 alert("收弧电流范围：30~550");
-   	 return;
-    }
-    if($('#farc_vol').numberbox('getValue')<12||$('#farc_vol').numberbox('getValue')>50){
-   	 alert("收弧电压范围：12~50");
-   	 return;
-    }
-    if($('#farc_vol1').numberbox('getValue')<(-30)||$('#farc_vol1').numberbox('getValue')>(30)){
-   	 alert("收弧电压一元范围：-30~30");
-   	 return;
-    }
-    if($('#fhysteresis').numberbox('getValue')<0||$('#fhysteresis').numberbox('getValue')>100){
-   	 alert("滞后送气范围：0~100");
-   	 return;
-    }
-    if($('#fcharacter').numberbox('getValue')<(-99)||$('#fcharacter').numberbox('getValue')>(99)){
-   	 alert("电弧特性范围：-99~99");
-   	 return;
-    }
-	var url2 = "";
-	var finitial;
-	var fcontroller;
-	var fmode;
-    if($("#finitial").is(":checked")==true){
-        finitial = 1;
-    }else{
-    	finitial = 0;
-    }
-    if($("#fcontroller").is(":checked")==true){
-    	fcontroller = 1;
-    }else{
-    	fcontroller = 0;
-    }
-    if($("#finitial").is(":checked")==true){
-    	fmode = 1;
-    }else{
-    	fmode = 0;
-    }
-    var fselect = $('#fselect').combobox('getValue');
-    var farc = $('#farc').combobox('getValue');
-    var fmaterial = $('#fmaterial').combobox('getValue');
-//    var fmaterial = document.getElementById('fmaterial').value;
-//    var fgas = document.getElementById('fgas').value;
-//    var fdiameter = document.getElementById('fdiameter').value;
-    var fgas = $('#fgas').combobox('getValue');
-    var fdiameter = $('#fdiameter').combobox('getValue');
-    var chanel = $('#chanel').combobox('getValue');
-	var ftime = $('#ftime').numberbox('getValue');
-	var fadvance = $('#fadvance').numberbox('getValue');
-	var fini_ele = $('#fini_ele').numberbox('getValue');
-	var fweld_ele = $('#fweld_ele').numberbox('getValue');
-	var farc_ele = $('#farc_ele').numberbox('getValue');
-	var fhysteresis = $('#fhysteresis').numberbox('getValue');
-	var fcharacter = $('#fcharacter').numberbox('getValue');
-	var fweld_tuny_ele = $('#fweld_tuny_ele').numberbox('getValue');
-	var farc_tuny_ele = $('#farc_tuny_ele').numberbox('getValue');
-	var fini_vol = $('#fini_vol').numberbox('getValue');
-	var fweld_vol = $('#fweld_vol').numberbox('getValue');
-	var farc_vol = $('#farc_vol').numberbox('getValue');
-	var fini_vol1 = $('#fini_vol1').numberbox('getValue');
-	var fweld_vol1 = $('#fweld_vol1').numberbox('getValue');
-	var farc_vol1 = $('#farc_vol1').numberbox('getValue');
-	if(fselect==102){
-		var fweld_tuny_vol = $('#fweld_tuny_vol').numberbox('getValue');
-		var farc_tuny_vol = $('#farc_tuny_vol').numberbox('getValue');
-	}else{
-		var fweld_tuny_vol = $('#fweld_tuny_vol1').numberbox('getValue');
-		var farc_tuny_vol = $('#farc_tuny_vol1').numberbox('getValue');
-	}
-    var machine = node11.id;
-	messager = "保存成功！";
-	url2 = "wps/apSpe"+"?finitial="+finitial+"&fcontroller="+fcontroller+"&fmode="+fmode+"&fselect="+fselect+"&farc="+farc+"&fmaterial="+fmaterial+"&fgas="+fgas+"&fdiameter="+fdiameter+"&chanel="+chanel+"&ftime="+ftime+"&fadvance="+fadvance+"&fini_ele="+fini_ele+"&fweld_ele="+fweld_ele+"&farc_ele="+farc_ele+"&fhysteresis="+fhysteresis+"&fcharacter="+fcharacter+"&machine="+machine+"&fweld_tuny_ele="+fweld_tuny_ele+"&farc_tuny_ele="+farc_tuny_ele+"&fini_vol="+fini_vol+"&fini_vol1="+fini_vol1+"&fweld_vol="+fweld_vol+"&fweld_vol1="+fweld_vol1+"&farc_vol="+farc_vol+"&farc_vol1="+farc_vol1+"&fweld_tuny_vol="+fweld_tuny_vol+"&farc_tuny_vol="+farc_tuny_vol;
-//	url2 = "wps/apSpe";
-	$.ajax({  
-	      type : "post",  
-	      async : false,
-	      url : url2,  
-	      data : {},  
-	      dataType : "json", //返回数据形式为json  
-	      success : function(result) {
-				if (!result.success) {
-					if(value==0){
-					$.messager.show( {
-						title : 'Error',
-						msg : result.errorMsg
-					});
-					}
-				} else {
-					if(value==0){
-					$.messager.alert("提示", messager);
-					$('#dlg').dialog('close');
-					$('#dg').datagrid('reload');
-					}
-				}
-	      },
-	      error : function(errorMsg) {  
-	          alert("数据请求失败，请联系系统管理员!");  
-	      }  
-	 });
+      	 alert("提前送气范围：0~100");
+      	 return;
+       }
+       if($('#fini_ele').numberbox('getValue')<30||$('#fini_ele').numberbox('getValue')>550){
+      	 alert("初期电流范围：30~550");
+      	 return;
+       }
+       if($('#fini_vol').numberbox('getValue')<12||$('#fini_vol').numberbox('getValue')>50){
+      	 alert("初期电压范围：12~50");
+      	 return;
+       }
+       if($('#fini_vol1').numberbox('getValue')<(-30)||$('#fini_vol1').numberbox('getValue')>(30)){
+      	 alert("初期电压一元范围：-30~30");
+      	 return;
+       }
+       if($('#fweld_ele').numberbox('getValue')<30||$('#fweld_ele').numberbox('getValue')>550){
+      	 alert("焊接电流范围：30~550");
+      	 return;
+       }
+       if($('#fweld_vol').numberbox('getValue')<12||$('#fweld_vol').numberbox('getValue')>50){
+      	 alert("焊接电压范围：12~50");
+      	 return;
+       }
+       if($('#fweld_vol1').numberbox('getValue')<(-30)||$('#fweld_vol1').numberbox('getValue')>(30)){
+      	 alert("焊接电压一元范围：-30~30");
+      	 return;
+       }
+       if($('#farc_ele').numberbox('getValue')<30||$('#farc_ele').numberbox('getValue')>550){
+      	 alert("收弧电流范围：30~550");
+      	 return;
+       }
+       if($('#farc_vol').numberbox('getValue')<12||$('#farc_vol').numberbox('getValue')>50){
+      	 alert("收弧电压范围：12~50");
+      	 return;
+       }
+       if($('#farc_vol1').numberbox('getValue')<(-30)||$('#farc_vol1').numberbox('getValue')>(30)){
+      	 alert("收弧电压一元范围：-30~30");
+      	 return;
+       }
+       if($('#fhysteresis').numberbox('getValue')<0||$('#fhysteresis').numberbox('getValue')>100){
+      	 alert("滞后送气范围：0~100");
+      	 return;
+       }
+       if($('#fcharacter').numberbox('getValue')<(-99)||$('#fcharacter').numberbox('getValue')>(99)){
+      	 alert("电弧特性范围：-99~99");
+      	 return;
+       }
+   	var url2 = "";
+   	var finitial;
+   	var fcontroller;
+   	var fmode;
+       if($("#finitial").is(":checked")==true){
+           finitial = 1;
+       }else{
+       	finitial = 0;
+       }
+       if($("#fcontroller").is(":checked")==true){
+       	fcontroller = 1;
+       }else{
+       	fcontroller = 0;
+       }
+       if($("#finitial").is(":checked")==true){
+       	fmode = 1;
+       }else{
+       	fmode = 0;
+       }
+       var fselect = $('#fselect').combobox('getValue');
+       var farc = $('#farc').combobox('getValue');
+       var fmaterial = $('#fmaterial').combobox('getValue');
+//       var fmaterial = document.getElementById('fmaterial').value;
+//       var fgas = document.getElementById('fgas').value;
+//       var fdiameter = document.getElementById('fdiameter').value;
+       var fgas = $('#fgas').combobox('getValue');
+       var fdiameter = $('#fdiameter').combobox('getValue');
+       var chanel = $('#chanel').combobox('getValue');
+   	var ftime = $('#ftime').numberbox('getValue');
+   	var fadvance = $('#fadvance').numberbox('getValue');
+   	var fini_ele = $('#fini_ele').numberbox('getValue');
+   	var fweld_ele = $('#fweld_ele').numberbox('getValue');
+   	var farc_ele = $('#farc_ele').numberbox('getValue');
+   	var fhysteresis = $('#fhysteresis').numberbox('getValue');
+   	var fcharacter = $('#fcharacter').numberbox('getValue');
+   	var fweld_tuny_ele = $('#fweld_tuny_ele').numberbox('getValue');
+   	var farc_tuny_ele = $('#farc_tuny_ele').numberbox('getValue');
+   	var fini_vol = $('#fini_vol').numberbox('getValue');
+   	var fweld_vol = $('#fweld_vol').numberbox('getValue');
+   	var farc_vol = $('#farc_vol').numberbox('getValue');
+   	var fini_vol1 = $('#fini_vol1').numberbox('getValue');
+   	var fweld_vol1 = $('#fweld_vol1').numberbox('getValue');
+   	var farc_vol1 = $('#farc_vol1').numberbox('getValue');
+   	if(fselect==102){
+   		var fweld_tuny_vol = $('#fweld_tuny_vol').numberbox('getValue');
+   		var farc_tuny_vol = $('#farc_tuny_vol').numberbox('getValue');
+   	}else{
+   		var fweld_tuny_vol = $('#fweld_tuny_vol1').numberbox('getValue');
+   		var farc_tuny_vol = $('#farc_tuny_vol1').numberbox('getValue');
+   	}
+       var machine = node11.id;
+   	messager = "保存成功！";
+   	url2 = "wps/apSpe"+"?finitial="+finitial+"&fcontroller="+fcontroller+"&fmode="+fmode+"&fselect="+fselect+"&farc="+farc+"&fmaterial="+fmaterial+"&fgas="+fgas+"&fdiameter="+fdiameter+"&chanel="+chanel+"&ftime="+ftime+"&fadvance="+fadvance+"&fini_ele="+fini_ele+"&fweld_ele="+fweld_ele+"&farc_ele="+farc_ele+"&fhysteresis="+fhysteresis+"&fcharacter="+fcharacter+"&machine="+machine+"&fweld_tuny_ele="+fweld_tuny_ele+"&farc_tuny_ele="+farc_tuny_ele+"&fini_vol="+fini_vol+"&fini_vol1="+fini_vol1+"&fweld_vol="+fweld_vol+"&fweld_vol1="+fweld_vol1+"&farc_vol="+farc_vol+"&farc_vol1="+farc_vol1+"&fweld_tuny_vol="+fweld_tuny_vol+"&farc_tuny_vol="+farc_tuny_vol;
+//   	url2 = "wps/apSpe";
+   	$.ajax({  
+   	      type : "post",  
+   	      async : false,
+   	      url : url2,  
+   	      data : {},  
+   	      dataType : "json", //返回数据形式为json  
+   	      success : function(result) {
+   				if (!result.success) {
+   					if(value==0){
+   					$.messager.show( {
+   						title : 'Error',
+   						msg : result.errorMsg
+   					});
+   					}
+   				} else {
+   					if(value==0){
+   					$.messager.alert("提示", messager);
+   					$('#dlg').dialog('close');
+   					$('#dg').datagrid('reload');
+   					}
+   				}
+   	      },
+   	      error : function(errorMsg) {  
+   	          alert("数据请求失败，请联系系统管理员!");  
+   	      }  
+   	 });
 }
 
 function insframeworkTree(){
