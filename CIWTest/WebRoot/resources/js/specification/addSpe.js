@@ -1505,6 +1505,7 @@ function copy(value){
 
 function savecopy(){
 	var smachine = node11.id;
+	rows="";
 	var rows = $("#ro").datagrid("getSelections");
     var str="";
 	for(var i=0; i<rows.length; i++){
@@ -1590,9 +1591,12 @@ function savecopy(){
 		window.setTimeout(function() {
 			if(symbol1==0){
 				alert("复制失败");
+				rows.length=0;
+				str="";
+				$('#ro').datagrid('clearSelections');
 //				socketfc.close();
 			}
-		}, 5000)
+		}, 3000)
 		}
 		socketfc.onopen = function() {
 			rows1 = $("#ro1").datagrid("getRows");
@@ -1606,6 +1610,9 @@ function savecopy(){
 					socketfc.close();
 					if(socketfc.readyState==1){
 						alert("复制失败");
+						rows.length=0;
+						str="";
+						$('#ro').datagrid('clearSelections');
 						}
 				}else{
 					rows1[xx].readynum=x;
@@ -1622,6 +1629,9 @@ function savecopy(){
 									xx=0;
 									$('#divro1').dialog('close');
 									rows1.length=0;
+									rows.length=0;
+									str="";
+									$('#ro').datagrid('clearSelections');
 							}
 								
 						}else{
@@ -1888,6 +1898,7 @@ socketfc.send(xiafasend);
 
 function wait(){
 	var smachine = node11.id;
+	rows="";
 	var rows = $("#ro").datagrid("getSelections");
     var str="";
 	for(var i=0; i<rows.length; i++){
