@@ -1196,13 +1196,13 @@ function xiafa(){
 				        	fcharacter = "0" + fcharacter;
 				        }
 				      }
-					var fgas = parseInt(document.getElementById('fgas').value).toString(16);
+					var fgas = parseInt($('#fgas').combobox('getValue')).toString(16);
 					if(fgas==parseInt(121).toString(16)){
-						fgas="1";
-					}else if(fgas==parseInt(122).toString(16)){
-						fgas="3";
-					}else{
 						fgas="0";
+					}else if(fgas==parseInt(122).toString(16)){
+						fgas="1";
+					}else{
+						fgas="3";
 					}
 					if(fgas.length<2){
 						var length = 2 - fgas.length;
@@ -1210,7 +1210,7 @@ function xiafa(){
 				        	fgas = "0" + fgas;
 				        }
 				      }
-					var fdiameter = parseInt(document.getElementById('fdiameter').value).toString(16);
+					var fdiameter = parseInt($('#fdiameter').combobox('getValue')).toString(16);
 					if(fdiameter==parseInt(131).toString(16)){
 						fdiameter="A";
 					}else if(fdiameter==parseInt(132).toString(16)){
@@ -1226,7 +1226,7 @@ function xiafa(){
 				        	fdiameter = "0" + fdiameter;
 				        }
 				      }
-					var fmaterial = parseInt(document.getElementById('fmaterial').value).toString(16);
+					var fmaterial = parseInt($('#fmaterial').combobox('getValue')).toString(16);
 					if(fmaterial==parseInt(91).toString(16)){
 						fmaterial="0";
 					}else if(fmaterial==parseInt(92).toString(16)){

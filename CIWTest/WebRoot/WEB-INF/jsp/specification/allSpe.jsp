@@ -31,6 +31,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script type="text/javascript" src="resources/js/specification/addSpe.js"></script>
 	<script type="text/javascript" src="resources/js/specification/destroySpe.js"></script>
 	<script type="text/javascript" src="resources/js/specification/specificationtree.js"></script>
+		<script type="text/javascript" src="resources/js/specification/control.js"></script>
 	<script type="text/javascript" src="resources/js/swfobject.js"></script>
 	<script type="text/javascript" src="resources/js/web_socket.js"></script>
 	<style type="text/css">
@@ -54,6 +55,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	<div  id="bodys" region="center"  hide="true"  split="true" >
   		<div id=bodyy style="text-align:center"><p>欢迎使用！请先选择焊机。。。</p></div>
   		<div id="body">
+  			<a style="font-size:20px;" href="javascript:parameter();">参数管理</a><span style="font-size:20px;">|</span><a style="font-size:20px;" href="javascript:control();">控制管理</a>
   			<form id="fm" class="easyui-form" method="post" data-options="novalidate:true">
 	        	<div region="left">
 	            	<table>
@@ -284,6 +286,30 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            	</table>
 				</div>
 			</form>
+			<form hidden="true" id="cfm" class="easyui-form" method="post" data-options="novalidate:true">
+				<div region="left">
+					<table width="50%" height="30%" border="1" style="text-align: center;">
+					  <tr height="30px">
+					    <td colspan="2" align="center">
+					    	<font face="黑体" size="5">控制命令</font>
+					    </td>
+					  </tr>
+					  <tr height="30px">
+					    <td align="center" bgcolor="#FFFAF0">工作：</td>
+					    <td>
+					    	<input id ="free" name="free" type="radio" value="1" checked="checked"/>工作不可自由调节
+			  				<input id ="free" name="free" type="radio" value="0"/>工作自由调节
+			  			</td>
+					  </tr>
+					  <tr height="30px">
+					    <td colspan="2" align="center">					
+							<a href="javascript:controlfun();" class="easyui-linkbutton" iconCls="icon-ok">下发控制命令</a>
+							<a href="javascript:openPassDlg();" class="easyui-linkbutton" iconCls="icon-ok">密码下发</a>			
+						</td>
+					  </tr>
+					</table>
+				</div>
+			</form>
 	    </div>
 	    <div id="divro" class="easyui-dialog" style="width:400px;height:400px" closed="true" buttons="#dlg-ro"algin="center">
 	    	<div style="text-align:center;height:25px">
@@ -305,6 +331,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <div id="dlg-ro1">
 			<a href="javascript:$('#divro1').dialog('close');" class="easyui-linkbutton" iconCls="icon-ok">确定</a>
 			<a href="javascript:$('#divro1').dialog('close');" class="easyui-linkbutton" iconCls="icon-cancel" >取消</a>
+		</div>
+		
+		<div id="pwd" class="easyui-dialog" style="text-align:center;width:400px;height:200px" closed="true" buttons="#dlg-pwd"algin="center">
+	        <br><br><lable><span class="required">*</span>密码：</lable>
+	        <input name="passwd" id="passwd" class="easyui-numberbox"><br/>
+	        <lable style="color:red;">（注：密码范围是1~999）</lable>
+        </div>
+        <div id="dlg-pwd">
+			<a href="javascript:passfun();" class="easyui-linkbutton" iconCls="icon-ok">确定下发</a>
+			<a href="javascript:$('#pwd').dialog('close');" class="easyui-linkbutton" iconCls="icon-cancel" >取消</a>
 		</div>
     </div>
 </body>
