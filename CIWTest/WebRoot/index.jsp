@@ -53,8 +53,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			        <li onclick="changeColor(this)"><a href="javascript:openGather()" ><div><img src="resources/images/c-13.png" />&nbsp;&nbsp;采集模块管理</div></a></li>
 					<li onclick="changeColor(this)"><a href="javascript:openWeldingMachine()"><div><img src="resources/images/c-12.png" />&nbsp;&nbsp;CAT焊机设备管理</div></a></li>
 				    <li onclick="changeColor(this)"><a href="javascript:openMachine()"><div><img src="resources/images/c-10.png" />&nbsp;&nbsp;维修记录管理</div></a></li>
-			        <li class="libottom"  onclick="changeColor(this)"><a href="javascript:openParameter()"><div><img src="resources/images/c-14.png" />&nbsp;&nbsp;参数设置</div></a></li>
-			        <li onclick="changeColor(this)"><a href="javascript:openWeldingMachines()"><div><img src="resources/images/c-12.png" />&nbsp;&nbsp;焊机设备管理</div></a></li>
+			        <li onclick="changeColor(this)"><a href="javascript:openParameter()"><div><img src="resources/images/c-14.png" />&nbsp;&nbsp;参数设置</div></a></li>
+			        <li class="libottom" onclick="changeColor(this)"><a href="javascript:openWeldingMachines()"><div><img src="resources/images/c-12.png" />&nbsp;&nbsp;焊机设备管理</div></a></li>
 				</ul>
 			</div>
 			<div title="生产数据统计" data-options="iconCls:'icon-num'">
@@ -131,19 +131,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							</ul>
 						</div>
 					</li>
-					<li onclick="changeColor(this)"><a href="javascript:openAndroid()"><div><img src="" />&nbsp;&nbsp;安卓数据上传统计</div></a></li>
-				    <li onclick="changeColor(this)"><a href="javascript:openMaxMin()"><div><img src="resources/images/s-11.png" />&nbsp;&nbsp;对照分析</div></a></li>
+					<li onclick="changeColor(this)"><a href="javascript:openAndroid()"><div><img src="resources/images/c-8.png" />&nbsp;&nbsp;安卓数据上传统计</div></a></li>
+				    <li class="libottom" onclick="changeColor(this)"><a href="javascript:openMaxMin()"><div><img src="resources/images/s-11.png" />&nbsp;&nbsp;对照分析</div></a></li>
 				</ul>
 			</div>
 			<div title="生产过程管理" data-options="iconCls:'icon-statement'">
 				<ul>
-			         <li onclick="changeColor(this)"><a href="javascript:openCatWeld()"><div><img src="resources/images/c-2.png" />&nbsp;&nbsp;CAT焊工管理</div></a></li>
-			         <li onclick="changeColor(this)"><a href="javascript:opencatmail()"><div><img src="resources/images/c-14.png" />&nbsp;&nbsp;CAT邮件管理</div></a></li>
+					<li onclick="changeColor(this)"><a href="javascript:openCatWeld()"><div><img src="resources/images/c-2.png" />&nbsp;&nbsp;CAT焊工管理</div></a></li>
+			        <li onclick="changeColor(this)"><a href="javascript:opencatmail()"><div><img src="resources/images/c-14.png" />&nbsp;&nbsp;CAT邮件管理</div></a></li>
 			        <li onclick="changeColor(this)"><a href="javascript:openWedJunction()"><div><img src="resources/images/c-7.png" />&nbsp;&nbsp;焊缝管理</div></a></li>
 			        <li onclick="changeColor(this)"><a href="javascript:openProduct()"><div><img src="resources/images/c-8.png" />&nbsp;&nbsp;产品管理</div></a></li>
 			        <li onclick="changeColor(this)"><a href="javascript:openWps()"><div><img src="resources/images/c-9.png" />&nbsp;&nbsp;工艺管理</div></a></li>
-			        <li class="libottom" onclick="changeColor(this)"><a href="javascript:openSpe()"><div><img src="resources/images/c-14.png" />&nbsp;&nbsp;焊机参数管理</div></a></li>
-			       <li onclick="changeColor(this)"><a href="javascript:openPerson()" ><div><img src="resources/images/c-6.png" />&nbsp;&nbsp;焊工管理</div></a></li>
+			        <li onclick="changeColor(this)"><a href="javascript:openSpe()"><div><img src="resources/images/c-14.png" />&nbsp;&nbsp;焊机参数管理</div></a></li>
+			       <li class="libottom" onclick="changeColor(this)"><a href="javascript:openPerson()" ><div><img src="resources/images/c-6.png" />&nbsp;&nbsp;焊工管理</div></a></li>
 				</ul>
 			</div>
 			<div title="系统配置管理" data-options="iconCls:'icon-sys'">
