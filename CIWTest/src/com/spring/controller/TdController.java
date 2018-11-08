@@ -9,18 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.github.pagehelper.PageInfo;
-import com.spring.page.Page;
-import com.spring.util.IsnullUtil;
 import com.spring.model.MyUser;
+import com.spring.model.Person;
 import com.spring.model.Td;
-import com.spring.model.User;
+import com.spring.page.Page;
+import com.spring.service.PersonService;
 import com.spring.service.TdService;
+import com.spring.util.IsnullUtil;
 
-import net.sf.json.JSON;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -35,6 +33,9 @@ public class TdController {
 	
 	@Autowired
 	private TdService tdService;
+	
+	@Autowired
+	private PersonService ps;
 	private Td td;
 	
 	IsnullUtil iutil = new IsnullUtil();
@@ -401,6 +402,72 @@ public class TdController {
 		obj.put("rows", ary);
 		return obj.toString();
 	}
+	
+	@RequestMapping("/getLiveWelder")
+	@ResponseBody
+	public String getLiveWelder(HttpServletRequest request){
+		/*BigInteger uid = lm.getUserId(request);*/
+		BigInteger parent = null;
+		/*String parentId = request.getParameter("parent");
+		if(iutil.isNull(parentId)){
+			parent = new BigInteger(parentId);
+		}else{
+			parent = im.getUserInsfId(uid);
+		}*/
+		JSONObject obj = new JSONObject();
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		try{
+			List<Person> list = ps.getWelderAll(parent);
+			/*Insframework insname = im.getInsById(parent);*/
+			for(int i=0;i<list.size();i++){
+				json.put("fname",list.get(i).getName());
+				json.put("fwelder_no", list.get(i).getWelderno());
+				json.put("fitemid", list.get(i).getInsid());
+				json.put("fitemname", list.get(i).getInsname());
+				ary.add(json);
+			}
+		}catch(Exception e){
+			e.getMessage();
+		}
+		obj.put("rows", ary);
+		return obj.toString();
+	}
+	
+	@RequestMapping("/getAllPositions")
+	@ResponseBody
+	public String getAllPositions(HttpServletRequest request){
+		/*String parentId = request.getParameter("parent");*/
+		BigInteger parent = null;
+		/*if(iutil.isNull(parentId)){
+			parent = new BigInteger(parentId);
+		}else{
+			MyUser myuser = (MyUser) SecurityContextHolder.getContext()  
+				    .getAuthentication()  
+				    .getPrincipal();
+			long uid = myuser.getId();
+			parent = im.getUserInsfId(BigInteger.valueOf(uid));
+		}*/
+		List<Td> getAP = tdService.getAllPosition(parent);
+		JSONObject obj = new JSONObject();
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		try{
+			for(Td td:getAP){
+				json.put("fid",td.getId());
+				json.put("fequipment_no", td.getFequipment_no());
+				json.put("fposition", td.getFposition());
+				json.put("finsid", td.getFci());
+				json.put("finsname", td.getFcn());
+				ary.add(json);
+			}
+		}catch(Exception e){
+			e.getMessage();
+		}
+		obj.put("rows", ary);
+		return obj.toString();
+	}
+
 	
 	@RequestMapping("/getMachine")
 	@ResponseBody
