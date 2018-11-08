@@ -53,11 +53,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			        <li onclick="changeColor(this)"><a href="javascript:openGather()" ><div><img src="resources/images/c-13.png" />&nbsp;&nbsp;采集模块管理</div></a></li>
 					<li onclick="changeColor(this)"><a href="javascript:openWeldingMachine()"><div><img src="resources/images/c-12.png" />&nbsp;&nbsp;CAT焊机设备管理</div></a></li>
 				    <li onclick="changeColor(this)"><a href="javascript:openMachine()"><div><img src="resources/images/c-10.png" />&nbsp;&nbsp;维修记录管理</div></a></li>
-			        <li class="libottom"  onclick="changeColor(this)"><a href="javascript:openParameter()"><div><img src="resources/images/c-14.png" />&nbsp;&nbsp;参数设置</div></a></li>
 			        <li onclick="changeColor(this)"><a href="javascript:opencatMachine()"><div><img src="resources/images/c-12.png" />&nbsp;&nbsp;CAT焊机合并版</div></a></li>
 			        <li onclick="changeColor(this)"><a href="javascript:openWeldingMachines()"><div><img src="resources/images/c-12.png" />&nbsp;&nbsp;焊机设备管理</div></a></li>
 			        <li onclick="changeColor(this)"><a href="javascript:openParameter()"><div><img src="resources/images/c-14.png" />&nbsp;&nbsp;参数设置</div></a></li>
-			        <li class="libottom" onclick="changeColor(this)"><a href="javascript:openWeldingMachines()"><div><img src="resources/images/c-12.png" />&nbsp;&nbsp;焊机设备管理</div></a></li>
+			      
 				</ul>
 			</div>
 			<div title="生产数据统计" data-options="iconCls:'icon-num'">
