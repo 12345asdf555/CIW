@@ -81,7 +81,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<lable>钢印号</lable>
 					<input class="easyui-textbox" id="ssnum" name="ssnum"/>
 					<lable>首次认证时间</lable>
-					<input class="easyui-datetimebox" id="firstsuretime"  name="firstsuretime" readonly="readonly"/>
+					<input class="easyui-datetimebox" id="firstsuretime"  name="firstsuretime" />
 				</div>
 				<div class="fitem">
 					<lable>部门</lable>
@@ -129,7 +129,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<lable>理论考试成绩</lable>
 					<input class="easyui-numberbox"  min="0.001" precision="3"  id="score" name="score"/>
 					<lable>认证状态</lable>
-					<input class="easyui-textbox"  id="ifpass"  name="ifpass"/>
+					<input class="easyui-textbox"  id="ifpase"  name="ifpase"/>
 				</div>
 				<div class="fitem">
 					<lable>IC卡有效期</lable>

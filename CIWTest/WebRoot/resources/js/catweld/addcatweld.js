@@ -59,21 +59,21 @@ function save(){
 	var newhys = $("#halfyearsure").textbox('getValue');
 	var newys = $("#yearsure").textbox('getValue');
 	var newny = $("#nextyear").textbox('getValue');
-	if(oldic!=newic){
-		symbol=1;
-	}else if(oldhys!=newhys){
-		symbol=2;
-	}else if(oldys!=newys){
-		symbol=3;
-	}else if(oldny!=newny){
-		symbol=4;
-	}
 	var messager = "";
 	var url2 = "";
 	if(flag==1){
 		messager = "新增成功！";
 		url2 = url;
 	}else{
+		if(oldic!=newic){
+			symbol=1;
+		}else if(oldhys!=newhys){
+			symbol=2;
+		}else if(oldys!=newys){
+			symbol=3;
+		}else if(oldny!=newny){
+			symbol=4;
+		}
 		messager = "修改成功！";
 		url2 = url+"&symbol="+symbol;
 	}

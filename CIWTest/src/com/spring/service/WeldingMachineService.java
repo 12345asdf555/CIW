@@ -34,6 +34,11 @@ public interface WeldingMachineService {
 	 * CAT新增设备
 	 */
 	void addcatMachine(WeldingMachine wm);
+	
+	/**
+	 * CAT合并新增设备
+	 */
+	void addcatmachine(WeldingMachine wm);
 	/**
 	 * 修改设备
 	 */
@@ -43,12 +48,26 @@ public interface WeldingMachineService {
 	 * CAT修改设备
 	 */
 	void editcatMachine(WeldingMachine wm);
+	
+	
 	/**
+	 * CAT合并修改设备
+	 */
+	void editcatmachine(WeldingMachine wm);
+	/**
+	
+	/**
+	 * 
 	 * 删除设备
 	 * @param wid
 	 */
 	void deleteWeldingChine(BigInteger wid);
 	
+	/**
+	 * CAT删除设备
+	 * @param wid
+	 */
+	void deletecatchine(BigInteger wid);
 	/**
 	 * CAT删除设备
 	 * @param wid

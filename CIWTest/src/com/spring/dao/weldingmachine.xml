@@ -188,6 +188,21 @@
 		fauthentication=#{fauthentication},ftest=#{ftest},fprevention=#{fprevention},fgather_no=#{fgather} where fid = #{id}
 	</update>
 	
+	<insert id="addcatmachine" parameterType="com.spring.model.WeldingMachine" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tb_welding_machine(fIP, ftype_id, fequipment_no, fstatus_id, fposition, finsframework_id, 
+		fmanufacturer_id,fgather_id, fisnetworking, fjoin_time, fmodel, fcreater, fcreatedate, fmanunumbers, fsection, fauthentication, ftest, fprevention) VALUES 
+		(#{ip},#{typeId},#{equipmentNo},#{statusId},#{position},#{insframeworkId.id},#{mvalueid},#{gatherId.id},#{isnetworking},#{joinTime},#{model},#{creater},now(),#{fmanunumbers},#{fsection},#{fauthentication},#{ftest},#{fprevention})
+	</insert>
+	
+	<update id="editcatmachine"  parameterType="com.spring.model.WeldingMachine">
+		UPDATE tb_welding_machine SET fIP=#{ip},ftype_id=#{typeId},fequipment_no=#{equipmentNo},fstatus_id=#{statusId},
+		fposition=#{position},finsframework_id=#{insframeworkId.id},fmanufacturer_id=#{mvalueid},fgather_id=#{gatherId.id},
+		fisnetworking=#{isnetworking},fjoin_time=#{joinTime},fmodel=#{model},fupdater=#{updater},fmanunumbers=#{fmanunumbers},fsection=#{fsection},fauthentication=#{fauthentication},ftest=#{ftest},fprevention=#{fprevention},fupdatedate=now() where fid = #{id}
+	</update>
+	
+	<delete id="deletecatmachine" parameterType="java.math.BigInteger">
+		DELETE FROM tb_welding_machine WHERE fid = #{wid}
+	</delete>
 	<update id="editstatus"  parameterType="com.spring.model.WeldingMachine">
 		UPDATE tb_welding_machine SET fstatus_id=#{status}  where fid = #{wid}
 	</update>

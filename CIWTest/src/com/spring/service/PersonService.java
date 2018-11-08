@@ -13,10 +13,14 @@ public interface PersonService {
 	List<Person> dic();
 	List<Person> ins();
 	void save(Person welder);
+	void catsave(Person welder);
 	Person findById(BigInteger fid);
 	int getUsernameCount(String welderno);
 	void update(Person welder);
+	void catupdate(Person welder);
 	void delete(BigInteger fid);
+	void catdelete(BigInteger fid);
+	List<Person> getWelderAll(BigInteger parent);
 
 	/**
 	 * 获取所有焊工

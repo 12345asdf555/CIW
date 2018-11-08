@@ -65,6 +65,8 @@ function openMachineChart(){
 		$("#machineimg").css("transform","rotate(0deg)");
 	}
 }
+
+
 function openFauit(){
 	addTab("故障报表","datastatistics/goFauit");
 }
@@ -103,8 +105,14 @@ function opencatmail(){
 
 function openCatWeld(){
 	addTab("CAT焊工管理","catweld/goCatWeld");
-}
 
+}
+function opencatPerson(){
+	addTab("cat焊工合并版","welders/catWelder");
+}
+function opencatMachine(){
+	addTab("cat焊机合并版","weldingMachine/gocatMachine");
+}
 
 function openWeldWorkpieceData(){
 	addTab("工件焊接数据","datastatistics/goWeldWorkpieceData");

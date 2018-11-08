@@ -22,13 +22,19 @@ public interface WeldingMachineMapper extends Mapper<WeldingMachine>{
 	
 	void addcatMachine(WeldingMachine wm);
 	
+	void addcatmachine(WeldingMachine wm);
+	
 	void editWeldingMachine(WeldingMachine wm);
 	
 	void editcatMachine(WeldingMachine wm);
 	
+	void editcatmachine(WeldingMachine wm);
+	
 	void deleteWeldingMachine(@Param("wid")BigInteger wid);
 	
 	void deletecatMachine(@Param("wid")BigInteger wid);
+	
+	void deletecatmachine(@Param("wid")BigInteger wid);
 	
 	BigInteger getWeldingMachineByEno(@Param("eno")String eno);
 	

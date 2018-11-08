@@ -25,15 +25,77 @@ public class Person {
 	private String valuenamex;
 	private String qualiname;
 	private String levename;
+	private String fcheckintime;
+	private String firstsuretime;
+	private String workship;
+	private String workmaintime;
+	private String workkmainname;
+	private String workfirsttime;
+	private String workfirstname;
+	private String worksecondtime;
+	private String worksecondname;
+	private String specification;
+	private String level;
+	private String score;
+	private String ifpase;
+	private String icworkime;
+	private String halfyearsure;
+	private String yearsure;
+	private String nextyear;
+	private String endTime;
 	
+	
+	private String creatTime;
+	private String updateTime;
+	private int updatecount;
+	private String nextwall_thickness;
+	private String next_material;
+	private String electricity_unit;
+	private String valtage_unit;
+	private BigInteger insfid;
+	private String femailname;
+	private String femailaddress;
+	private String femailtext;
+	private String femailstatus;
+	private String femailtime;
 	public Person(){
 		super();
 	}
+	public String getNextwall_thickness() {
+		return nextwall_thickness;
+	}
+	public void setNextwall_thickness(String nextwall_thickness) {
+		this.nextwall_thickness = nextwall_thickness;
+	}
+	public String getNext_material() {
+		return next_material;
+	}
+	public void setNext_material(String next_material) {
+		this.next_material = next_material;
+	}
+	public String getElectricity_unit() {
+		return electricity_unit;
+	}
+	public void setValtage_unit(String valtage_unit) {
+		this.valtage_unit = valtage_unit;
+	}
+	public void setElectricity_unit(String electricity_unit) {
+		this.electricity_unit = electricity_unit;
+	}
+	public String getValtage_unit() {
+		return valtage_unit;
+	}
+	
 	
 	public String getQualiname() {
 		return qualiname;
 	}
-
+	public String getFcheckintime() {
+		return fcheckintime;
+	}
+	public void setFcheckintime(String fcheckintime) {
+		this.fcheckintime = fcheckintime;
+	}
 	public void setQualiname(String qualiname) {
 		this.qualiname = qualiname;
 	}
@@ -159,6 +221,160 @@ public class Person {
 	}
 	public void setValuenamex(String valuenamex){
 		this.valuenamex = valuenamex;
+	}
+	public String getFirstsuretime() {
+		return firstsuretime;
+	}
+	public void setFirstsuretime(String firstsuretime) {
+		this.firstsuretime = firstsuretime;
+	}
+	
+	public String getWorkship() {
+		return workship;
+	}
+	public void setWorkship(String workship) {
+		this.workship = workship;
+	}
+	public String getWorkmaintime() {
+		return workmaintime;
+	}
+	public void setWorkmaintime(String workmaintime) {
+		this.workmaintime = workmaintime;
+	}
+	public String getWorkkmainname() {
+		return workkmainname;
+	}
+	public void setWorkkmainname(String workkmainname) {
+		this.workkmainname = workkmainname;
+	}
+	public String getWorkfirsttime() {
+		return workfirsttime;
+	}
+	public void setWorkfirsttime(String workfirsttime) {
+		this.workfirsttime = workfirsttime;
+	}
+	public String getWorkfirstname() {
+		return workfirstname;
+	}
+	public void setWorkfirstname(String workfirstname) {
+		this.workfirstname = workfirstname;
+	}
+	public String getWorksecondtime() {
+		return worksecondtime;
+	}
+	public void setWorksecondtime(String worksecondtime) {
+		this.worksecondtime = worksecondtime;
+	}
+	public String getWorksecondname() {
+		return worksecondname;
+	}
+	public void setWorksecondname(String worksecondname) {
+		this.worksecondname = worksecondname;
+	}
+	
+	public String getSpecification() {
+		return specification;
+	}
+	public void setSpecification(String specification) {
+		this.specification = specification;
+	}
+	
+	public String getLevel() {
+		return level;
+	}
+	public void setLevel(String level) {
+		this.level = level;
+	}
+	public String getScore() {
+		return score;
+	}
+	public void setScore(String score) {
+		this.score = score;
+	}
+	public String getIfpase() {
+		return ifpase;
+	}
+	public void setIfpase(String ifpase) {
+		this.ifpase = ifpase;
+	}
+	public String getYearsure() {
+		return yearsure;
+	}
+	public void setYearsure(String yearsure) {
+		this.yearsure = yearsure;
+	}
+	public String getNextyear() {
+		return nextyear;
+	}
+	public void setNextyear(String nextyear) {
+		this.nextyear = nextyear;
+	}
+	public String getEndTime() {
+		return endTime;
+	}
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
+	}
+	public String getIcworkime() {
+		return icworkime;
+	}
+	public void setIcworkime(String icworkime) {
+		this.icworkime = icworkime;
+	}
+	public String getHalfyearsure() {
+		return halfyearsure;
+	}
+	public void setHalfyearsure(String halfyearsure) {
+		this.halfyearsure = halfyearsure;
+	}
+	
+	public String getFemailname() {
+		return femailname;
+	}
+	public void setFemailname(String femailname) {
+		this.femailname = femailname;
+	}
+	public String getFemailaddress() {
+		return femailaddress;
+	}
+	public void setFemailaddress(String femailaddress) {
+		this.femailaddress = femailaddress;
+	}
+	public String getFemailtext() {
+		return femailtext;
+	}
+	public void setFemailtext(String femailtext) {
+		this.femailtext = femailtext;
+	}
+	public String getFemailstatus() {
+		return femailstatus;
+	}
+	public void setFemailstatus(String femailstatus) {
+		this.femailstatus = femailstatus;
+	}
+	public String getFemailtime() {
+		return femailtime;
+	}
+	public void setFemailtime(String femailtime) {
+		this.femailtime = femailtime;
+	}
+	public String getCreatTime() {
+		return creatTime;
+	}
+	public void setCreatTime(String creatTime) {
+		this.creatTime = creatTime;
+	}
+	public String getUpdateTime() {
+		return updateTime;
+	}
+	public void setUpdateTime(String updateTime) {
+		this.updateTime = updateTime;
+	}
+	public int getUpdatecount() {
+		return updatecount;
+	}
+	public void setUpdatecount(int updatecount) {
+		this.updatecount = updatecount;
 	}
 	public Person(BigInteger id,String welderno,String name,String cellphone,int leveid,String cardnum,int quali,Date createdate,Date updatedate,BigInteger creater,BigInteger updater,BigInteger owner,BigInteger insid,String back,int val,int type,String valuename,String insname,String valuenamex) {
 		super();

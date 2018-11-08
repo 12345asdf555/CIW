@@ -1,138 +1,136 @@
 $(function(){
-	weldedJunctionDatagrid();
+	weldDatagrid();
 });
 
-function weldedJunctionDatagrid(){
-	$("#weldedJunctionTable").datagrid( {
-//		fitColumns : true,
+function weldDatagrid(){
+	$("#welderTable").datagrid( {
 		height : $("#body").height(),
 		width : $("#body").width(),
 		idField : 'id',
 		pageSize : 10,
 		pageList : [ 10, 20, 30, 40, 50 ],
-		url : "catweld/getCatWeldList",
+		url : "welders/getAllWelder",
 		singleSelect : true,
 		rownumbers : true,
 		showPageList : false,
+		pagination : true,
+		//fitColumns : true,
 		columns : [ [ {
-			field : 'weldnum',
-			title : '工号',
-			width : 60,
+			field : 'id',
+			title : '序号',
+			width : 100,
 			halign : "center",
 			align : "left",
-//			hidden:true
+			hidden:true
 		}, {
-			field : 'checkintime',
+			field : 'welderno',
+			title : '工号',
+			width : 50,
+			halign : "center",
+			align : "left"
+		},{
+			field : 'fcheckintime',
 			title : '入职时间',
-			width : 140,
+			width : 100,
 			halign : "center",
 			align : "left"
 		}, {
-			field : 'ssnum',
+			field : 'cardnum',
 			title : '钢印号',
-			width : 50,
+			width : 100,
 			halign : "center",
-			align : "left",
-//			hidden:true
-		}, {
+			align : "left"
+		},{
 			field : 'firstsuretime',
-			title : '首次认证时间',
-			width : 80,
+			title : '首次认证日期',
+			width : 100,
 			halign : "center",
-			align : "left",
-//			hidden:true
-		}, {
-			field : 'department',
+			align : "left"
+		},{
+			field : 'ownername',
 			title : '部门',
-			width : 50,
+			width : 100,
 			halign : "center",
-			align : "left",
-//			hidden:true
-		}, {
+			align : "left"
+		},{
 			field : 'workship',
 			title : '车间',
 			width : 50,
 			halign : "center",
-			align : "left",
-//			hidden:true
-		}, {
+			align : "left"
+		},{
 			field : 'workmaintime',
 			title : '主岗位上岗时间',
 			width : 100,
 			halign : "center",
-			align : "left",
-//			hidden:true
-		}, {
+			align : "left"
+		},{
 			field : 'workkmainname',
-			title : '主岗位名称',
-			width : 90,
+			title : '主岗位上岗名称',
+			width : 100,
 			halign : "center",
-			align : "left",
-//			hidden:true
-		}, {
+			align : "left"
+		},{
 			field : 'workfirsttime',
 			title : '岗位一上岗时间',
 			width : 100,
 			halign : "center",
-			align : "left",
-//			hidden:true
-		}, {
+			align : "left"
+		},{
 			field : 'workfirstname',
-			title : '岗位一名称',
-			width : 90,
+			title : '岗位一上岗名称',
+			width : 100,
 			halign : "center",
-			align : "left",
-//			hidden:true
-		}, {
+			align : "left"
+		},{
 			field : 'worksecondtime',
 			title : '岗位二上岗时间',
 			width : 100,
 			halign : "center",
 			align : "left"
-		}, {
+		},{
 			field : 'worksecondname',
-			title : '岗位二名称',
-			width : 90,
+			title : '岗位二上岗名称',
+			width : 100,
 			halign : "center",
 			align : "left"
-		}, {
-			field : 'ifwelding',
-			title : '1E2111焊接',
-			width : 50,
-			halign : "center",
-			align : "left"
-		}, {
-			field : 'classify',
-			title : '分类',
+		},{
+			field : 'qualiname',
+			title : 'IE211从事员',
 			width : 80,
 			halign : "center",
 			align : "left"
-		}, {
-			field : 'weldername',
+		},{
+			field : 'levename',
+			title : '分类',
+			width : 100,
+			halign : "center",
+			align : "left"
+		},{
+			field : 'name',
 			title : '姓名',
 			width : 50,
 			halign : "center",
 			align : "left"
-		}, {
+		},{
 			field : 'level',
 			title : '技能等级',
-			width : 60,
+			width : 80,
 			halign : "center",
 			align : "left"
-		}, {
+		},{
 			field : 'score',
-			title : '理论考试结果',
-			width : 60,
-			halign : "center",
-			align : "left",
-//			hidden:true
-		}, {
-			field : 'ifpass',
-			title : '认证状态',
-			width : 60,
+			title : '理论考试成绩',
+			width : 80,
 			halign : "center",
 			align : "left"
-		}, {
+		},{
+			field : 'ifpase',
+			title : '认证状态',
+			width : 80,
+			halign : "center",
+			align : "left"
+		},{
 			field : 'icworkime',
 			title : 'IC卡有效期',
 			width : 100,
@@ -140,95 +138,68 @@ function weldedJunctionDatagrid(){
 			align : "left"
 		},{
 			field : 'yearsure',
-			title : '年度认证',
+			title : '最后年度认证',
 			width : 100,
 			halign : "center",
-			align : "left",
-//			hidden:true
-		},  {
+			align : "left"
+		},{
 			field : 'halfyearsure',
-			title : '半年确认时间',
+			title : '半年年度认证',
 			width : 100,
 			halign : "center",
-			align : "left",
-//			hidden:true
-		}, {
+			align : "left"
+		},{
 			field : 'nextyear',
 			title : '次年年度认证',
 			width : 100,
 			halign : "center",
-			align : "left",
-//			hidden:true
+			align : "left"
 		},{
-			field : 'itemname',
-			title : '所属项目',
-//			width : 150,
+			field : 'cellphone',
+			title : '手机',
+			width : 100,
+			halign : "center",
+			align : "left"
+		},{
+			field : 'leveid',
+			title : '级别id',
+			width : 100,
 			halign : "center",
 			align : "left",
 			hidden:true
 		},{
-			field : 'startTime',
-			title : '开始时间',
-			width : 90,
+			field : 'quali',
+			title : '资质id',
+			width : 100,
 			halign : "center",
 			align : "left",
 			hidden:true
-		}, {
-			field : 'endTime',
-			title : '完成时间',
-			width : 90,
+		},{
+			field : 'owner',
+			title : '部门id',
+			width : 100,
 			halign : "center",
 			align : "left",
 			hidden:true
-		}, {
-			field : 'creatTime',
-			title : '创建时间',
-			width : 90,
+		},{
+			field : 'back',
+			title : '备注',
+			width : 100,
 			halign : "center",
-			align : "left",
-			hidden:true
-		}, {
-			field : 'updateTime',
-			title : '修改时间',
-			width : 90,
-			halign : "center",
-			align : "left",
-			hidden:true
-		}, {
-			field : 'updatecount',
-			title : '修改次数',
-			width : 90,
-			halign : "center",
-			align : "left",
-			hidden:true
-		}, {
-			field : 'valtage_unit',
-			title : '电压单位',
-			width : 90,
-			halign : "center",
-			align : "left",
-			hidden:true
-		}, {
-			field : 'electricity_unit',
-			title : '电流单位',
-			width : 90,
-			halign : "center",
-			align : "left",
-			hidden:true
-		}, {
+			align : "left"
+		},{
 			field : 'edit',
 			title : '编辑',
-			width : 115,
+			width : 150,
 			halign : "center",
 			align : "left",
-			formatter: function(value,row,index){
-				var str = '<a id="edit" class="easyui-linkbutton" href="javascript:editCatweld()"/>';
-				str += '<a id="remove" class="easyui-linkbutton" href="javascript:removeCatweld()"/>';
-				str += '<a id="look" class="easyui-linkbutton" href="weldedjunction/goShowMoreJunction?id='+row.id+'"/>';
-				return str;
-			}
-		}] ],
-		pagination : true,
+			formatter:function(value,row,index){
+			var str = "";
+			str += '<a id="edit" class="easyui-linkbutton" href="javascript:editWelder()"/>';
+			str += '<a id="remove" class="easyui-linkbutton" href="javascript:removeWelder()"/>';
+			return str;
+			}}
+		] ],
 		rowStyler: function(index,row){
             if ((index % 2)!=0){
             	//处理行代背景色后无法选中
@@ -237,11 +208,11 @@ function weldedJunctionDatagrid(){
                 return color;
             }
         },
-		onLoadSuccess: function(data){
+		nowrap : false,
+		onLoadSuccess:function(data){
 	        $("a[id='edit']").linkbutton({text:'修改',plain:true,iconCls:'icon-update'});
 	        $("a[id='remove']").linkbutton({text:'删除',plain:true,iconCls:'icon-delete'});
-			$("a[id='look']").linkbutton({text:'查看更多',plain:true,iconCls:'icon-newadd'});
-		}
+	        }
 	});
 }
 
@@ -269,7 +240,7 @@ function importWeldingMachine(){
 						});
 					} else {
 						$('#importdiv').dialog('close');
-						$('#weldedJunctionTable').datagrid('reload');
+						$('#welderTable').datagrid('reload');
 						$.messager.alert("提示", result.msg);
 					}
 				}
@@ -282,7 +253,6 @@ function importWeldingMachine(){
 	}
 }
 
-
 //监听窗口大小变化
 window.onresize = function() {
 	setTimeout(domresize, 500);
@@ -290,7 +260,7 @@ window.onresize = function() {
 
 //改变表格高宽
 function domresize() {
-	$("#weldedJunctionTable").datagrid('resize', {
+	$("#welderTable").datagrid('resize', {
 		height : $("#body").height(),
 		width : $("#body").width()
 	});

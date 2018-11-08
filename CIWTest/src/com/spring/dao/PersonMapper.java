@@ -14,8 +14,11 @@ public interface PersonMapper {
 	List<Person> dic();
 	List<Person> ins();
 	void save(Person welder);
+	void catsave(Person welder);
 	Person findById(BigInteger fid);
 	int getUsernameCount(@Param("welderno")String welderno);
 	void update(Person welder);
 	void delete(BigInteger fid);
+	void catupdate(Person welder);
+	void catdelete(BigInteger fid);
 }

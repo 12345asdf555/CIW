@@ -51,7 +51,10 @@ public class WeldingMachineServiceImpl implements WeldingMachineService {
 	public void addcatMachine(WeldingMachine wm) {
 		wmm.addcatMachine(wm);
 	}
-	
+	@Override
+	public void addcatmachine(WeldingMachine wm) {
+		wmm.addcatmachine(wm);
+	}
 	@Override
 	public void editWeldingMachine(WeldingMachine wm) {
 		wmm.editWeldingMachine(wm);
@@ -60,6 +63,11 @@ public class WeldingMachineServiceImpl implements WeldingMachineService {
 	@Override
 	public void editcatMachine(WeldingMachine wm) {
 		wmm.editcatMachine(wm);
+	}
+	
+	@Override
+	public void editcatmachine(WeldingMachine wm) {
+		wmm.editcatmachine(wm);
 	}
 	
 	@Override
@@ -101,7 +109,10 @@ public class WeldingMachineServiceImpl implements WeldingMachineService {
 	public void deletecatChine(BigInteger wid) {
 		wmm.deletecatMachine(wid);
 	}
-	
+	@Override
+	public void deletecatchine(BigInteger wid) {
+		wmm.deletecatmachine(wid);
+	}
 	@Override
 	public BigInteger getInsframeworkByName(String name) {
 		return im.getInsframeworkByName(name);
