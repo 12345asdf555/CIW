@@ -150,50 +150,72 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div id="rdlg" class="easyui-dialog" style="width: 400px; height: 530px; padding:10px 20px" closed="true" buttons="#remove-buttons">
 			<form id="rfm" class="easyui-form" method="post" data-options="novalidate:true">
 				<div class="fitem">
-				<lable>固定资产编号</lable>
-				<input type="hidden" name="wid" readonly="readonly"/>
-				<input class="easyui-textbox" name="equipmentNo" readonly="readonly"/>
-			</div>
-			<div class="fitem">
-				<lable>设备类型</lable>
-				<input class="easyui-textbox" name="typeName" readonly="readonly"/>
-			</div>
-			<div class="fitem">
-				<lable>入厂时间</lable>
-				<input class="easyui-textbox" name="joinTime" readonly="readonly" />
-			</div>
-			<div class="fitem">
-				<lable>所属项目</lable>
-				<input class="easyui-textbox" name="insframeworkName" readonly="readonly"/>
-			</div>
-			<div class="fitem">
-				<lable>生产厂商</lable>
-				<input class="easyui-textbox" name="manufacturerName" readonly="readonly"/>
-			</div>
-			<div class="fitem">
-				<lable>采集序号</lable>
-				<input class="easyui-textbox" name="gatherId" readonly="readonly"/>
-			</div>
-			<div class="fitem">
-				<lable>设备位置</lable>
-				<input class="easyui-textbox" name="position" readonly="readonly"/>
-			</div>
-			<div class="fitem">
-					<lable>ip地址</lable>
-					<input class="easyui-textbox" name="ip" id="ip"/>
-			</div>
-			<div class="fitem">
+					<lable><span class="required">*</span>设备编号</lable>
+					<input type="hidden" id="valideno">
+					<input class="easyui-textbox" name="equipmentNo" id="equipmentNo" readonly="true"/>
+				</div>
+				<div class="fitem">
+					<lable><span class="required">*</span>设备类型</lable>
+					<select class="easyui-combobox" name="typeId" id="tId" data-options="required:true,editable:false"" readonly="true"></select>
+				</div>
+				<div class="fitem">
 					<lable>设备型号</lable>
-					<input class="easyui-textbox" name="model" id="model"/>
-			</div>
-			<div class="fitem">
-				<lable>是否联网</lable>
-				<input class="easyui-textbox" name="isnetworking" readonly="readonly"/>
-			</div>
-			<div class="fitem">
-				<lable>状态</lable>
-				<input class="easyui-textbox" name="statusName" readonly="readonly"/>
-			</div>
+					<input class="easyui-textbox" name="model" id="model" readonly="true"/>
+				</div>
+				<div class="fitem">
+					<lable><span class="required">*</span>制造厂家</lable>
+					<select class="easyui-combobox" name="manuno" id="manuno" data-options="required:true,editable:false"" readonly="true"></select>
+				</div>
+				<div class="fitem">
+					<lable><span class="required">*</span>出厂编号</lable>
+					<select class="easyui-textbox" name="manufacturerNo" id="manufacturerNo" readonly="true"></select>
+				</div>
+				<div class="fitem">
+					<lable>使用日期</lable>
+					<input class="easyui-datetimebox" name="joinTime" id="joinTime" readonly="true"/>
+				</div>
+				<div class="fitem">
+					<lable>存放地点</lable>
+					<input class="easyui-textbox" name="position" id="position" readonly="true"/>
+				</div>
+				<div class="fitem">
+					<lable><span class="required">*</span>使用工段</lable>
+					<input class="easyui-textbox" name="action" id="action" readonly="true"/>
+				</div>
+				<div class="fitem">
+					<lable>上度认证时间</lable>
+					<input class="easyui-datetimebox" name="inspectTime" id="inspectTime" readonly="true"/>
+				</div>
+				<div class="fitem">
+					<lable>下次效验时间</lable>
+					<input class="easyui-datetimebox" name="nextTime" id="nextTime" readonly="true"/>
+				</div>
+				<div class="fitem">
+					<lable>预防性维护日期</lable>
+					<input class="easyui-datetimebox" name="maintainTime" id="maintainTime" readonly="true"/>
+				</div>
+				<div class="fitem">
+					<lable><span class="required">*</span>所属项目</lable>
+					<input type="hidden" id="validinsf">
+					<select class="easyui-combobox" name="iId" id="iId" data-options="required:true,editable:false"" readonly="true"></select>
+				</div>
+				<div class="fitem">
+					<lable>采集序号</lable>
+					<input type="hidden" id="validgid">
+					<select class="easyui-combobox" name="gid" id="gid" data-options="validType:['checkNumber','wmGatheridValidate'],editable:false"" readonly="true"></select>
+				</div>
+				<div class="fitem">
+					<lable><span class="required">*</span>ip地址</lable>
+					<input class="easyui-textbox" name="ip" id="ip" data-options="required:true" readonly="true"/>
+				</div>
+				<div class="fitem" >
+					<lable>是否联网</lable>
+					<input class="easyui-textbox" name="isnetworking" readonly="readonly"/>
+				</div>
+				<div class="fitem">
+					<lable>状态</lable>
+	   				<input class="easyui-textbox" name="statusName" readonly="readonly"/>
+				</div>
 			</form>
 		</div>
 		<div id="remove-buttons">

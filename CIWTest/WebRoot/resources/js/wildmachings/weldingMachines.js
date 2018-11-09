@@ -29,32 +29,14 @@ function weldingMachineDatagrid(){
 			align : "left"
 		}, {
 			field : 'typeName',
-			title : '设备名称',
+			title : '设备类型',
 //			width : 80,
-			halign : "center",
-			align : "left"
-		},{
-			field : 'model',
-			title : '设备型号',
-//			width : 100,
 			halign : "center",
 			align : "left"
 		}, {
 			field : 'joinTime',
-			title : '使用日期',
+			title : '入厂时间',
 //			width : 150,
-			halign : "center",
-			align : "left"
-		},  {
-			field : 'manufacturerName',
-			title : '制造厂家',
-//			width : 150,
-			halign : "center",
-			align : "left"
-		},{
-			field : 'position',
-			title : '存放地点',
-//			width : 100,
 			halign : "center",
 			align : "left"
 		}, {
@@ -70,6 +52,12 @@ function weldingMachineDatagrid(){
 			halign : "center",
 			align : "left"
 		} , {
+			field : 'manufacturerName',
+			title : '厂家',
+//			width : 150,
+			halign : "center",
+			align : "left"
+		}, {
 			field : 'isnetworking',
 			title : '是否在网',
 //			width : 80,
@@ -82,38 +70,20 @@ function weldingMachineDatagrid(){
 			halign : "center",
 			align : "left"
 		}, {
+			field : 'position',
+			title : '位置',
+//			width : 100,
+			halign : "center",
+			align : "left"
+		}, {
 			field : 'ip',
 			title : 'ip地址',
 //			width : 100,
 			halign : "center",
 			align : "left"
 		}, {
-			field : 'action',
-			title : '使用工段',
-//			width : 80,
-			halign : "center",
-			align : "left"
-		} ,{
-			field : 'manufacturerNo',
-			title : '出厂编号',
-//			width : 80,
-			halign : "center",
-			align : "left"
-		},{
-			field : 'inspectTime',
-			title : '上度认证时间',
-//			width : 100,
-			halign : "center",
-			align : "left"
-		},{
-			field : 'nextTime',
-			title : '下次校验日期',
-//			width : 100,
-			halign : "center",
-			align : "left"
-		},{
-			field : 'maintainTime',
-			title : '预防性维护日期',
+			field : 'model',
+			title : '设备型号',
 //			width : 100,
 			halign : "center",
 			align : "left"
@@ -159,7 +129,7 @@ function weldingMachineDatagrid(){
 			halign : "center",
 			align : "left",
 			hidden: true
-		}, {
+		},  {
 			field : 'edit',
 			title : '编辑',
 			width : 250,

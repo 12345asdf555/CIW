@@ -74,28 +74,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<div class="fitem">
 					<lable><span class="required">*</span>固定资产编号</lable>
 					<input type="hidden" id="valideno">
-					<input class="easyui-textbox" name="equipmentNo" id="equipmentNo"  data-options="validType:['wmEnoValidate'],required:true"/>
+					<input class="easyui-textbox" name="equipmentNo" id="equipmentNo"  data-options="validType:['checkNumber','wmEnoValidate','checkLength'],required:true"/>
 				</div>
 				<div class="fitem">
-					<lable><span class="required">*</span>设备名称</lable>
-					<select class="easyui-combobox" name="typeId" id="tId" data-options="required:true,editable:false"></select>
+					<lable><span class="required">*</span>设备类型</lable>
+					<select class="easyui-combobox" name="typeId" id="tId" data-options="required:true,editable:false"" ></select>
 				</div>
 				<div class="fitem">
-					<lable>设备型号</lable>
-					<input class="easyui-textbox" name="model" id="model"/>
-				</div>
-				<div class="fitem">
-					<lable>使用日期</lable>
+					<lable>入厂时间</lable>
 					<input class="easyui-datetimebox" name="joinTime" id="joinTime"/>
-				</div>
-				<div class="fitem">
-					<lable><span class="required">*</span>生产厂商</lable>
-					<select class="easyui-combobox" name="manuno" id="manuno" data-options="required:true,editable:false""></select>
 				</div>
 				<div class="fitem">
 					<lable><span class="required">*</span>所属项目</lable>
 					<input type="hidden" id="validinsf">
 					<select class="easyui-combobox" name="iId" id="iId" data-options="required:true,editable:false""></select>
+				</div>
+				<div class="fitem">
+					<lable><span class="required">*</span>生产厂商</lable>
+					<select class="easyui-combobox" name="manuno" id="manuno" data-options="required:true,editable:false""></select>
 				</div>
 				<div class="fitem">
 					<lable>采集序号</lable>
@@ -111,24 +107,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<input class="easyui-textbox" name="ip" id="ip" data-options="required:true" />
 				</div>
 				<div class="fitem">
-					<lable>出产编号</lable>
-					<input class="easyui-textbox" name="manufacturerNo" id="manufacturerNo"/>
-				</div>
-				<div class="fitem">
-					<lable><span class="required">*</span>使用工段</lable>
-					<input class="easyui-textbox" name="action" id="action" />
-				</div>
-				<div class="fitem">
-					<lable>上度认证时间</lable>
-					<input class="easyui-datetimebox" name="inspectTime" id="inspectTime"/>
-				</div>
-				<div class="fitem">
-					<lable>下次效验时间</lable>
-					<input class="easyui-datetimebox" name="nextTime" id="nextTime"/>
-				</div>
-				<div class="fitem">
-					<lable>预防性维护日期</lable>
-					<input class="easyui-datetimebox" name="maintainTime" id="maintainTime"/>
+					<lable>设备型号</lable>
+					<input class="easyui-textbox" name="model" id="model"/>
 				</div>
 				<div class="fitem" >
 					<lable>是否联网</lable>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -194,26 +174,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<lable>状态</lable>
 				<input class="easyui-textbox" name="statusName" readonly="readonly"/>
 			</div>
-				<div class="fitem">
-					<lable>出产编号</lable>
-					<input class="easyui-textbox" name="manufacturerNo" id="manufacturerNo" readonly="readonly"/>
-				</div>
-				<div class="fitem">
-					<lable><span class="required">*</span>使用工段</lable>
-					<input class="easyui-textbox" name="action" id="action" readonly="readonly" />
-				</div>
-				<div class="fitem">
-					<lable>上度认证时间</lable>
-					<input class="easyui-textbox" name="inspectTime" id="inspectTime"/>
-				</div>
-				<div class="fitem">
-					<lable>下次效验时间</lable>
-					<input class="easyui-textbox" name="nextTime" id="nextTime" readonly="readonly"/>
-				</div>
-				<div class="fitem">
-					<lable>预防性维护日期</lable>
-					<input class="easyui-textbox" name="maintainTime" id="maintainTime" readonly="readonly"/>
-				</div>
 			</form>
 		</div>
 		<div id="remove-buttons">
