@@ -53,8 +53,8 @@
 	<select id="getWeldingMachineAll" resultMap="wmMap"  parameterType="java.lang.String">
 		SELECT 
 		w.fid fid,w.fIP fIP,w.fmodel model,fstatus_id, i.fid iid,ftype_id,g.fid gid,dic.fvalue mid, fequipment_no,fgather_no ,fjoin_time,i.fname iname
-		,dic.fvaluename mname,fisnetworking,fposition,d.fvaluename statusname,di.fvaluename typename,fprevention fprevention_no,ftest ftest_no
-		,fmanunumbers fmanunumbers_no,fsection fsection_no,fauthentication fauthentication_no
+		,dic.fvaluename mname,fisnetworking,fposition,d.fvaluename statusname,di.fvaluename typename,w.fprevention fprevention_no,w.ftest ftest_no
+		,w.fmanunumbers fmanunumbers_no,w.fsection fsection_no,w.fauthentication fauthentication_no
 		FROM tb_welding_machine w
 		LEFT JOIN tb_insframework i ON w.finsframework_id = i.fid
 		INNER JOIN tb_insframework ins ON ins.fid = i.fparent

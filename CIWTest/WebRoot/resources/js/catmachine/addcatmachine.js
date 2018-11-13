@@ -54,6 +54,7 @@ function editWeldingMachine(){
 		$('#validgid').val(row.gatherId);
 		$('#validinsf').val(row.iId);
 		$('#fm').form('load', row);
+		oldnextTime = $("#nextTime").textbox('getValue');
 		if(row.gid){
 			var str = $("#gid").html();
 			str += "<option value=\"" + row.gid + "\" >"  
@@ -68,6 +69,13 @@ function editWeldingMachine(){
 
 //提交
 function saveWeldingMachine(){
+	var symbol=0;
+	var newnextTime = $("#nextTime").textbox('getValue');
+	if(oldnextTime!=newnextTime){
+		symbol=1;
+	}else{
+		symbol=2;
+	}
 	var tid = $('#tId').combobox('getValue');
 	var iid = $('#iId').combobox('getValue');
 	var gatherId = $('#gid').combobox('getValue');
@@ -81,7 +89,7 @@ function saveWeldingMachine(){
 		url2 = url+"?tId="+tid+"&iId="+iid+"&sId="+sid+"&isnetworking="+isnetworking+"&manuno="+manuno;
 	}else{
 		messager = "修改成功！";
-		url2 = url+"&tId="+tid+"&iId="+iid+"&sId="+sid+"&isnetworking="+isnetworking+"&manuno="+manuno+"&gatherId="+gatherId;
+		url2 = url+"&symbol="+symbol+"&tId="+tid+"&iId="+iid+"&sId="+sid+"&isnetworking="+isnetworking+"&manuno="+manuno+"&gatherId="+gatherId;
 	}
 	$('#fm').form('submit', {
 		url : url2,
