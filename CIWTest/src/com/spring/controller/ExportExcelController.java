@@ -222,21 +222,24 @@ public class ExportExcelController {
 					data[ii][7]=getTimeStrBySecond(starttime);//工作时间
 					standytime = dss.getStandytime(i.getId(), dto);//获取待机总时长
 					weldtime = dss.getWorkTimeAndEleVol(i.getId(),dto);//获取焊接时长，平均电流电压
-					double standytimes = 0,time=0,electric=0;
+					double standytimes = 0,time=0,electric=0,air=0;
 					if(standytime!=null){
 						standytimes = standytime.doubleValue()/60/60;
 					}
 					if(weldtime!=null){
+						air = (double)Math.round(parameter.getAirflow()*time*100)/100;//气体消耗量=气体流量*焊接时间
 						electric = (double)Math.round((weldtime.getWorktime().doubleValue()/60/60*(weldtime.getElectricity()*weldtime.getVoltage())/1000+standytimes*parameter.getStandbypower()/1000)*100)/100;//电能消耗量=焊接时间*焊接平均电流*焊接平均电压+待机时间*待机功率
 					}else{
 						electric = (double)Math.round((time+standytimes*parameter.getStandbypower()/1000)*100)/100;//电能消耗量=焊接时间*焊接平均电流*焊接平均电压+待机时间*待机功率
 					}
-					data[ii][11]=electric;//电能消耗
+					data[ii][10]=electric;//电能消耗
+					data[ii][11]=air;//气体消耗
 				}else{
 					data[ii][2]=0;
 					data[ii][5]=0;
 					data[ii][7]="00:00:00";
 					data[ii][10]=0;
+					data[ii][11]=0;//气体消耗
 				}
 				if(i.getTotal()!=0 && weldtime!=null){
 					DataStatistics machine = dss.getWorkMachineNum(i.getId(), dto);//获取工作(焊接)的焊机数
@@ -253,9 +256,7 @@ public class ExportExcelController {
 						String[] strsz = parameter.getWireweight().split(",");
 						double wireweight =Double.valueOf(strsz[0]);
 						double wire = (double)Math.round(wireweight*parameter.getSpeed()*time*100)/100;//焊丝消耗量=焊丝|焊丝重量*送丝速度*焊接时间
-						double air = (double)Math.round(parameter.getAirflow()*time*100)/100;//气体消耗量=气体流量*焊接时间
 						data[ii][9]=wire;//焊丝消耗
-						data[ii][11]=air;//气体消耗
 					}
 				}else{
 					data[ii][3]=0;//实焊设备数
@@ -264,7 +265,6 @@ public class ExportExcelController {
 					data[ii][8]=0;//焊接效率
 					data[ii][2]=0;//开机设备数
 					data[ii][9]=0;//焊丝消耗
-					data[ii][11]=0;//气体消耗
 				}
 				}
 				ii++;
@@ -423,20 +423,23 @@ public class ExportExcelController {
 					data[ii][4]=getTimeStrBySecond(worktime);//工作时间
 					standytime = dss.getStandytime(i.getInsid(), dto);//获取待机总时长
 					weld = dss.getWorkTimeAndEleVol(i.getInsid(), dto);
-					double standytimes = 0,time=0,electric=0;
+					double standytimes = 0,time=0,electric=0,air=0;
 					if(standytime!=null){
 						standytimes = standytime.doubleValue()/60/60;
 					}
 					if(weld!=null){
+						air = (double)Math.round(parameter.getAirflow()*time*100)/100;//气体消耗量=气体流量*焊接时间
 						electric = (double)Math.round((weld.getWorktime().doubleValue()/60/60*(weld.getElectricity()*weld.getVoltage())/1000+standytimes*parameter.getStandbypower()/1000)*100)/100;//电能消耗量=焊接时间*焊接平均电流*焊接平均电压+待机时间*待机功率
 					}else{
 						electric = (double)Math.round((time+standytimes*parameter.getStandbypower()/1000)*100)/100;//电能消耗量=焊接时间*焊接平均电流*焊接平均电压+待机时间*待机功率
 					}
 					data[ii][7]=electric;//电能消耗
+					data[ii][8]=air;//气体消耗
 				}else{
 					data[ii][2]=0;
 					data[ii][4]="00:00:00";
 					data[ii][7]=0;
+					data[ii][8]=0;
 				}
 				if(weld!=null){
 					data[ii][3]=getTimeStrBySecond(weld.getWorktime());//焊接时间
@@ -448,15 +451,12 @@ public class ExportExcelController {
 						String[] str = parameter.getWireweight().split(",");
 						double wireweight =Double.valueOf(str[0]);
 						double wire = (double)Math.round(wireweight*parameter.getSpeed()*time*100)/100;//焊丝消耗量=焊丝|焊丝重量*送丝速度*焊接时间
-						double air = (double)Math.round(parameter.getAirflow()*time*100)/100;//气体消耗量=气体流量*焊接时间
 						data[ii][6]=wire;//焊丝消耗
-						data[ii][8]=air;//气体消耗
 					}
 				}else{
 					data[ii][3]="00:00:00";
 					data[ii][5]=0;
 					data[ii][6]=0;
-					data[ii][8]=0;
 				}
 				}
 				ii++;
@@ -616,21 +616,24 @@ public class ExportExcelController {
 						data[ii][4]=getTimeStrBySecond(worktime);//工作时间
 						standytime = dss.getStandytime(null, dto);
 						weld = dss.getWorkTimeAndEleVol(null, dto);
-						double standytimes = 0,time=0,electric=0;
+						double standytimes = 0,time=0,electric=0,air=0;
 						if(standytime!=null){
 							standytimes = standytime.doubleValue()/60/60;
 						}
 						if(weld!=null){
+							air = (double)Math.round(parameter.getAirflow()*time*100)/100;//气体消耗量=气体流量*焊接时间
 							time = weld.getWorktime().doubleValue()/60/60;
 							electric = (double)Math.round((time*(weld.getElectricity()*weld.getVoltage())/1000+standytimes*parameter.getStandbypower()/1000)*100)/100;//电能消耗量=焊接时间*焊接平均电流*焊接平均电压+待机时间*待机功率
 						}else{
 							electric = (double)Math.round((time+standytimes*parameter.getStandbypower()/1000)*100)/100;
 						}
 						data[ii][7]=electric;//电能消耗
+						data[ii][8]=air;//气体消耗
 					}else{
 						data[ii][2]=0;
 						data[ii][4]="00:00:00";//工作时间
 						data[ii][7]=0;
+						data[ii][8]=0;//气体消耗
 					}
 					if(weld!=null){
 						data[ii][3]=getTimeStrBySecond(weld.getWorktime());//焊接时间
@@ -641,15 +644,12 @@ public class ExportExcelController {
 							String[] str = parameter.getWireweight().split(",");
 							double wireweight =Double.valueOf(str[0]);
 							double wire = (double)Math.round(wireweight*parameter.getSpeed()*time*100)/100;//焊丝消耗量=焊丝|焊丝重量*送丝速度*焊接时间
-							double air = (double)Math.round(parameter.getAirflow()*time*100)/100;//气体消耗量=气体流量*焊接时间
 							data[ii][6]=wire;//焊丝消耗
-							data[ii][8]=air;//气体消耗
 						}
 					}else{
 						data[ii][3]="00:00:00";
 						data[ii][5]=0;
 						data[ii][6]=0;
-						data[ii][8]=0;
 					}
 				}
 				ii++;
@@ -803,20 +803,23 @@ public class ExportExcelController {
 						weld = dss.getWorkTimeAndEleVol(null, dto);
 						standytime = dss.getStandytime(null, dto);
 
-						double standytimes = 0,time=0,electric=0;
+						double standytimes = 0,time=0,electric=0,air=0;
 						if(standytime!=null){
 							standytimes = standytime.doubleValue()/60/60;
 						}
 						if(weld!=null){
+							air = (double)Math.round(parameter.getAirflow()*time*100)/100;//气体消耗量=气体流量*焊接时间
 							time = weld.getWorktime().doubleValue()/60/60;
 							electric = (double)Math.round((time*(weld.getElectricity()*weld.getVoltage())/1000+standytimes*parameter.getStandbypower()/1000)*100)/100;//电能消耗量=焊接时间*焊接平均电流*焊接平均电压+待机时间*待机功率
 						}else{
 							electric = (double)Math.round((time+standytimes*parameter.getStandbypower()/1000)*100)/100;
 						}
 						data[ii][5]=electric;//电能消耗
+						data[ii][6]=air;//气体消耗
 					}else{
 						data[ii][2]="00:00:00";
 						data[ii][5]=0;
+						data[ii][6]=0;
 					}
 					if(worktime!=null && weld!=null){
 						data[ii][1]=getTimeStrBySecond(weld.getWorktime());//焊接时间
@@ -827,15 +830,12 @@ public class ExportExcelController {
 							String[] str = parameter.getWireweight().split(",");
 							double wireweight =Double.valueOf(str[0]);
 							double wire = (double)Math.round(wireweight*parameter.getSpeed()*time*100)/100;//焊丝消耗量=焊丝|焊丝重量*送丝速度*焊接时间
-							double air = (double)Math.round(parameter.getAirflow()*time*100)/100;//气体消耗量=气体流量*焊接时间
 							data[ii][4]=wire;//焊丝消耗
-							data[ii][6]=air;//气体消耗
 						}
 					}else{
 						data[ii][1]="00:00:00";
 						data[ii][3]=0;
 						data[ii][4]=0;
-						data[ii][6]=0;
 					}
 				}
 				ii++;

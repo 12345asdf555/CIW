@@ -23,7 +23,14 @@ public class DataStatistics {
 	private String time;
 	private double hour;
 	private String welderno;
+	private double rateofflow;
 	
+	public double getRateofflow() {
+		return rateofflow;
+	}
+	public void setRateofflow(double rateofflow) {
+		this.rateofflow = rateofflow;
+	}
 	public double getHour() {
 		return hour;
 	}

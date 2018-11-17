@@ -24,6 +24,7 @@
        	<result property="time" column="time"></result>
        	<result property="welderno" column="welderno"></result>
        	<result property="hour" column="hour"></result>
+       	<result property="rateofflow" column="rateofflow"></result>
 	</resultMap>
 	
 	<!-- 获取项目部焊机总数 -->
@@ -269,7 +270,7 @@
 	<!-- 焊接时长及平均电流电压 -->
 	<select id="getWorkTimeAndEleVol" resultMap="dataMap">
 		SELECT * from (
-		select avg(felectricity) electricity,avg(fvoltage) voltage,sum(fworktime) worktime from tb_work where 1=1 
+		select avg(felectricity) electricity,avg(fvoltage) voltage,avg(frateofflow) rateofflow,sum(fworktime) worktime from tb_work where 1=1 
 		<if test="itemid!=null and itemid!=''">
 			and fitemid= #{itemid}
 		</if>
