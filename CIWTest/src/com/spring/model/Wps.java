@@ -48,6 +48,8 @@ public class Wps {
 	private String finitial;
 	private String fcontroller;
 	private String fmode;
+	private double frequency;
+	private double gasflow;
 	public Wps(){
 		super();
 	}
@@ -353,5 +355,17 @@ public class Wps {
 	}
 	public void setFarc_vol1(double farc_vol1) {
 		this.farc_vol1 = farc_vol1;
+	}
+	public double getFrequency() {
+		return frequency;
+	}
+	public void setFrequency(double frequency) {
+		this.frequency = frequency;
+	}
+	public double getGasflow() {
+		return gasflow;
+	}
+	public void setGasflow(double gasflow) {
+		this.gasflow = gasflow;
 	}
 }

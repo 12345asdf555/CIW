@@ -223,5 +223,12 @@
 		DELETE FROM tb_welding_machine WHERE finsframework_id = #{insfId}
 	</delete>
 
-		
+	<select id="getMachineGather"  resultMap="wmMap">
+		SELECT 
+		w.fid fid,g.fid gid,fgather_no
+		FROM tb_welding_machine w
+		left JOIN tb_gather g ON g.fid = w.fgather_id
+		where 1=1
+	</select>
+	
 </mapper>

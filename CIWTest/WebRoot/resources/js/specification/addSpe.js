@@ -6,7 +6,6 @@
  */
 var data1;
 var da;
-var socketfc=null;
 var yshu;
 var yshu1;
 var node11;
@@ -17,6 +16,7 @@ var x=0;
 var xx=0;
 var rows1;
 var itemrow;
+var machga;
 $(function(){
 	gfsd();
 //	inscombobox();
@@ -63,14 +63,31 @@ $(function(){
 	    error : function(errorMsg) {  
 	        alert("数据请求失败，请联系系统管理员!");  
 	    }  
-		}); 
+		});
+	
 		$("#item").combobox();
+		
+		$.ajax({  
+		      type : "post",  
+		      async : false,
+		      url : "weldingMachine/getMachineGather",  
+		      data : {},  
+		      dataType : "json", //返回数据形式为json  
+		      success : function(result) {
+		          if (result) {
+		        	  machga = eval(result.rows);
+		          }  
+		      },
+		      error : function(errorMsg) {  
+		          alert("数据请求失败，请联系系统管理员!");  
+		      }  
+		 });
  })
  
  function w() {
 	if(typeof(WebSocket) == "undefined") {
-		alert("您的浏览器不支持WebSocket");
-		return;
+    	WEB_SOCKET_SWF_LOCATION = "resources/js/WebSocketMain.swf";
+    	WEB_SOCKET_DEBUG = true;
 	}
 	ws();
 };
@@ -135,6 +152,8 @@ $(document).ready(function () {
 				    		$("#farc_tuny_vol").numberbox('setValue',yshu[0].Fdiameter);
 				    		$("#farc_tuny_vol1").numberbox('setValue',yshu[0].Fdiameter);
 				    		$("#fweld_tuny_vol1").numberbox('setValue',yshu[0].fweld_tuny_vol);
+				    		$("#frequency").numberbox('setValue',yshu[0].frequency);
+				    		$("#gasflow").numberbox('setValue',yshu[0].gasflow);
 			    		if(yshu[0].Fweld_I=="1"){
 			    			$("#finitial").prop("checked",true);
 			    		}
@@ -191,6 +210,8 @@ function chushihua(){
 	$("#farc_vol1").numberbox('setValue',0);
 	$("#fweld_tuny_vol1").numberbox('setValue',0);
 	$("#farc_tuny_vol1").numberbox('setValue',0);
+	$("#frequency").numberbox('setValue',30);
+	$("#gasflow").numberbox('setValue',5);
 }
 
 function gfsd() {
@@ -355,133 +376,139 @@ function editWps(){
 //提交
 function save(value){
     if($('#fadvance').numberbox('getValue')<0||$('#fadvance').numberbox('getValue')>100){
-   	 alert("提前送气范围：0~100");
-   	 return;
-    }
-    if($('#fini_ele').numberbox('getValue')<30||$('#fini_ele').numberbox('getValue')>550){
-   	 alert("初期电流范围：30~550");
-   	 return;
-    }
-    if($('#fini_vol').numberbox('getValue')<12||$('#fini_vol').numberbox('getValue')>50){
-   	 alert("初期电压范围：12~50");
-   	 return;
-    }
-    if($('#fini_vol1').numberbox('getValue')<(-30)||$('#fini_vol1').numberbox('getValue')>(30)){
-   	 alert("初期电压一元范围：-30~30");
-   	 return;
-    }
-    if($('#fweld_ele').numberbox('getValue')<30||$('#fweld_ele').numberbox('getValue')>550){
-   	 alert("焊接电流范围：30~550");
-   	 return;
-    }
-    if($('#fweld_vol').numberbox('getValue')<12||$('#fweld_vol').numberbox('getValue')>50){
-   	 alert("焊接电压范围：12~50");
-   	 return;
-    }
-    if($('#fweld_vol1').numberbox('getValue')<(-30)||$('#fweld_vol1').numberbox('getValue')>(30)){
-   	 alert("焊接电压一元范围：-30~30");
-   	 return;
-    }
-    if($('#farc_ele').numberbox('getValue')<30||$('#farc_ele').numberbox('getValue')>550){
-   	 alert("收弧电流范围：30~550");
-   	 return;
-    }
-    if($('#farc_vol').numberbox('getValue')<12||$('#farc_vol').numberbox('getValue')>50){
-   	 alert("收弧电压范围：12~50");
-   	 return;
-    }
-    if($('#farc_vol1').numberbox('getValue')<(-30)||$('#farc_vol1').numberbox('getValue')>(30)){
-   	 alert("收弧电压一元范围：-30~30");
-   	 return;
-    }
-    if($('#fhysteresis').numberbox('getValue')<0||$('#fhysteresis').numberbox('getValue')>100){
-   	 alert("滞后送气范围：0~100");
-   	 return;
-    }
-    if($('#fcharacter').numberbox('getValue')<(-99)||$('#fcharacter').numberbox('getValue')>(99)){
-   	 alert("电弧特性范围：-99~99");
-   	 return;
-    }
-	var url2 = "";
-	var finitial;
-	var fcontroller;
-	var fmode;
-    if($("#finitial").is(":checked")==true){
-        finitial = 1;
-    }else{
-    	finitial = 0;
-    }
-    if($("#fcontroller").is(":checked")==true){
-    	fcontroller = 1;
-    }else{
-    	fcontroller = 0;
-    }
-    if($("#finitial").is(":checked")==true){
-    	fmode = 1;
-    }else{
-    	fmode = 0;
-    }
-    var fselect = $('#fselect').combobox('getValue');
-    var farc = $('#farc').combobox('getValue');
-    var fmaterial = $('#fmaterial').combobox('getValue');
-//    var fmaterial = document.getElementById('fmaterial').value;
-//    var fgas = document.getElementById('fgas').value;
-//    var fdiameter = document.getElementById('fdiameter').value;
-    var fgas = $('#fgas').combobox('getValue');
-    var fdiameter = $('#fdiameter').combobox('getValue');
-    var chanel = $('#chanel').combobox('getValue');
-	var ftime = $('#ftime').numberbox('getValue');
-	var fadvance = $('#fadvance').numberbox('getValue');
-	var fini_ele = $('#fini_ele').numberbox('getValue');
-	var fweld_ele = $('#fweld_ele').numberbox('getValue');
-	var farc_ele = $('#farc_ele').numberbox('getValue');
-	var fhysteresis = $('#fhysteresis').numberbox('getValue');
-	var fcharacter = $('#fcharacter').numberbox('getValue');
-	var fweld_tuny_ele = $('#fweld_tuny_ele').numberbox('getValue');
-	var farc_tuny_ele = $('#farc_tuny_ele').numberbox('getValue');
-	var fini_vol = $('#fini_vol').numberbox('getValue');
-	var fweld_vol = $('#fweld_vol').numberbox('getValue');
-	var farc_vol = $('#farc_vol').numberbox('getValue');
-	var fini_vol1 = $('#fini_vol1').numberbox('getValue');
-	var fweld_vol1 = $('#fweld_vol1').numberbox('getValue');
-	var farc_vol1 = $('#farc_vol1').numberbox('getValue');
-	if(fselect==102){
-		var fweld_tuny_vol = $('#fweld_tuny_vol').numberbox('getValue');
-		var farc_tuny_vol = $('#farc_tuny_vol').numberbox('getValue');
-	}else{
-		var fweld_tuny_vol = $('#fweld_tuny_vol1').numberbox('getValue');
-		var farc_tuny_vol = $('#farc_tuny_vol1').numberbox('getValue');
-	}
-    var machine = node11.id;
-	messager = "保存成功！";
-	url2 = "wps/apSpe"+"?finitial="+finitial+"&fcontroller="+fcontroller+"&fmode="+fmode+"&fselect="+fselect+"&farc="+farc+"&fmaterial="+fmaterial+"&fgas="+fgas+"&fdiameter="+fdiameter+"&chanel="+chanel+"&ftime="+ftime+"&fadvance="+fadvance+"&fini_ele="+fini_ele+"&fweld_ele="+fweld_ele+"&farc_ele="+farc_ele+"&fhysteresis="+fhysteresis+"&fcharacter="+fcharacter+"&machine="+machine+"&fweld_tuny_ele="+fweld_tuny_ele+"&farc_tuny_ele="+farc_tuny_ele+"&fini_vol="+fini_vol+"&fini_vol1="+fini_vol1+"&fweld_vol="+fweld_vol+"&fweld_vol1="+fweld_vol1+"&farc_vol="+farc_vol+"&farc_vol1="+farc_vol1+"&fweld_tuny_vol="+fweld_tuny_vol+"&farc_tuny_vol="+farc_tuny_vol;
-//	url2 = "wps/apSpe";
-	$.ajax({  
-	      type : "post",  
-	      async : false,
-	      url : url2,  
-	      data : {},  
-	      dataType : "json", //返回数据形式为json  
-	      success : function(result) {
-				if (!result.success) {
-					if(value==0){
-					$.messager.show( {
-						title : 'Error',
-						msg : result.errorMsg
-					});
-					}
-				} else {
-					if(value==0){
-					$.messager.alert("提示", messager);
-					$('#dlg').dialog('close');
-					$('#dg').datagrid('reload');
-					}
-				}
-	      },
-	      error : function(errorMsg) {  
-	          alert("数据请求失败，请联系系统管理员!");  
-	      }  
-	 });
+      	 alert("提前送气范围：0~100");
+      	 return;
+       }
+       if($('#fini_ele').numberbox('getValue')<30||$('#fini_ele').numberbox('getValue')>550){
+      	 alert("初期电流范围：30~550");
+      	 return;
+       }
+       if($('#fini_vol').numberbox('getValue')<12||$('#fini_vol').numberbox('getValue')>50){
+      	 alert("初期电压范围：12~50");
+      	 return;
+       }
+       if($('#fini_vol1').numberbox('getValue')<(-30)||$('#fini_vol1').numberbox('getValue')>(30)){
+      	 alert("初期电压一元范围：-30~30");
+      	 return;
+       }
+       if($('#fweld_ele').numberbox('getValue')<30||$('#fweld_ele').numberbox('getValue')>550){
+      	 alert("焊接电流范围：30~550");
+      	 return;
+       }
+       if($('#fweld_vol').numberbox('getValue')<12||$('#fweld_vol').numberbox('getValue')>50){
+      	 alert("焊接电压范围：12~50");
+      	 return;
+       }
+       if($('#fweld_vol1').numberbox('getValue')<(-30)||$('#fweld_vol1').numberbox('getValue')>(30)){
+      	 alert("焊接电压一元范围：-30~30");
+      	 return;
+       }
+       if($('#farc_ele').numberbox('getValue')<30||$('#farc_ele').numberbox('getValue')>550){
+      	 alert("收弧电流范围：30~550");
+      	 return;
+       }
+       if($('#farc_vol').numberbox('getValue')<12||$('#farc_vol').numberbox('getValue')>50){
+      	 alert("收弧电压范围：12~50");
+      	 return;
+       }
+       if($('#farc_vol1').numberbox('getValue')<(-30)||$('#farc_vol1').numberbox('getValue')>(30)){
+      	 alert("收弧电压一元范围：-30~30");
+      	 return;
+       }
+       if($('#fhysteresis').numberbox('getValue')<0||$('#fhysteresis').numberbox('getValue')>100){
+      	 alert("滞后送气范围：0~100");
+      	 return;
+       }
+       if($('#fcharacter').numberbox('getValue')<(-99)||$('#fcharacter').numberbox('getValue')>(99)){
+      	 alert("电弧特性范围：-99~99");
+      	 return;
+       }
+       if($('#frequency').numberbox('getValue')<(5)||$('#frequency').numberbox('getValue')>(320)){
+        	 alert("双脉冲频率范围：5~320");
+        	 return;
+       }
+   	var url2 = "";
+   	var finitial;
+   	var fcontroller;
+   	var fmode;
+       if($("#finitial").is(":checked")==true){
+           finitial = 1;
+       }else{
+       	finitial = 0;
+       }
+       if($("#fcontroller").is(":checked")==true){
+       	fcontroller = 1;
+       }else{
+       	fcontroller = 0;
+       }
+       if($("#finitial").is(":checked")==true){
+       	fmode = 1;
+       }else{
+       	fmode = 0;
+       }
+       var fselect = $('#fselect').combobox('getValue');
+       var farc = $('#farc').combobox('getValue');
+       var fmaterial = $('#fmaterial').combobox('getValue');
+//       var fmaterial = document.getElementById('fmaterial').value;
+//       var fgas = document.getElementById('fgas').value;
+//       var fdiameter = document.getElementById('fdiameter').value;
+       var fgas = $('#fgas').combobox('getValue');
+       var fdiameter = $('#fdiameter').combobox('getValue');
+       var chanel = $('#chanel').combobox('getValue');
+   	var ftime = $('#ftime').numberbox('getValue');
+   	var fadvance = $('#fadvance').numberbox('getValue');
+   	var fini_ele = $('#fini_ele').numberbox('getValue');
+   	var fweld_ele = $('#fweld_ele').numberbox('getValue');
+   	var farc_ele = $('#farc_ele').numberbox('getValue');
+   	var fhysteresis = $('#fhysteresis').numberbox('getValue');
+   	var fcharacter = $('#fcharacter').numberbox('getValue');
+   	var fweld_tuny_ele = $('#fweld_tuny_ele').numberbox('getValue');
+   	var farc_tuny_ele = $('#farc_tuny_ele').numberbox('getValue');
+   	var fini_vol = $('#fini_vol').numberbox('getValue');
+   	var fweld_vol = $('#fweld_vol').numberbox('getValue');
+   	var farc_vol = $('#farc_vol').numberbox('getValue');
+   	var fini_vol1 = $('#fini_vol1').numberbox('getValue');
+   	var fweld_vol1 = $('#fweld_vol1').numberbox('getValue');
+   	var farc_vol1 = $('#farc_vol1').numberbox('getValue');
+   	if(fselect==102){
+   		var fweld_tuny_vol = $('#fweld_tuny_vol').numberbox('getValue');
+   		var farc_tuny_vol = $('#farc_tuny_vol').numberbox('getValue');
+   	}else{
+   		var fweld_tuny_vol = $('#fweld_tuny_vol1').numberbox('getValue');
+   		var farc_tuny_vol = $('#farc_tuny_vol1').numberbox('getValue');
+   	}
+       var machine = node11.id;
+    var frequency = $('#frequency').numberbox('getValue');
+    var gasflow = $('#gasflow').numberbox('getValue');
+   	messager = "保存成功！";
+   	url2 = "wps/apSpe"+"?finitial="+finitial+"&fcontroller="+fcontroller+"&fmode="+fmode+"&fselect="+fselect+"&farc="+farc+"&fmaterial="+fmaterial+"&fgas="+fgas+"&fdiameter="+fdiameter+"&chanel="+chanel+"&ftime="+ftime+"&fadvance="+fadvance+"&fini_ele="+fini_ele+"&fweld_ele="+fweld_ele+"&farc_ele="+farc_ele+"&fhysteresis="+fhysteresis+"&fcharacter="+fcharacter+"&machine="+machine+"&fweld_tuny_ele="+fweld_tuny_ele+"&farc_tuny_ele="+farc_tuny_ele+"&fini_vol="+fini_vol+"&fini_vol1="+fini_vol1+"&fweld_vol="+fweld_vol+"&fweld_vol1="+fweld_vol1+"&farc_vol="+farc_vol+"&farc_vol1="+farc_vol1+"&fweld_tuny_vol="+fweld_tuny_vol+"&farc_tuny_vol="+farc_tuny_vol+"&frequency="+frequency+"&gasflow="+gasflow;
+//   	url2 = "wps/apSpe";
+   	$.ajax({  
+   	      type : "post",  
+   	      async : false,
+   	      url : url2,  
+   	      data : {},  
+   	      dataType : "json", //返回数据形式为json  
+   	      success : function(result) {
+   				if (!result.success) {
+   					if(value==0){
+   					$.messager.show( {
+   						title : 'Error',
+   						msg : result.errorMsg
+   					});
+   					}
+   				} else {
+   					if(value==0){
+   					$.messager.alert("提示", messager);
+   					$('#dlg').dialog('close');
+   					$('#dg').datagrid('reload');
+   					}
+   				}
+   	      },
+   	      error : function(errorMsg) {  
+   	          alert("数据请求失败，请联系系统管理员!");  
+   	      }  
+   	 });
 }
 
 function insframeworkTree(){
@@ -545,10 +572,11 @@ $(document).ready(function () {
 });
 
 function suoqu(){
+	var socketfc=null;
 	symbol=0;
 	if(typeof(WebSocket) == "undefined") {
-		alert("您的浏览器不支持WebSocket");
-		return;
+    	WEB_SOCKET_SWF_LOCATION = "resources/js/WebSocketMain.swf";
+    	WEB_SOCKET_DEBUG = true;
 	}
 	socketfc = new WebSocket(data1);
 	//打开事件
@@ -561,7 +589,35 @@ function suoqu(){
         	chanel = "0" + chanel;
         }
       }
-	socketfc.send("7E"+chanel+"560101017D");
+	var mach;
+	if(machga!=null){
+		for(var q=0;q<machga.length;q++){
+			if(machga[q].id==node11.id){
+				mach = parseInt(machga[q].gatherId).toString(16);
+				if(mach.length<4){
+					var length = 4 - mach.length;
+			        for(var i=0;i<length;i++){
+			        	mach = "0" + mach;
+			        };
+			        break;
+				}
+			}
+		}
+	}
+	var xxx = "7E0901010156"+mach+chanel;
+	var check = 0;
+	for (var i = 0; i < (xxx.length/2); i++)
+	{
+		var tstr1=xxx.substring(i*2, i*2+2);
+		var k=parseInt(tstr1,16);
+		check += k;
+	}
+
+	var checksend = parseInt(check).toString(16);
+	var a2 = checksend.length;
+	checksend = checksend.substring(a2-2,a2);
+	checksend = checksend.toUpperCase();
+	socketfc.send(xxx+checksend+"7D");
 	if(symbol==0){
 		window.setTimeout(function() {
 			if(symbol==0){
@@ -571,59 +627,59 @@ function suoqu(){
 		}, 5000)
 	}
 	socketfc.onmessage = function(msg) {
-		var strdata1=msg.data;
-		if((strdata1.substring(4,6)=="56")||(strdata1.substring(0,8)=="7E7C2056")){
-        var strdata2=strdata1.replace(/7C20/g, '00');
+		var da=msg.data;
+/*        var strdata2=strdata1.replace(/7C20/g, '00');
         var strdata3=strdata2.replace(/7C5E/g, '7E');
         var strdata4=strdata3.replace(/7C5C/g, '7C');
-        var da =strdata4.replace(/7C5D/g, '7D');
-        if(da.substring(10,12)=="FF"){
+        var da =strdata4.replace(/7C5D/g, '7D');*/
+		if(da.substring(0,2)=="7E"&&da.substring(10,12)=="56"){
+        if(da.substring(18,20)=="FF"){
     		symbol++;
     		socketfc.close();
     		if(socketfc.readyState!=1){
         		alert("此通道没有规范，请尝试新建规范，可恢复默认值进行参考");
     			}
         }else{
-		$('#chanel').combobox('select',parseInt(da.substring(10,12),16));
-		$("#ftime").numberbox('setValue',parseInt(da.substring(12,16),16));
-		$("#fadvance").numberbox('setValue',parseInt(da.substring(16,20),16));
-		$("#fini_ele").numberbox('setValue',parseInt(da.substring(20,24),16));
-		$("#fini_vol").numberbox('setValue',(parseInt(da.substring(24,28),16)/10).toFixed(1));
-		$("#fini_vol1").numberbox('setValue',(parseInt(da.substring(28,32),16)/10).toFixed(1));
-		$("#fweld_ele").numberbox('setValue',parseInt(da.substring(32,36),16));
-		$("#fweld_vol").numberbox('setValue',(parseInt(da.substring(36,40),16)/10).toFixed(1));
-		$("#fweld_vol1").numberbox('setValue',(parseInt(da.substring(40,44),16)/10).toFixed(1));
-		$("#farc_ele").numberbox('setValue',parseInt(da.substring(44,48),16));
-		$("#farc_vol").numberbox('setValue',(parseInt(da.substring(48,52),16)/10).toFixed(1));
-		$("#farc_vol1").numberbox('setValue',(parseInt(da.substring(52,56),16)/10).toFixed(1));
-		$("#fhysteresis").numberbox('setValue',parseInt(da.substring(56,60),16));
-		$("#fcharacter").numberbox('setValue',parseInt(da.substring(60,64),16));
-		if(parseInt(da.substring(64,66),16)==0){
+		$('#chanel').combobox('select',parseInt(da.substring(18,20),16));
+		$("#ftime").numberbox('setValue',parseInt(da.substring(20,24),16));
+		$("#fadvance").numberbox('setValue',parseInt(da.substring(24,28),16));
+		$("#fini_ele").numberbox('setValue',parseInt(da.substring(28,32),16));
+		$("#fini_vol").numberbox('setValue',(parseInt(da.substring(32,36),16)/10).toFixed(1));
+		$("#fini_vol1").numberbox('setValue',(parseInt(da.substring(36,40),16)/10).toFixed(1));
+		$("#fweld_ele").numberbox('setValue',parseInt(da.substring(40,44),16));
+		$("#fweld_vol").numberbox('setValue',(parseInt(da.substring(44,48),16)/10).toFixed(1));
+		$("#fweld_vol1").numberbox('setValue',(parseInt(da.substring(48,52),16)/10).toFixed(1));
+		$("#farc_ele").numberbox('setValue',parseInt(da.substring(52,56),16));
+		$("#farc_vol").numberbox('setValue',(parseInt(da.substring(56,60),16)/10).toFixed(1));
+		$("#farc_vol1").numberbox('setValue',(parseInt(da.substring(60,64),16)/10).toFixed(1));
+		$("#fhysteresis").numberbox('setValue',parseInt(da.substring(64,68),16));
+		$("#fcharacter").numberbox('setValue',parseInt(da.substring(68,72),16));
+		if(parseInt(da.substring(72,74),16)==0){
 			$('#fgas').combobox('select',121);
-		}else if(parseInt(da.substring(64,66),16)==1){
+		}else if(parseInt(da.substring(72,74),16)==1){
 			$('#fgas').combobox('select',122);
 		}else{
 			$('#fgas').combobox('select',122);
 		}
-		if(parseInt(da.substring(66,68),16)==10){
+		if(parseInt(da.substring(74,76),16)==10){
 			$('#fdiameter').combobox('select',131);
-		}else if(parseInt(da.substring(66,68),16)==12){
+		}else if(parseInt(da.substring(74,76),16)==12){
 			$('#fdiameter').combobox('select',132);
-		}else if(parseInt(da.substring(66,68),16)==14){
+		}else if(parseInt(da.substring(74,76),16)==14){
 			$('#fdiameter').combobox('select',133);
 		}else{
 			$('#fdiameter').combobox('select',134);
 		}
-		if(parseInt(da.substring(68,70),16)==0){
+		if(parseInt(da.substring(76,78),16)==0){
 			$('#fmaterial').combobox('select',91);
-		}else if(parseInt(da.substring(68,70),16)==1){
+		}else if(parseInt(da.substring(76,78),16)==1){
 			$('#fmaterial').combobox('select',92);
-		}else if(parseInt(da.substring(68,70),16)==4){
+		}else if(parseInt(da.substring(76,78),16)==4){
 			$('#fmaterial').combobox('select',93);
 		}else{
 			$('#fmaterial').combobox('select',94);
 		}
-		var sconx = parseInt(da.substring(74,76),16);
+		var sconx = parseInt(da.substring(82,84),16);
 		sconx = sconx.toString(2);
 		if(sconx.length<8){
 	        var length = 8 - sconx.length;
@@ -663,12 +719,14 @@ function suoqu(){
 			$("#fmode").prop("checked",false);
 		}
 //		parsevar(da.substring(68,70),16);
-		$("#fweld_tuny_ele").numberbox('setValue',parseInt(da.substring(76,78),16));
-		$("#farc_tuny_ele").numberbox('setValue',parseInt(da.substring(80,82),16));
-		$("#fweld_tuny_vol").numberbox('setValue',(parseInt(da.substring(78,80),16)/10).toFixed(1));
-		$("#farc_tuny_vol").numberbox('setValue',(parseInt(da.substring(82,84),16)/10).toFixed(1));
-		$("#fweld_tuny_vol1").numberbox('setValue',(parseInt(da.substring(78,80),16)/10).toFixed(1));
-		$("#farc_tuny_vol1").numberbox('setValue',(parseInt(da.substring(82,84),16)/10).toFixed(1));
+		$("#fweld_tuny_ele").numberbox('setValue',parseInt(da.substring(84,86),16));
+		$("#farc_tuny_ele").numberbox('setValue',parseInt(da.substring(88,90),16));
+		$("#fweld_tuny_vol").numberbox('setValue',(parseInt(da.substring(86,88),16)/10).toFixed(1));
+		$("#farc_tuny_vol").numberbox('setValue',(parseInt(da.substring(90,92),16)/10).toFixed(1));
+		$("#fweld_tuny_vol1").numberbox('setValue',(parseInt(da.substring(86,88),16)/10).toFixed(1));
+		$("#farc_tuny_vol1").numberbox('setValue',(parseInt(da.substring(90,92),16)/10).toFixed(1));
+		$("#frequency").numberbox('setValue',(parseInt(da.substring(92,96),16)/10));
+		$("#gasflow").numberbox('setValue',(parseInt(da.substring(96,100),16)/10));
 		
 		symbol++;
 		socketfc.close();
@@ -729,13 +787,18 @@ function xiafa(){
    	 alert("电弧特性范围：-99~99");
    	 return;
     }
+    if($('#frequency').numberbox('getValue')<(5)||$('#frequency').numberbox('getValue')>(320)){
+   	 alert("双脉冲频率范围：5~320");
+   	 return;
+    }
 	if($('#fselect').combobox('getValue')==102){
 		if(($('#fweld_tuny_vol').numberbox('getValue')>5||$('#fweld_tuny_vol').numberbox('getValue')<0)){
 			alert("个别模式下微调电压范围为0~5")
 		}else{
+			var socketfc=null;
 			if(typeof(WebSocket) == "undefined") {
-				alert("您的浏览器不支持WebSocket");
-				return;
+		    	WEB_SOCKET_SWF_LOCATION = "resources/js/WebSocketMain.swf";
+		    	WEB_SOCKET_DEBUG = true;
 			}
 			symbol1=0;
 			socketfc = new WebSocket(data1);
@@ -745,7 +808,7 @@ function xiafa(){
 					alert("下发失败");
 					socketfc.close();
 				}
-			}, 5000)
+			}, 10000)
 			}
 			socketfc.onopen = function() {
 				var chanel = parseInt($('#chanel').numberbox('getValue')).toString(16);
@@ -961,14 +1024,61 @@ function xiafa(){
 			        	con = "0" + con;
 			        }
 			      }
-			var xiafasend1 = "7E00520101"+chanel+ftime+fadvance+fini_ele+fini_vol+fini_vol1+fweld_ele+fweld_vol+fweld_vol1+farc_ele+farc_vol+farc_vol1+fhysteresis+fcharacter+fgas
-			+fdiameter+fmaterial+"0000"+con+fweld_tuny_ele+fweld_tuny_vol+farc_tuny_ele+farc_tuny_vol;
+				
+				var mach;
+				if(machga!=null){
+					for(var q=0;q<machga.length;q++){
+						if(machga[q].id==node11.id){
+							if(machga[q].gatherId){
+								mach = parseInt(machga[q].gatherId).toString(16);
+								if(mach.length<4){
+									var length = 4 - mach.length;
+							        for(var i=0;i<length;i++){
+							        	mach = "0" + mach;
+							        };
+							        break;
+								}
+							}else{
+								alert("该焊机未对应采集编号!!!");
+								socketfc.close();
+								return;
+							}
+						}
+					}
+				}
+			
+				var frequency = parseInt($('#frequency').numberbox('getValue')*10).toString(16);
+				if(frequency.length<4){
+					var length = 4 - frequency.length;
+			        for(var i=0;i<length;i++){
+			        	frequency = "0" + frequency;
+			        }
+			      }
+				
+				var gasflow = parseInt($('#gasflow').numberbox('getValue')*10).toString(16);
+				if(gasflow.length<4){
+					var length = 4 - gasflow.length;
+			        for(var i=0;i<length;i++){
+			        	gasflow = "0" + gasflow;
+			        }
+			      }
+				
+			var xiafasend1 = mach+chanel+ftime+fadvance+fini_ele+fini_vol+fini_vol1+fweld_ele+fweld_vol+fweld_vol1+farc_ele+farc_vol+farc_vol1+fhysteresis+fcharacter+fgas
+			+fdiameter+fmaterial+"0000"+con+fweld_tuny_ele+fweld_tuny_vol+farc_tuny_ele+farc_tuny_vol+frequency+gasflow+"00000000";
 			
 		/*	var xiafasend2 = xiafasend1.replace(/00/g, '7C20');
 			var xiafasend3 = xiafasend2.replace(/7E/g, '7C5E');
 			var xiafasend4 = xiafasend3.replace(/7C/g, '7C5C');
 			var xiafasend = xiafasend4.replace(/7D/g, '7C5D').toUpperCase();*/
 			var xxx = xiafasend1.toUpperCase();
+			var data_length = ((parseInt(xxx.length)+12)/2).toString(16);
+			if(data_length.length<2){
+				var length = 2 - data_length.length;
+		        for(var i=0;i<length;i++){
+		        	data_length = "0" + data_length;
+		        }
+		    };
+		    xxx="7E"+data_length+"01010152"+xiafasend1;
 		    var check = 0;
 			for (var i = 0; i < (xxx.length/2); i++)
 			{
@@ -982,9 +1092,8 @@ function xiafa(){
 			checksend = checksend.substring(a2-2,a2);
 			checksend = checksend.toUpperCase();
 			
-			var xiafasend2 = (xiafasend1+checksend).substring(2);
-			
-			var xiafasend4 = xiafasend2.replace(/7C/g, '7C5C');
+			var xiafasend2 = (xxx+checksend).substring(2);
+/*			var xiafasend4 = xiafasend2.replace(/7C/g, '7C5C');
 			var xiafasend3 = xiafasend4.replace(/7E/g, '7C5E');
 			var fuer="";
 			for(var er=0;er<(xiafasend3.length/2);er++){
@@ -997,13 +1106,14 @@ function xiafa(){
 			var xiafasend5 = fuer.replace(/7D/g, '7C5D').toUpperCase();
 			
 			var xiafasend = "7E" + xiafasend5 + "7D";
-			socketfc.send(xiafasend);
+			socketfc.send(xiafasend);*/
+			socketfc.send("7E"+xiafasend2+"7D");
 			socketfc.onmessage = function(msg) {
 				var fan = msg.data;
-				fan = fan.replace(/7C20/g, '00').toUpperCase();
-				if(fan.substring(4,6)=="52"){
+//				fan = fan.replace(/7C20/g, '00').toUpperCase();
+				if(fan.substring(0,2)=="7E"&&fan.substring(10,12)=="52"){
 					symbol1++;
-					if(parseInt(fan.substring(10,12),16)==1){
+					if(parseInt(fan.substring(18,20),16)==1){
 						socketfc.close();
 						if(socketfc.readyState!=1){
 							alert("下发失败");
@@ -1023,9 +1133,10 @@ function xiafa(){
 		if(($('#fweld_tuny_vol1').numberbox('getValue')>20||$('#fweld_tuny_vol1').numberbox('getValue')<0)){
 			alert("一元模式下微调电压范围为0~20")
 		}else{
+			var socketfc=null;
 			if(typeof(WebSocket) == "undefined") {
-				alert("您的浏览器不支持WebSocket");
-				return;
+		    	WEB_SOCKET_SWF_LOCATION = "resources/js/WebSocketMain.swf";
+		    	WEB_SOCKET_DEBUG = true;
 			}
 			/*$.messager.alert("提示", "正在下发，请稍等。。。");*/
 			symbol1=0;
@@ -1137,13 +1248,13 @@ function xiafa(){
 				        	fcharacter = "0" + fcharacter;
 				        }
 				      }
-					var fgas = parseInt(document.getElementById('fgas').value).toString(16);
+					var fgas = parseInt($('#fgas').combobox('getValue')).toString(16);
 					if(fgas==parseInt(121).toString(16)){
-						fgas="1";
-					}else if(fgas==parseInt(122).toString(16)){
-						fgas="3";
-					}else{
 						fgas="0";
+					}else if(fgas==parseInt(122).toString(16)){
+						fgas="1";
+					}else{
+						fgas="3";
 					}
 					if(fgas.length<2){
 						var length = 2 - fgas.length;
@@ -1151,7 +1262,7 @@ function xiafa(){
 				        	fgas = "0" + fgas;
 				        }
 				      }
-					var fdiameter = parseInt(document.getElementById('fdiameter').value).toString(16);
+					var fdiameter = parseInt($('#fdiameter').combobox('getValue')).toString(16);
 					if(fdiameter==parseInt(131).toString(16)){
 						fdiameter="A";
 					}else if(fdiameter==parseInt(132).toString(16)){
@@ -1167,7 +1278,7 @@ function xiafa(){
 				        	fdiameter = "0" + fdiameter;
 				        }
 				      }
-					var fmaterial = parseInt(document.getElementById('fmaterial').value).toString(16);
+					var fmaterial = parseInt($('#fmaterial').combobox('getValue')).toString(16);
 					if(fmaterial==parseInt(91).toString(16)){
 						fmaterial="0";
 					}else if(fmaterial==parseInt(92).toString(16)){
@@ -1249,14 +1360,61 @@ function xiafa(){
 				        	con = "0" + con;
 				        }
 				      }
-			var xiafasend1 = "7E00520101"+chanel+ftime+fadvance+fini_ele+fini_vol+fini_vol1+fweld_ele+fweld_vol+fweld_vol1+farc_ele+farc_vol+farc_vol1+fhysteresis+fcharacter+fgas
-			+fdiameter+fmaterial+"0000"+con+fweld_tuny_ele+fweld_tuny_vol+farc_tuny_ele+farc_tuny_vol;
+					
+					var mach;
+					if(machga!=null){
+						for(var q=0;q<machga.length;q++){
+							if(machga[q].id==node11.id){
+								if(machga[q].gatherId){
+									mach = parseInt(machga[q].gatherId).toString(16);
+									if(mach.length<4){
+										var length = 4 - mach.length;
+								        for(var i=0;i<length;i++){
+								        	mach = "0" + mach;
+								        };
+								        break;
+									}
+								}else{
+									alert("该焊机未对应采集编号!!!");
+									socketfc.close();
+									return;
+								}
+							}
+						}
+					}
+					
+					var frequency = parseInt($('#frequency').numberbox('getValue')*10).toString(16);
+					if(frequency.length<4){
+						var length = 4 - frequency.length;
+				        for(var i=0;i<length;i++){
+				        	frequency = "0" + frequency;
+				        }
+				      }
+					
+					var gasflow = parseInt($('#gasflow').numberbox('getValue')*10).toString(16);
+					if(gasflow.length<4){
+						var length = 4 - gasflow.length;
+				        for(var i=0;i<length;i++){
+				        	gasflow = "0" + gasflow;
+				        }
+				      }
+					
+			var xiafasend1 = mach+chanel+ftime+fadvance+fini_ele+fini_vol+fini_vol1+fweld_ele+fweld_vol+fweld_vol1+farc_ele+farc_vol+farc_vol1+fhysteresis+fcharacter+fgas
+			+fdiameter+fmaterial+"0000"+con+fweld_tuny_ele+fweld_tuny_vol+farc_tuny_ele+farc_tuny_vol+frequency+gasflow+"00000000";
 			
 		/*	var xiafasend2 = xiafasend1.replace(/00/g, '7C20');
 			var xiafasend3 = xiafasend2.replace(/7E/g, '7C5E');
 			var xiafasend4 = xiafasend3.replace(/7C/g, '7C5C');
 			var xiafasend = xiafasend4.replace(/7D/g, '7C5D').toUpperCase();*/
 			var xxx = xiafasend1.toUpperCase();
+			var data_length = ((parseInt(xxx.length)+12)/2).toString(16);
+			if(data_length.length<2){
+				var length = 2 - data_length.length;
+		        for(var i=0;i<length;i++){
+		        	data_length = "0" + data_length;
+		        }
+		    };
+		    xxx="7E"+data_length+"01010152"+xiafasend1;
 		    var check = 0;
 			for (var i = 0; i < (xxx.length/2); i++)
 			{
@@ -1269,9 +1427,8 @@ function xiafa(){
 			checksend = checksend.substring(a2-2,a2);
 			checksend = checksend.toUpperCase();
 			
-			var xiafasend2 = (xiafasend1+checksend).substring(2);
-			
-			var xiafasend4 = xiafasend2.replace(/7C/g, '7C5C');
+			var xiafasend2 = (xxx+checksend).substring(2);
+/*			var xiafasend4 = xiafasend2.replace(/7C/g, '7C5C');
 			var xiafasend3 = xiafasend4.replace(/7E/g, '7C5E');
 			var fuer="";
 			for(var er=0;er<(xiafasend3.length/2);er++){
@@ -1284,13 +1441,14 @@ function xiafa(){
 			var xiafasend5 = fuer.replace(/7D/g, '7C5D').toUpperCase();
 			
 			var xiafasend = "7E" + xiafasend5 + "7D";
-			socketfc.send(xiafasend);
+			socketfc.send(xiafasend);*/
+			socketfc.send("7E"+xiafasend2+"7D");
 			socketfc.onmessage = function(msg) {
 				var fan = msg.data;
-				fan = fan.replace(/7C20/g, '00').toUpperCase();
-				if(fan.substring(4,6)=="52"){
+//				fan = fan.replace(/7C20/g, '00').toUpperCase();
+				if(fan.substring(0,2)=="7E"&&fan.substring(10,12)=="52"){
 					symbol1++;
-					if(parseInt(fan.substring(10,12),16)==1){
+					if(parseInt(fan.substring(18,20),10)==1){
 						socketfc.close();
 						if(socketfc.readyState==1){
 							alert("下发失败");
@@ -1429,6 +1587,7 @@ function copy(value){
 
 function savecopy(){
 	var smachine = node11.id;
+	rows="";
 	var rows = $("#ro").datagrid("getSelections");
     var str="";
 	for(var i=0; i<rows.length; i++){
@@ -1514,22 +1673,29 @@ function savecopy(){
 		window.setTimeout(function() {
 			if(symbol1==0){
 				alert("复制失败");
+				rows.length=0;
+				str="";
+				$('#ro').datagrid('clearSelections');
 //				socketfc.close();
 			}
-		}, 5000)
+		}, 10000)
 		}
 		socketfc.onopen = function() {
 			rows1 = $("#ro1").datagrid("getRows");
-			ccp();
+			ccp(rows[0].fequipment_no);
 		}
 		socketfc.onmessage = function(msg) {
 			var fan = msg.data;
-			if(fan.substring(4,6)=="52"){
+//			fan = fan.replace(/7C20/g, '00').toUpperCase();
+			if(fan.substring(0,2)=="7E"&&fan.substring(10,12)=="52"){
 				symbol1++;
-				if(parseInt(fan.substring(10,12),16)==1){
+				if(parseInt(fan.substring(18,20),16)==1){
 					socketfc.close();
 					if(socketfc.readyState==1){
 						alert("复制失败");
+						rows.length=0;
+						str="";
+						$('#ro').datagrid('clearSelections');
 						}
 				}else{
 					rows1[xx].readynum=x;
@@ -1546,14 +1712,17 @@ function savecopy(){
 									xx=0;
 									$('#divro1').dialog('close');
 									rows1.length=0;
+									rows.length=0;
+									str="";
+									$('#ro').datagrid('clearSelections');
 							}
 								
 						}else{
-							ccp();
+							ccp(rows[xx].fequipment_no);
 						}
 					}else{
 					$('#ro1').datagrid('refreshRow', xx);
-					ccp();
+					ccp(rows[xx].fequipment_no);
 					}
 				}
 			}
@@ -1563,7 +1732,7 @@ function savecopy(){
 }
 }
 
-function ccp(){
+function ccp(value){
 	if("1-"+x==rows1[xx].num){
 		x=0;
 	}
@@ -1595,7 +1764,7 @@ function ccp(){
         	fini_ele = "0" + fini_ele;
         }
       }
-	var fini_vol = parseInt(yshu1[x].fini_vol).toString(16);
+	var fini_vol = (parseInt(yshu1[x].fini_vol)*10).toString(16);
 	if(fini_vol.length<4){
 		var length = 4 - fini_vol.length;
         for(var i=0;i<length;i++){
@@ -1616,7 +1785,7 @@ function ccp(){
         	fweld_ele = "0" + fweld_ele;
         }
       }
-	var fweld_vol = parseInt(yshu1[x].fweld_vol).toString(16);
+	var fweld_vol = (parseInt(yshu1[x].fweld_vol)*10).toString(16);
 	if(fweld_vol.length<4){
 		var length = 4 - fweld_vol.length;
         for(var i=0;i<length;i++){
@@ -1637,7 +1806,7 @@ function ccp(){
         	farc_ele = "0" + farc_ele;
         }
       }
-	var farc_vol = parseInt(yshu1[x].farc_vol).toString(16);
+	var farc_vol = (parseInt(yshu1[x].farc_vol)*10).toString(16);
 	if(farc_vol.length<4){
 		var length = 4 - farc_vol.length;
         for(var i=0;i<length;i++){
@@ -1667,11 +1836,11 @@ function ccp(){
       }
 	var fgas = parseInt(yshu1[0].Fweld_Alter_V).toString(16);
 	if(fgas==parseInt(121).toString(16)){
-		fgas="1";
-	}else if(fgas==parseInt(122).toString(16)){
-		fgas="3";
-	}else{
 		fgas="0";
+	}else if(fgas==parseInt(122).toString(16)){
+		fgas="1";
+	}else{
+		fgas="3";
 	}
 	if(fgas.length<2){
 		var length = 2 - fgas.length;
@@ -1765,10 +1934,56 @@ function ccp(){
         	con1 = "0" + con1;
         }
       }
-var xiafasend1 = "7E00520101"+chanel+ftime+fadvance+fini_ele+fini_vol+fini_vol1+fweld_ele+fweld_vol+fweld_vol1+farc_ele+farc_vol+farc_vol1+fhysteresis+fcharacter+fgas
-+fdiameter+fmaterial+"0000"+con1+fweld_tuny_ele+fweld_tuny_vol+farc_tuny_ele+farc_tuny_vol;
+	var mach;
+	if(machga!=null){
+		for(var q=0;q<machga.length;q++){
+			if(machga[q].id==node11.id){
+				if(machga[q].gatherId){
+					mach = parseInt(machga[q].gatherId).toString(16);
+					if(mach.length<4){
+						var length = 4 - mach.length;
+				        for(var i=0;i<length;i++){
+				        	mach = "0" + mach;
+				        };
+				        break;
+					}
+				}else{
+					alert("该焊机未对应采集编号!!!");
+					socketfc.close();
+					return;
+				}
+			}
+		}
+	}
+	
+	var frequency = parseInt(yshu1[x].frequency).toString(16);
+	if(frequency.length<2){
+		var length = 2 - frequency.length;
+        for(var i=0;i<length;i++){
+        	frequency = "0" + frequency;
+        }
+      }
+	
+	var gasflow = parseInt(yshu1[x].gasflow).toString(16);
+	if(gasflow.length<2){
+		var length = 2 - gasflow.length;
+        for(var i=0;i<length;i++){
+        	gasflow = "0" + gasflow;
+        }
+      }
+	
+var xiafasend1 = mach+chanel+ftime+fadvance+fini_ele+fini_vol+fini_vol1+fweld_ele+fweld_vol+fweld_vol1+farc_ele+farc_vol+farc_vol1+fhysteresis+fcharacter+fgas
++fdiameter+fmaterial+"0000"+con1+fweld_tuny_ele+fweld_tuny_vol+farc_tuny_ele+farc_tuny_vol+frequency+gasflow+"00000000";
 
 var xxx = xiafasend1.toUpperCase();
+var data_length = ((parseInt(xxx.length)+12)/2).toString(16);
+if(data_length.length<2){
+	var length = 2 - data_length.length;
+    for(var i=0;i<length;i++){
+    	data_length = "0" + data_length;
+    }
+};
+xxx="7E"+data_length+"01010152"+xiafasend1;
 var check = 0;
 for (var i = 0; i < (xxx.length/2); i++)
 {
@@ -1781,9 +1996,8 @@ var a2 = checksend.length;
 checksend = checksend.substring(a2-2,a2);
 checksend = checksend.toUpperCase();
 
-var xiafasend2 = (xiafasend1+checksend).substring(2);
-
-var xiafasend4 = xiafasend2.replace(/7C/g, '7C5C');
+var xiafasend2 = (xxx+checksend).substring(2);
+/*var xiafasend4 = xiafasend2.replace(/7C/g, '7C5C');
 var xiafasend3 = xiafasend4.replace(/7E/g, '7C5E');
 var fuer="";
 for(var er=0;er<(xiafasend3.length/2);er++){
@@ -1796,12 +2010,14 @@ if(xiafasend3.substring(er*2,er*2+2)=="00"){
 var xiafasend5 = fuer.replace(/7D/g, '7C5D').toUpperCase();
 
 var xiafasend = "7E" + xiafasend5 + "7D";
-socketfc.send(xiafasend);
+socketfc.send(xiafasend);*/
+socketfc.send("7E"+xiafasend2+"7D");
 	x++;
 }
 
 function wait(){
 	var smachine = node11.id;
+	rows="";
 	var rows = $("#ro").datagrid("getSelections");
     var str="";
 	for(var i=0; i<rows.length; i++){
