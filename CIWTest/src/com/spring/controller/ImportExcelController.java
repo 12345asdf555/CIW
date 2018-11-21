@@ -110,17 +110,17 @@ public class ImportExcelController {
 				wm.getInsframeworkId().setId(wmm.getInsframeworkByName(name));
 				Gather gather = wm.getGatherId();
 				int count2 = 0;
-				if(gather!=null){
-					int count3 = g.getGatherNoByItemCount(gather.getGatherNo(), wm.getInsframeworkId().getId()+"");
-					if(count3 == 0){
-						obj.put("msg","导入失败，请检查您的采集序号是否存在或是否属于该部门！");
-						obj.put("success",false);
-						return obj.toString();
-					}
-					gather.setId(g.getGatherByNo(gather.getGatherNo()));
-					wm.setGatherId(gather);
-					count2 = wmm.getGatheridCount(wm.getInsframeworkId().getId(),gather.getGatherNo());
-				}
+//				if(gather!=null){
+//					int count3 = g.getGatherNoByItemCount(gather.getGatherNo(), wm.getInsframeworkId().getId()+"");
+//					if(count3 == 0){
+//						obj.put("msg","导入失败，请检查您的采集序号是否存在或是否属于该部门！");
+//						obj.put("success",false);
+//						return obj.toString();
+//					}
+//					gather.setId(g.getGatherByNo(gather.getGatherNo()));
+//					wm.setGatherId(gather);
+//					count2 = wmm.getGatheridCount(wm.getInsframeworkId().getId(),gather.getGatherNo());
+//				}
 //				if(isInteger(wm.getFmachingnumber())){
 //					wm.setFmachingnumber(wm.getFmachingnumber());
 //				}
@@ -689,10 +689,7 @@ public class ImportExcelController {
 						dit.setJoinTime(cellValue);//入厂时间
 						break;
 					}
-					else if(k == 4){
-						dit.setFmanunumbers(cellValue);//出厂编码
-						break;
-					}
+					
 					else if(k == 5){
 						dit.setJoinTime(cellValue);//使用日期
 						break;
@@ -1083,46 +1080,11 @@ public class ImportExcelController {
 						p.setFcheckintime(cellValue);//入职时间
 						break;
 					}
-					else if(k == 4){
+					else if(k == 3){
 						p.setFirstsuretime(cellValue);//首次认证日期
 						break;
  					}
-					else if(k == 7){
-						p.setWorkmaintime(cellValue);//主岗位上岗时间
-						break;
- 					}
-					else if(k == 9){
-						p.setWorkfirsttime(cellValue);//岗位一上岗时间
-						break;
- 					}
-					else if(k == 11){
-						p.setWorksecondtime(cellValue);//岗位二上岗时间
-						break;
- 					}
-					else if(k == 17){
-						p.setScore(cellValue);//理论考试结果
-						break;
- 					}
-					else if(k == 19){
-						p.setIcworkime(cellValue);//IC卡有效期
-						break;
- 					}
-					else if(k == 20){
-						p.setHalfyearsure(cellValue);//半年认证时间
-						break;
- 					}
-					else if(k == 21){
-						p.setYearsure(cellValue);//年度确认
-						break;
- 					}
-					else if(k == 22){
-						p.setNextyear(cellValue);//次年年度确认
-						break;
- 					}
-					else if(k == 23){
-						p.setCellphone(cellValue);//手机号
-						break;
- 					}
+					
 					break;
 				case HSSFCell.CELL_TYPE_STRING://字符串
 					cellValue = cell.getStringCellValue();
@@ -1138,87 +1100,87 @@ public class ImportExcelController {
 						p.setCardnum(cellValue);//钢印号
 						break;
  					}
-					else if(k == 4){
+					else if(k == 3){
 						p.setFirstsuretime(cellValue);//首次认证日期
 						break;
  					}
-					else if(k == 5){
+					else if(k == 4){
 						p.setInsname(cellValue);//部门
 						break;
  					}
-					else if(k == 6){
+					else if(k == 5){
 						p.setWorkship(cellValue);//车间
 						break;
  					}
-					else if(k == 7){
+					else if(k == 6){
 						p.setWorkmaintime(cellValue);//主岗位上岗时间
 						break;
  					}
-					else if(k == 8){
+					else if(k == 7){
 						p.setWorkkmainname(cellValue);//主岗位岗位名称
 						break;
  					}
-					else if(k == 9){
+					else if(k == 8){
 						p.setWorkfirsttime(cellValue);//岗位一上岗时间
 						break;
  					}
-					else if(k == 10){
+					else if(k == 9){
 						p.setWorkfirstname(cellValue);//岗位一名称
 						break;
  					}
-					else if(k == 11){
+					else if(k == 10){
 						p.setWorksecondtime(cellValue);//岗位二上岗时间
 						break;
  					}
-					else if(k == 12){
+					else if(k == 11){
 						p.setWorksecondname(cellValue);//岗位二上岗名称
 						break;
  					}
-					else if(k == 13){
+					else if(k == 12){
 						p.setQualiname(cellValue);//从事IE2111焊接
 						break;
  					}
-					else if(k == 14){
+					else if(k == 13){
 						p.setLevename(cellValue);//分类
 						break;
  					}
-					else if(k == 15){
+					else if(k == 14){
 						p.setName(cellValue);//姓名
 						break;
  					}
-					else if(k == 16){
+					else if(k == 15){
 						p.setLevel(cellValue);//技能等级
 						break;
  					}
-					else if(k == 17){
+					else if(k == 16){
 						p.setScore(cellValue);//理论考试结果
 						break;
  					}
-					else if(k == 18){
+					else if(k == 17){
 						p.setIfpase(cellValue);//认证状态
 						break;
  					}
-					else if(k == 19){
+					else if(k == 18){
 						p.setIcworkime(cellValue);//IC卡有效期
 						break;
  					}
-					else if(k == 20){
+					else if(k == 19){
 						p.setHalfyearsure(cellValue);//半年认证时间
 						break;
  					}
-					else if(k == 21){
+					else if(k == 20){
 						p.setYearsure(cellValue);//年度确认
 						break;
  					}
-					else if(k == 22){
+					else if(k == 21){
 						p.setNextyear(cellValue);//次年年度确认
 						break;
  					}
-					else if(k == 23){
+					else if(k == 22){
 						p.setCellphone(cellValue);//手机号
 						break;
  					}
-					else if(k == 24){
+					else if(k == 23){
 						p.setBack(cellValue);//备注
 						break;
  					}
