@@ -8,7 +8,7 @@ import java.math.BigInteger;
  * @author gpyf16
  */
 public class ModelDto {
-	private BigInteger overproof;
+	private double overproof;
 	private String weldTime;
 	private BigInteger fid;
 	private BigInteger iid;
@@ -27,7 +27,7 @@ public class ModelDto {
 	private String overtime;
 	private String uploaddatetime;
 	private double loads;
-	private BigInteger idle;
+	private double idle;
 	private double time;
 	private String type;
 	private BigInteger dyne;
@@ -53,10 +53,38 @@ public class ModelDto {
 	private String nextmaterial;//下游材质
 	private BigInteger itemid;//项目id
 	private String jidgather;
-	private BigInteger hous;//用来获取工时的总值
+	private double hous;//用来获取工时的总值
 	private String starttime;
 	private String endtime;
+	private BigInteger companyid;
+	private String companyname;
+	private BigInteger caustid;
+	private String caustname;
 	
+	public BigInteger getCompanyid() {
+		return companyid;
+	}
+	public void setCompanyid(BigInteger companyid) {
+		this.companyid = companyid;
+	}
+	public String getCompanyname() {
+		return companyname;
+	}
+	public void setCompanyname(String companyname) {
+		this.companyname = companyname;
+	}
+	public BigInteger getCaustid() {
+		return caustid;
+	}
+	public void setCaustid(BigInteger caustid) {
+		this.caustid = caustid;
+	}
+	public String getCaustname() {
+		return caustname;
+	}
+	public void setCaustname(String caustname) {
+		this.caustname = caustname;
+	}
 	public String getNextwallThickness() {
 		return nextwallThickness;
 	}
@@ -81,10 +109,10 @@ public class ModelDto {
 	public void setEndtime(String endtime) {
 		this.endtime = endtime;
 	}
-	public BigInteger getHous() {
+	public double getHous() {
 		return hous;
 	}
-	public void setHous(BigInteger hous) {
+	public void setHous(double hous) {
 		this.hous = hous;
 	}
 	public String getExternalDiameter() {
@@ -225,10 +253,10 @@ public class ModelDto {
 	public void setTime(double time) {
 		this.time = time;
 	}
-	public BigInteger getIdle() {
+	public double getIdle() {
 		return idle;
 	}
-	public void setIdle(BigInteger idle) {
+	public void setIdle(double idle) {
 		this.idle = idle;
 	}
 	public double getLoads() {
@@ -315,10 +343,10 @@ public class ModelDto {
 	public void setFmin_electricity(double fmin_electricity) {
 		this.fmin_electricity = fmin_electricity;
 	}
-	public BigInteger getOverproof() {
+	public double getOverproof() {
 		return overproof;
 	}
-	public void setOverproof(BigInteger overproof) {
+	public void setOverproof(double overproof) {
 		this.overproof = overproof;
 	}
 	public BigInteger getLivecount() {

@@ -1,6 +1,8 @@
 package com.spring.controller;
 
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,12 +13,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.spring.model.Insframework;
 import com.spring.model.MyUser;
 import com.spring.model.Person;
 import com.spring.model.Td;
+import com.spring.model.WeldingMachine;
 import com.spring.page.Page;
+import com.spring.service.InsframeworkService;
 import com.spring.service.PersonService;
 import com.spring.service.TdService;
+import com.spring.service.WeldingMachineService;
 import com.spring.util.IsnullUtil;
 
 import net.sf.json.JSONArray;
@@ -36,6 +42,10 @@ public class TdController {
 	
 	@Autowired
 	private PersonService ps;
+	@Autowired
+	private InsframeworkService insm;
+	@Autowired
+	private WeldingMachineService ms;
 	private Td td;
 	
 	IsnullUtil iutil = new IsnullUtil();
@@ -68,7 +78,9 @@ public class TdController {
 	@RequestMapping("/goNextcurve")
 	public String goNextcurve(HttpServletRequest request){
 		String value = request.getParameter("value");
+		String machid = request.getParameter("machid");
 		request.setAttribute("value", value);
+		request.setAttribute("machid", machid);
 		return "td/nextCurve";
 	}
 	
@@ -541,13 +553,16 @@ public class TdController {
 	@RequestMapping("/allWeldname")
 	@ResponseBody
 	public String allWeldname(HttpServletRequest request){
-		
-		List<Td> fwn = tdService.allWeldname();	
+		MyUser myuser = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		List<Insframework> insframework = insm.getInsByUserid(BigInteger.valueOf(myuser.getId()));
+		BigInteger parent = insframework.get(0).getId();
+		List<Td> fwn = tdService.allWeldname(parent);	
 		JSONObject obj = new JSONObject();
 		JSONObject json = new JSONObject();
 		JSONArray ary = new JSONArray();
 		try{
 			for(Td td:fwn){
+				json.put("fid", td.getId());
 				json.put("fname",td.getFname());
 				json.put("fwelder_no", td.getFwelder_no());
 				ary.add(json);
@@ -557,5 +572,26 @@ public class TdController {
 		}
 		obj.put("rows", ary);
 		return obj.toString();
+	}
+	
+
+	@RequestMapping("/getLiveTime")
+	@ResponseBody
+	public String getLiveTime(HttpServletRequest request){
+		JSONObject json = new JSONObject();
+		try{
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String time = sdf.format(new Date());
+			Td list = tdService.getLiveTime(time, new BigInteger(request.getParameter("machineid")));
+			WeldingMachine machinelist = ms.getWeldingMachineById(new BigInteger(request.getParameter("machineid")));
+			json.put("machineno", machinelist.getTypename());
+			if(list!=null){
+				json.put("worktime",list.getWorktime());
+				json.put("time",list.getTime());
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return json.toString();
 	}
 }

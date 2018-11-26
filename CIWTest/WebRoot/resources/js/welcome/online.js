@@ -1,6 +1,7 @@
 var work = new Array();
 var wait = new Array();
 var weld = new Array();
+var mall = new Array();
 var websocketURL;
 var socket;
 var redata;
@@ -77,8 +78,8 @@ function websocketurl(){
 
 function websocket() {
 	if(typeof(WebSocket) == "undefined") {
-		alert("您的浏览器不支持WebSocket");
-		return;
+		WEB_SOCKET_SWF_LOCATION = "resources/js/WebSocketMain.swf";
+		WEB_SOCKET_DEBUG = true;
 	}
 	webclient();
 };
@@ -102,66 +103,106 @@ function webclient(){
 	};
 	socket.onmessage = function(msg) {
 		var xxx = msg.data;
-		if(xxx.substring(0,2)!="7E"){
-		redata=msg.data;
-		//53改为69
-		for(var i = 0;i < redata.length;i+=69){
-			if(redata.substring(8+i, 12+i)!="0000"){
-				if(weld.length==0){
-					weld.push(redata.substring(8+i, 12+i));
-				}else{
-					for(var j=0;j<weld.length;j++){
-						if(weld[j]!=redata.substring(8+i, 12+i)){
-							if(j==weld.length-1){
-								weld.push(redata.substring(8+i, 12+i));
-							}
+		if(xxx.length==279){
+			if(xxx.substring(0,2)!="7E"){
+			redata=msg.data;
+			if(symbol==0){
+				window.setTimeout(function() {
+					for(var m=0;m<mall.length;m++){
+						if(mall[m].fstatus=="00"){
+							wait.push(mall[m]);
 						}else{
-							break;
+							work.push(mall[m]);
 						}
 					}
-				}
-				if(redata.substring(0+i,2+i)=="03"||redata.substring(0+i,2+i)=="05"||redata.substring(0+i,2+i)=="07"){
-					if(work.length==0){
-						work.push(redata.substring(4+i, 8+i));
-					}else{
-						for(var j=0;j<work.length;j++){
-							if(work[j]!=redata.substring(4+i, 8+i)){
-								if(j==work.length-1){
-									work.push(redata.substring(4+i, 8+i));
-								}
+					var data = [{value:work.length, name:'工作'},{value:wait.length, name:'待机'},{value:machine.length-work.length-wait.length, name:'关机'}];
+					refreshWelderData(data);
+					data = [{value:weld.length, name:'在线'},{value:namex.length-weld.length, name:'离线'}];
+					refreshPersonData(data);
+					work.length=0;
+					wait.length=0;
+					mall.length=0;
+				}, 3000)
+				symbol=1;
+			}
+			//53改为69
+			for(var i = 0;i < redata.length;i+=93){
+						if(redata.substring(0+i, 4+i)!="0000"){
+						//组织机构与焊工编号都与数据库中一直则录入
+							if(weld.length==0){
+								weld.push(redata.substring(0+i, 4+i));
 							}else{
-								break;
+								for(var j=0;j<weld.length;j++){
+									if(weld[j]!=redata.substring(0+i, 4+i)){
+										if(j==weld.length-1){
+											weld.push(redata.substring(0+i, 4+i));
+										}
+									}else{
+										break;
+									}
+								}
 							}
 						}
-					}
-			  }
-			if(redata.substring(0+i,2+i)=="00"){
-				if(wait.length==0){
-					wait.push(redata.substring(4+i, 8+i));
-				}else{
-					for(var j=0;j<wait.length;j++){
-						if(wait[j]!=redata.substring(4+i, 8+i)){
-							if(j==wait.length-1){
+					if(redata.substring(36+i,38+i)=="03"||redata.substring(36+i,38+i)=="05"||redata.substring(36+i,38+i)=="07"||redata.substring(36+i,38+i)=="00"){
+						for(var x=0;x<machine.length;x++){
+							if(machine[x].fid == parseInt(redata.substring(4+i, 8+i))){
+								if(mall.length==0){
+									var arr  =
+								     {
+								         "fid" : redata.substring(4+i, 8+i),
+								         "fstatus" : redata.substring(36+i,38+i)
+								     }
+									mall.push(arr);
+								}else{
+									for(var j=0;j<mall.length;j++){
+										if(mall[j].fid!=redata.substring(4+i, 8+i)){
+											if(j==mall.length-1){
+												var arr  =
+											     {
+											         "fid" : redata.substring(4+i, 8+i),
+											         "fstatus" : redata.substring(36+i,38+i)
+											     }
+												mall.push(arr);
+											}
+										}else{
+											break;
+										}
+									}
+								}
+							}
+						}
+				  }
+	/*			if(redata.substring(0+i,2+i)=="00"){
+					for(var w=0;w<work.length;w++){
+						if(work[w]!=redata.substring(4+i, 8+i)&&w==work.length-1){
+							if(wait.length==0){
 								wait.push(redata.substring(4+i, 8+i));
+							}else{
+								for(var j=0;j<wait.length;j++){
+									if(wait[j]!=redata.substring(4+i, 8+i)){
+										if(j==wait.length-1){
+											wait.push(redata.substring(4+i, 8+i));
+										}
+									}else{
+										break;
+									}
+								}
 							}
-						}else{
-							break;
 						}
 					}
-				}
+				}*/
+			//新增定时器
+	//		if(symbol==0){
+	//			window.setInterval(function() {
+	//				work.length=0;
+	//				weld.length=0;
+	//				wait.length=0;
+	//			}, 30000)
+	//		}
+	//		symbol=1;
 			}
 		};
-		//新增定时器
-		if(symbol==0){
-			window.setInterval(function() {
-				work.length=0;
-				weld.length=0;
-				wait.length=0;
-			}, 2950)
-		}
-		symbol=1;
-		}
-	};
+	}
 	//关闭事件
 	socket.onclose = function(e) {
         if (e.code == 4001 || e.code == 4002 || e.code == 4003 || e.code == 4005 || e.code == 4006){
@@ -221,7 +262,7 @@ function showPersonChart(){
 		        {
 		            name:'焊工在线统计',
 		            type:'pie',
-		            radius : ['50%', '70%'],
+		            radius : ['40%', '60%'],
 		            color:['#F6C95E','#82B3E0'],
 		            data:[
 		                {value:weld.length, name:'在线'},
@@ -297,7 +338,7 @@ function showWelderChart(){
 		        {
 		            name:'焊机在线统计',
 		            type:'pie',
-		            radius : ['50%', '70%'],
+		            radius : ['40%', '60%'],
 		            color:['#F6C95E','#6870B3','#82B3E0'],
 		            data:[
 		                {value:work.length, name:'工作'},
@@ -342,6 +383,17 @@ function refreshWelderData(data){
      weldercharts.setOption(option);    
 }
 window.setInterval(function () {
+	for(var m=0;m<mall.length;m++){
+		if(mall[m].fstatus=="00"){
+			wait.push(mall[m]);
+		}else{
+			work.push(mall[m]);
+		}
+	}
 	var data = [{value:work.length, name:'工作'},{value:wait.length, name:'待机'},{value:machine.length-work.length-wait.length, name:'关机'}];
 	refreshWelderData(data);
+	work.length=0;
+	weld.length=0;
+	wait.length=0;
+	mall.length=0;
 },30000);

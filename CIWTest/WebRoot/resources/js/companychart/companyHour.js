@@ -13,6 +13,8 @@ var charts;
 var array1 = new Array();
 var array2 = new Array();
 function showCompanyHourChart(){
+	array1 = new Array();
+	array2 = new Array();
 	setParam();
 	var parent = $("#parent").val();
 	 $.ajax({  
@@ -50,7 +52,7 @@ function showCompanyHourChart(){
 			trigger: 'axis'//坐标轴触发，即是否跟随鼠标集中显示数据
 		},
 		legend:{
-			data:['工时(s)']
+			data:['工时(h)']
 		},
 		grid:{
 			left:'60',//组件距离容器左边的距离
@@ -71,11 +73,11 @@ function showCompanyHourChart(){
 		},
 		yAxis:{
 			type: 'value',//value:数值轴，category:类目轴，time:时间轴，log:对数轴
-			name:'焊接平均时长(s)'
+			name:'焊接平均时长(h)'
 		},
 		series:[
 			{
-				name:'工时(s)',
+				name:'工时(h)',
 				type:'bar',
 	            barMaxWidth:20,//最大宽度
 				data:array2
@@ -106,13 +108,12 @@ function CompanyHourDatagrid(){
 		pagination : true,
 		columns : [ [ {
 			field : 'name',
-			title : '事业部',
+			title : '所属部门',
 			width : 100,
 			halign : "center",
 			align : "left",
 			formatter:function(value,row,index){
 				array1.push(value);
-//				return  '<a href="caustChart/goCaustHour?parent='+row.itemid+'">'+value+'</a>';
 				return value;
 			}
 		}, {
@@ -132,7 +133,7 @@ function CompanyHourDatagrid(){
 			}
 		}, {
 			field : 'manhour',
-			title : '焊接平均工时(s)',
+			title : '焊接平均工时(h)',
 			width : 100,
 			halign : "center",
 			align : "left",
@@ -172,7 +173,7 @@ function classifyDatagrid(){
 		height : $("#classifydiv").height(),
 		width : $("body").width()/2,
 		idField : 'fid',
-		url : "itemChart/getItemHousClassify?item="+parent,
+		url : "companyChart/getItemHousClassify?item="+parent,
 		singleSelect : true,
 		pageSize : 5,
 		pageList : [ 5, 10, 15, 20, 25],
@@ -222,8 +223,6 @@ function classifyDatagrid(){
 		toolbar : '#classify_btn',
 		onLoadSuccess: function(){
 			$("#classify").datagrid("selectRow",0);
-			array1 = new Array();
-			array2 = new Array();
 			CompanyHourDatagrid();
 			showCompanyHourChart();
 		},
@@ -241,8 +240,6 @@ function classifyDatagrid(){
 function commitChecked(){
 	chartStr = "";
 	search = "";
-	array1 = new Array();
-	array2 = new Array();
 	$("#chartLoading").show();
 	var rows = $("#classify").datagrid("getSelected");
 	search += " (fmaterial='"+rows.material+"' and fexternal_diameter='"+rows.external_diameter+"' and fwall_thickness='"+rows.wall_thickness+"' and fnextExternal_diameter='"+rows.nextExternal_diameter+

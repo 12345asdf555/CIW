@@ -32,23 +32,29 @@
 		select * from (
 		select i.fid,i.fname,count(w.fid) total from tb_insframework i 
 		inner join tb_welding_machine w on w.finsframework_id=i.fid 
+		left JOIN tb_insframework ins on ins.fid = i.fparent
+        left JOIN tb_insframework insf on insf.fid = ins.fparent
 		where i.ftype=23 
 		<if test="parent!=null and parent!=''">
-			and i.fparent=#{parent}
+			and (i.fid=#{parent} or ins.fid=#{parent} or insf.fid=#{parent} or insf.fparent=#{parent})
 		</if>
 		group by i.fid
 		UNION ALL
 		select i.fid,i.fname,0 total from tb_insframework  i 
+		left JOIN tb_insframework ins on ins.fid = i.fparent
+        left JOIN tb_insframework insf on insf.fid = ins.fparent
 		where i.ftype=23 
 		<if test="parent!=null and parent!=''">
-			and i.fparent=#{parent}
+			and (i.fid=#{parent} or ins.fid=#{parent} or insf.fid=#{parent} or insf.fparent=#{parent})
 		</if>
 		and i.fid not in 
 		(select i.fid from tb_insframework i 
 		inner join tb_welding_machine w on w.finsframework_id=i.fid 
+		left JOIN tb_insframework ins on ins.fid = i.fparent
+        left JOIN tb_insframework insf on insf.fid = ins.fparent
 		where i.ftype=23 
 		<if test="parent!=null and parent!=''">
-			and i.fparent=#{parent}
+			and (i.fid=#{parent} or ins.fid=#{parent} or insf.fid=#{parent} or insf.fparent=#{parent})
 		</if>
 		 group by i.fid )
 		)temp order by fid
@@ -57,9 +63,12 @@
 	<!-- 获取开机焊机数 -->
 	<select id="getStartingUpMachineNum" resultType="java.lang.Integer">
 		select count(*) from(
-		select fmachine_id from tb_work where 1=1
+		select fmachine_id from tb_work w
+		INNER JOIN tb_insframework i on i.fid  = w.fmachine_itemid left JOIN tb_insframework ins on ins.fid = i.fparent
+        left JOIN tb_insframework insf on insf.fid = ins.fparent
+		where fmachine_id!=0
 		<if test="itemid!=null and itemid!=''">
-			and fitemid= #{itemid}
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
 		</if>
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
@@ -70,9 +79,12 @@
 			</if>
 		</if>
 		UNION 
-		select fmachine_id from tb_standby where 1=1
+		select fmachine_id from tb_standby  w
+		INNER JOIN tb_insframework i on i.fid  = w.fmachine_itemid left JOIN tb_insframework ins on ins.fid = i.fparent
+        left JOIN tb_insframework insf on insf.fid = ins.fparent
+		where fmachine_id!=0
 		<if test="itemid!=null and itemid!=''">
-			and fitemid= #{itemid}
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
 		</if>
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
@@ -83,9 +95,12 @@
 			</if>
 		</if>
 		UNION
-		select fmachine_id from tb_alarm where 1=1
+		select fmachine_id from tb_alarm  w
+		INNER JOIN tb_insframework i on i.fid  = w.fmachine_itemid left JOIN tb_insframework ins on ins.fid = i.fparent
+        left JOIN tb_insframework insf on insf.fid = ins.fparent
+		where fmachine_id!=0
 		<if test="itemid!=null and itemid!=''">
-			and fitemid= #{itemid}
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
 		</if>
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
@@ -96,23 +111,19 @@
 			</if>
 		</if>
 		)temp
-		
 	</select>
 	
 	<!-- 获取工作的焊机数-->
 	<select id="getWorkMachineNum" resultMap="dataMap">
 		select count(DISTINCT(fmachine_id)) machinenum
-		from tb_work where 1=1
+		from tb_work  w
+		INNER JOIN tb_insframework i on i.fid  = w.fmachine_itemid left JOIN tb_insframework ins on ins.fid = i.fparent
+        left JOIN tb_insframework insf on insf.fid = ins.fparent
+		where fmachine_id!=0
 		<if test="itemid!=null and itemid!=''">
-			and fitemid= #{itemid}
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
 		</if>
 		<if test="dto!=null and dto!=''">
-			<if test="dto.welderno!=null and dto.welderno!=''">
-				and fwelder_id = #{dto.welderno}
-			</if>
-			<if test="dto.machineid!=null and dto.machineid!=''">
-				and fmachine_id = #{dto.machineid}
-			</if>
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
 				and fstarttime &gt;= #{dto.dtoTime1}
 			</if>
@@ -125,14 +136,14 @@
 	<!-- 获取工作的焊口数-->
 	<select id="getWorkJunctionNum" resultMap="dataMap">
 		select count(fjunction_id) junctionnum from(
-		select fjunction_id from tb_work where 1=1
+		select fjunction_id from tb_work  w
+		INNER JOIN tb_insframework i on i.fid  = w.fmachine_itemid left JOIN tb_insframework ins on ins.fid = i.fparent
+        left JOIN tb_insframework insf on insf.fid = ins.fparent
+		where fjunction_id != 0
 		<if test="itemid!=null and itemid!=''">
-			and fitemid= #{itemid}
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
 		</if>
 		<if test="dto!=null and dto!=''">
-			<if test="dto.welderno!=null and dto.welderno!=''">
-				and fwelder_id = #{dto.welderno}
-			</if>
 			<if test="dto.machineid!=null and dto.machineid!=''">
 				and fmachine_id = #{dto.machineid}
 			</if>
@@ -144,14 +155,14 @@
 			</if>
 		</if>
 		union
-		select fjunction_id from tb_standby where 1=1
+		select fjunction_id from tb_standby w
+		INNER JOIN tb_insframework i on i.fid  = w.fmachine_itemid left JOIN tb_insframework ins on ins.fid = i.fparent
+        left JOIN tb_insframework insf on insf.fid = ins.fparent
+		where fjunction_id != 0
 		<if test="itemid!=null and itemid!=''">
-			and fitemid= #{itemid}
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
 		</if>
 		<if test="dto!=null and dto!=''">
-			<if test="dto.welderno!=null and dto.welderno!=''">
-				and fwelder_id = #{dto.welderno}
-			</if>
 			<if test="dto.machineid!=null and dto.machineid!=''">
 				and fmachine_id = #{dto.machineid}
 			</if>
@@ -166,20 +177,59 @@
 	</select>
 	
 	
+	<!-- 获取工作的焊口数-->
+	<select id="getWorkJunctionNumByWelder" resultMap="dataMap">
+		select count(fjunction_id) junctionnum from(
+		select fjunction_id from tb_work  w
+		INNER JOIN tb_insframework i on i.fid  = w.fwelder_itemid left JOIN tb_insframework ins on ins.fid = i.fparent
+        left JOIN tb_insframework insf on insf.fid = ins.fparent
+		where fjunction_id != 0
+		<if test="itemid!=null and itemid!=''">
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
+		</if>
+		<if test="dto!=null and dto!=''">
+			<if test="dto.welderno!=null and dto.welderno!=''">
+				and fwelder_no = #{dto.welderno}
+			</if>
+			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
+				and fstarttime &gt;= #{dto.dtoTime1}
+			</if>
+			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
+				and fendtime &lt;= #{dto.dtoTime2}
+			</if>
+		</if>
+		union
+		select fjunction_id from tb_standby w
+		INNER JOIN tb_insframework i on i.fid  = w.fwelder_itemid left JOIN tb_insframework ins on ins.fid = i.fparent
+        left JOIN tb_insframework insf on insf.fid = ins.fparent
+		where fjunction_id != 0
+		<if test="itemid!=null and itemid!=''">
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
+		</if>
+		<if test="dto!=null and dto!=''">
+			<if test="dto.welderno!=null and dto.welderno!=''">
+				and fwelder_no = #{dto.welderno}
+			</if>
+			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
+				and fstarttime &gt;= #{dto.dtoTime1}
+			</if>
+			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
+				and fendtime &lt;= #{dto.dtoTime2}
+			</if>
+		</if>
+		)temp
+	</select>
+	
 	<!-- 获取开机总时长 -->
 	<select id="getStaringUpTime" resultType="java.math.BigInteger">
 		select sum(num) from(
-		select sum(fworktime) num from tb_work where 1=1
+		select sum(fworktime) num from tb_work w INNER JOIN tb_insframework i on i.fid  = w.fmachine_itemid left JOIN tb_insframework ins on ins.fid = i.fparent
+        left JOIN tb_insframework insf on insf.fid = ins.fparent
+		where 1=1
 		<if test="itemid!=null and itemid!=''">
-			and fitemid= #{itemid}
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
 		</if>
 		<if test="dto!=null and dto!=''">
-			<if test="dto.junctionno!=null and dto.junctionno!=''">
-				and fjunction_id = #{dto.junctionno}
-			</if>
-			<if test="dto.welderno!=null and dto.welderno!=''">
-				and fwelder_id = #{dto.welderno}
-			</if>
 			<if test="dto.machineid!=null and dto.machineid!=''">
 				and fmachine_id = #{dto.machineid}
 			</if>
@@ -191,17 +241,13 @@
 			</if>
 		</if>
 		UNION ALL
-		select sum(fstandbytime) num from tb_standby where 1=1
+		select sum(fstandbytime) num from tb_standby w INNER JOIN tb_insframework i on i.fid  = w.fmachine_itemid left JOIN tb_insframework ins on ins.fid = i.fparent
+        left JOIN tb_insframework insf on insf.fid = ins.fparent
+		where 1=1
 		<if test="itemid!=null and itemid!=''">
-			and fitemid= #{itemid}
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
 		</if>
 		<if test="dto!=null and dto!=''">
-			<if test="dto.junctionno!=null and dto.junctionno!=''">
-				and fjunction_id = #{dto.junctionno}
-			</if>
-			<if test="dto.welderno!=null and dto.welderno!=''">
-				and fwelder_id = #{dto.welderno}
-			</if>
 			<if test="dto.machineid!=null and dto.machineid!=''">
 				and fmachine_id = #{dto.machineid}
 			</if>
@@ -213,19 +259,133 @@
 			</if>
 		</if>
 		UNION ALL
-		select sum(falarmtime) num from tb_alarm where 1=1
+		select sum(falarmtime) num from tb_alarm w INNER JOIN tb_insframework i on i.fid  = w.fmachine_itemid left JOIN tb_insframework ins on ins.fid = i.fparent
+        left JOIN tb_insframework insf on insf.fid = ins.fparent
+		where 1=1
 		<if test="itemid!=null and itemid!=''">
-			and fitemid= #{itemid}
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
+		</if>
+		<if test="dto!=null and dto!=''">
+			<if test="dto.machineid!=null and dto.machineid!=''">
+				and fmachine_id = #{dto.machineid}
+			</if>
+			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
+				and fstarttime &gt;= #{dto.dtoTime1}
+			</if>
+			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
+				and fendtime &lt;= #{dto.dtoTime2}
+			</if>
+		</if>
+		)temp
+	</select>
+	
+	<!-- 获取开机总时长 -->
+	<select id="getStaringUpTimeByJunction" resultType="java.math.BigInteger">
+		select sum(num) from(
+		select sum(fworktime) num from tb_work w INNER JOIN tb_insframework i on i.fid  = w.fjunction_itemid left JOIN tb_insframework ins on ins.fid = i.fparent
+        left JOIN tb_insframework insf on insf.fid = ins.fparent
+		where 1=1
+		<if test="itemid!=null and itemid!=''">
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
 		</if>
 		<if test="dto!=null and dto!=''">
 			<if test="dto.junctionno!=null and dto.junctionno!=''">
-				and fjunction_id = #{dto.junctionno}
+				and fjunction_no = #{dto.junctionno}
 			</if>
+			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
+				and fstarttime &gt;= #{dto.dtoTime1}
+			</if>
+			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
+				and fendtime &lt;= #{dto.dtoTime2}
+			</if>
+		</if>
+		UNION ALL
+		select sum(fstandbytime) num from tb_standby w INNER JOIN tb_insframework i on i.fid  = w.fjunction_itemid left JOIN tb_insframework ins on ins.fid = i.fparent
+        left JOIN tb_insframework insf on insf.fid = ins.fparent
+		where 1=1
+		<if test="itemid!=null and itemid!=''">
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
+		</if>
+		<if test="dto!=null and dto!=''">
+			<if test="dto.junctionno!=null and dto.junctionno!=''">
+				and fjunction_no = #{dto.junctionno}
+			</if>
+			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
+				and fstarttime &gt;= #{dto.dtoTime1}
+			</if>
+			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
+				and fendtime &lt;= #{dto.dtoTime2}
+			</if>
+		</if>
+		UNION ALL
+		select sum(falarmtime) num from tb_alarm w INNER JOIN tb_insframework i on i.fid  = w.fjunction_itemid left JOIN tb_insframework ins on ins.fid = i.fparent
+        left JOIN tb_insframework insf on insf.fid = ins.fparent
+		where 1=1
+		<if test="itemid!=null and itemid!=''">
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
+		</if>
+		<if test="dto!=null and dto!=''">
+			<if test="dto.junctionno!=null and dto.junctionno!=''">
+				and fjunction_no = #{dto.junctionno}
+			</if>
+			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
+				and fstarttime &gt;= #{dto.dtoTime1}
+			</if>
+			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
+				and fendtime &lt;= #{dto.dtoTime2}
+			</if>
+		</if>
+		)temp
+	</select>
+	
+	<!-- 获取开机总时长 -->
+	<select id="getStaringUpTimeByWelder" resultType="java.math.BigInteger">
+		select sum(num) from(
+		select sum(fworktime) num from tb_work w INNER JOIN tb_insframework i on i.fid  = w.fwelder_itemid left JOIN tb_insframework ins on ins.fid = i.fparent
+        left JOIN tb_insframework insf on insf.fid = ins.fparent
+		where 1=1
+		<if test="itemid!=null and itemid!=''">
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
+		</if>
+		<if test="dto!=null and dto!=''">
 			<if test="dto.welderno!=null and dto.welderno!=''">
-				and fwelder_id = #{dto.welderno}
+				and fwelder_no = #{dto.welderno}
 			</if>
-			<if test="dto.machineid!=null and dto.machineid!=''">
-				and fmachine_id = #{dto.machineid}
+			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
+				and fstarttime &gt;= #{dto.dtoTime1}
+			</if>
+			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
+				and fendtime &lt;= #{dto.dtoTime2}
+			</if>
+		</if>
+		UNION ALL
+		select sum(fstandbytime) num from tb_standby w INNER JOIN tb_insframework i on i.fid  = w.fwelder_itemid left JOIN tb_insframework ins on ins.fid = i.fparent
+        left JOIN tb_insframework insf on insf.fid = ins.fparent
+		where 1=1
+		<if test="itemid!=null and itemid!=''">
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
+		</if>
+		<if test="dto!=null and dto!=''">
+			<if test="dto.welderno!=null and dto.welderno!=''">
+				and fwelder_no = #{dto.welderno}
+			</if>
+			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
+				and fstarttime &gt;= #{dto.dtoTime1}
+			</if>
+			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
+				and fendtime &lt;= #{dto.dtoTime2}
+			</if>
+		</if>
+		UNION ALL
+		select sum(falarmtime) num from tb_alarm w INNER JOIN tb_insframework i on i.fid  = w.fwelder_itemid left JOIN tb_insframework ins on ins.fid = i.fparent
+        left JOIN tb_insframework insf on insf.fid = ins.fparent
+		where 1=1
+		<if test="itemid!=null and itemid!=''">
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
+		</if>
+		<if test="dto!=null and dto!=''">
+			<if test="dto.welderno!=null and dto.welderno!=''">
+				and fwelder_no = #{dto.welderno}
 			</if>
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
 				and fstarttime &gt;= #{dto.dtoTime1}
@@ -244,19 +404,62 @@
 	
 	<!-- 待机时长 -->
 	<select id="getStandytime" resultType="java.math.BigInteger">
-		select sum(fstandbytime) worktime from tb_standby where 1=1 
+		select sum(fstandbytime) worktime from tb_standby w 
+		INNER JOIN tb_insframework i on i.fid  = w.fmachine_itemid left JOIN tb_insframework ins on ins.fid = i.fparent
+        left JOIN tb_insframework insf on insf.fid = ins.fparent
+		where 1=1
 		<if test="itemid!=null and itemid!=''">
-			and fitemid= #{itemid}
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
+		</if>
+		<if test="dto!=null and dto!=''">
+			<if test="dto.machineid!=null and dto.machineid!=''">
+				and fmachine_id = #{dto.machineid}
+			</if>
+			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
+				and fstarttime &gt;= #{dto.dtoTime1}
+			</if>
+			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
+				and fendtime &lt;= #{dto.dtoTime2}
+			</if>
+		</if>
+	</select>
+	
+	
+	<!-- 待机时长 -->
+	<select id="getStandytimeByWelder" resultType="java.math.BigInteger">
+		select sum(fstandbytime) worktime from tb_standby  w 
+		INNER JOIN tb_insframework i on i.fid  = w.fwelder_itemid left JOIN tb_insframework ins on ins.fid = i.fparent
+        left JOIN tb_insframework insf on insf.fid = ins.fparent
+		where 1=1
+		<if test="itemid!=null and itemid!=''">
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
+		</if>
+		<if test="dto!=null and dto!=''">
+			<if test="dto.welderno!=null and dto.welderno!=''">
+				and fwelder_no = #{dto.welderno}
+			</if>
+			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
+				and fstarttime &gt;= #{dto.dtoTime1}
+			</if>
+			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
+				and fendtime &lt;= #{dto.dtoTime2}
+			</if>
+		</if>
+	</select>
+	
+	
+	<!-- 待机时长 -->
+	<select id="getStandytimeByJunction" resultType="java.math.BigInteger">
+		select sum(fstandbytime) worktime from tb_standby  w 
+		INNER JOIN tb_insframework i on i.fid  = w.fjunction_itemid left JOIN tb_insframework ins on ins.fid = i.fparent
+        left JOIN tb_insframework insf on insf.fid = ins.fparent
+		where 1=1
+		<if test="itemid!=null and itemid!=''">
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
 		</if>
 		<if test="dto!=null and dto!=''">
 			<if test="dto.junctionno!=null and dto.junctionno!=''">
-				and fjunction_id = #{dto.junctionno}
-			</if>
-			<if test="dto.welderno!=null and dto.welderno!=''">
-				and fwelder_id = #{dto.welderno}
-			</if>
-			<if test="dto.machineid!=null and dto.machineid!=''">
-				and fmachine_id = #{dto.machineid}
+				and fjunction_no = #{dto.junctionno}
 			</if>
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
 				and fstarttime &gt;= #{dto.dtoTime1}
@@ -270,19 +473,64 @@
 	<!-- 焊接时长及平均电流电压 -->
 	<select id="getWorkTimeAndEleVol" resultMap="dataMap">
 		SELECT * from (
-		select avg(felectricity) electricity,avg(fvoltage) voltage,avg(frateofflow) rateofflow,sum(fworktime) worktime from tb_work where 1=1 
+		select avg(felectricity) electricity,avg(fvoltage) voltage,avg(frateofflow) rateofflow,sum(fworktime) worktime from tb_work w 
+		INNER JOIN tb_insframework i on i.fid  = w.fmachine_itemid left JOIN tb_insframework ins on ins.fid = i.fparent
+        left JOIN tb_insframework insf on insf.fid = ins.fparent
+		where 1=1
 		<if test="itemid!=null and itemid!=''">
-			and fitemid= #{itemid}
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
+		</if>
+		<if test="dto!=null and dto!=''">
+			<if test="dto.machineid!=null and dto.machineid!=''">
+				and fmachine_id = #{dto.machineid}
+			</if>
+			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
+				and fstarttime &gt;= #{dto.dtoTime1}
+			</if>
+			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
+				and fendtime &lt;= #{dto.dtoTime2}
+			</if>
+		</if>
+		)temp
+	</select>
+	
+	<!-- 焊接时长及平均电流电压 -->
+	<select id="getWorkTimeAndEleVolByWelder" resultMap="dataMap">
+		SELECT * from (
+		select avg(felectricity) electricity,avg(fvoltage) voltage,sum(fworktime) worktime from tb_work w 
+		INNER JOIN tb_insframework i on i.fid  = w.fwelder_itemid left JOIN tb_insframework ins on ins.fid = i.fparent
+        left JOIN tb_insframework insf on insf.fid = ins.fparent
+		where 1=1
+		<if test="itemid!=null and itemid!=''">
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
+		</if>
+		<if test="dto!=null and dto!=''">
+			<if test="dto.welderno!=null and dto.welderno!=''">
+				and fwelder_no = #{dto.welderno}
+			</if>
+			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
+				and fstarttime &gt;= #{dto.dtoTime1}
+			</if>
+			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
+				and fendtime &lt;= #{dto.dtoTime2}
+			</if>
+		</if>
+		)temp
+	</select>
+	
+	<!-- 焊接时长及平均电流电压 -->
+	<select id="getWorkTimeAndEleVolByJunction" resultMap="dataMap">
+		SELECT * from (
+		select avg(felectricity) electricity,avg(fvoltage) voltage,sum(fworktime) worktime from tb_work w 
+		INNER JOIN tb_insframework i on i.fid  = w.fjunction_itemid left JOIN tb_insframework ins on ins.fid = i.fparent
+        left JOIN tb_insframework insf on insf.fid = ins.fparent
+		where 1=1
+		<if test="itemid!=null and itemid!=''">
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
 		</if>
 		<if test="dto!=null and dto!=''">
 			<if test="dto.junctionno!=null and dto.junctionno!=''">
-				and fjunction_id = #{dto.junctionno}
-			</if>
-			<if test="dto.welderno!=null and dto.welderno!=''">
-				and fwelder_id = #{dto.welderno}
-			</if>
-			<if test="dto.machineid!=null and dto.machineid!=''">
-				and fmachine_id = #{dto.machineid}
+				and fjunction_no = #{dto.junctionno}
 			</if>
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
 				and fstarttime &gt;= #{dto.dtoTime1}
@@ -296,20 +544,29 @@
 
 	<!-- 查询所有焊机id，编号，组织机构id及名称 -->
 	<select id="getAllMachine" resultMap="dataMap">
-		SELECT m.fid,m.fequipment_no fname,i.fid insid,fname insname FROM tb_welding_machine m inner join tb_insframework i on i.fid = m.finsframework_id where ftype=23
+		SELECT m.fid,m.fequipment_no fname,i.fid insid,i.fname insname FROM tb_welding_machine m 
+		inner join tb_insframework i on i.fid = m.finsframework_id
+		left JOIN tb_insframework ins on ins.fid = i.fparent
+        left JOIN tb_insframework insf on insf.fid = ins.fparent where i.ftype=23
 		<if test="item!=null and item!=''">
-			and i.fid = #{item}
+			and (i.fid=#{item} or ins.fid=#{item} or insf.fid=#{item} or insf.fparent=#{item})
 		</if>
 	</select>
 	
 	<!--查询所有焊工编号，姓名 -->
 	<select id="getAllWelder" resultMap="dataMap">
-		SELECT fwelder_no serialnumber,fname FROM tb_welder
+		SELECT w.fwelder_no serialnumber,w.fname FROM tb_welder w
+		inner join tb_insframework i on w.Fowner=i.fid 
+        left JOIN tb_insframework ins on ins.fid = i.fparent
+        left JOIN tb_insframework insf on insf.fid = ins.fparent where 1=1
+        <if test="parent!=null and parent!=''">
+			and (i.fid=#{parent} or ins.fid=#{parent} or insf.fid=#{parent} or insf.fparent=#{parent})
+		</if>
 	</select>
 	
 	<!-- 查询所有焊缝编号，组织机构名称 -->
 	<select id="getAllJunction" resultMap="dataMap">
-		SELECT fwelded_junction_no serialnumber,i.fid,i.fname FROM tb_welded_junction j INNER join tb_insframework i on i.fid = j.fitemId where 1=1
+		SELECT fwelded_junction_no serialnumber,j.fexternal_diameter speed,i.fid,i.fname FROM tb_welded_junction j INNER join tb_insframework i on i.fid = j.fitemId where 1=1
 		<if test="junctionno!=null and junctionno!=''">
 			and fwelded_junction_no like #{junctionno}
 		</if>
@@ -317,14 +574,21 @@
 	
 	<!-- 查询所有项目部组织机构 -->
 	<select id="getAllInsframe"  resultMap="dataMap">
-		SELECT fid,fname FROM tb_insframework where ftype=23
+		SELECT i.fid,i.fname FROM tb_insframework i
+		INNER JOIN tb_insframework ins on ins.fid = i.fparent
+        INNER JOIN tb_insframework insf on insf.fid = ins.fparent where i.ftype=23
+		<if test="parent!=null and parent!=''">
+			and (i.fid=#{parent} or ins.fid=#{parent} or insf.fid=#{parent} or insf.fparent=#{parent})
+		</if>        
 	</select>
 	
 	<!-- 查询组织机构正常焊接时长 -->
 	<select id="getWeldItemInCount"  resultMap="dataMap">
 		select * from (
 		select i.fid,i.fname,SUM(w.fworktime) insid from tb_insframework i 
-		inner join tb_work w on w.fitemid=i.fid
+		inner join tb_work w on w.fmachine_itemid=i.fid
+		LEFT JOIN tb_insframework ins on ins.fid = i.fparent
+        LEFT JOIN tb_insframework insf on insf.fid = ins.fparent
 		where i.ftype=23
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
@@ -332,15 +596,27 @@
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
 				and w.fendtime &lt;= #{dto.dtoTime2}
+			</if>
+			<if test="dto.parent!=null and dto.parent!=''">
+				and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
 			</if>
 		</if>
 		group by i.fid
 		UNION ALL
 		select i.fid,i.fname,0 id from tb_insframework  i 
+		inner JOIN tb_insframework ins on ins.fid = i.fparent
+        inner JOIN tb_insframework insf on insf.fid = ins.fparent
 		where i.ftype=23 
+		<if test="dto!=null and dto!=''">
+			<if test="dto.parent!=null and dto.parent!=''">
+				and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
+			</if>
+		</if>
 		and i.fid not in 
 		(select i.fid from tb_insframework i 
-		inner join tb_work w on w.fitemid=i.fid 
+		inner join tb_work w on w.fmachine_itemid=i.fid 
+		LEFT JOIN tb_insframework ins on ins.fid = i.fparent
+        LEFT JOIN tb_insframework insf on insf.fid = ins.fparent
 		where i.ftype=23
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
@@ -348,6 +624,9 @@
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
 				and w.fendtime &lt;= #{dto.dtoTime2}
+			</if>
+			<if test="dto.parent!=null and dto.parent!=''">
+				and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
 			</if>
 		</if>
 		group by i.fid )
@@ -358,7 +637,9 @@
 	<select id="getWeldItemOutCount"  resultMap="dataMap">
 		select * from (
 		select i.fid,i.fname,SUM(w.falarmtime) insid from tb_insframework i 
-		inner join tb_alarm w on w.fitemid=i.fid
+		inner join tb_alarm w on w.fmachine_itemid=i.fid
+		LEFT JOIN tb_insframework ins on ins.fid = i.fparent
+        LEFT JOIN tb_insframework insf on insf.fid = ins.fparent
 		where i.ftype=23
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
@@ -366,15 +647,27 @@
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
 				and w.fendtime &lt;= #{dto.dtoTime2}
+			</if>
+			<if test="dto.parent!=null and dto.parent!=''">
+				and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
 			</if>
 		</if>
 		group by i.fid
 		UNION ALL
 		select i.fid,i.fname,0 insid from tb_insframework  i 
+		inner JOIN tb_insframework ins on ins.fid = i.fparent
+        inner JOIN tb_insframework insf on insf.fid = ins.fparent
 		where i.ftype=23 
+		<if test="dto!=null and dto!=''">
+			<if test="dto.parent!=null and dto.parent!=''">
+				and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
+			</if>
+		</if>
 		and i.fid not in 
 		(select i.fid from tb_insframework i 
-		inner join tb_alarm w on w.fitemid=i.fid 
+		inner join tb_alarm w on w.fmachine_itemid=i.fid 
+		LEFT JOIN tb_insframework ins on ins.fid = i.fparent
+        LEFT JOIN tb_insframework insf on insf.fid = ins.fparent
 		where i.ftype=23
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
@@ -382,6 +675,9 @@
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
 				and w.fendtime &lt;= #{dto.dtoTime2}
+			</if>
+			<if test="dto.parent!=null and dto.parent!=''">
+				and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
 			</if>
 		</if>
 		group by i.fid )
@@ -391,8 +687,10 @@
 	<!-- 查询焊机正常焊接时长 -->
 	<select id="getWeldMachineInCount"  resultMap="dataMap">
 		select * from (
-		SELECT m.fequipment_no fname,fname insname,SUM(w.fworktime) insid FROM tb_welding_machine m 
+		SELECT m.fequipment_no fname,i.fname insname,SUM(w.fworktime) insid FROM tb_welding_machine m 
 		inner join tb_insframework i on i.fid = m.finsframework_id 
+		LEFT JOIN tb_insframework ins on ins.fid = i.fparent
+        LEFT JOIN tb_insframework insf on insf.fid = ins.fparent
 		INNER JOIN tb_work w ON w.fmachine_id=m.fid 
 		where 1=1
 		<if test="dto!=null and dto!=''">
@@ -404,38 +702,44 @@
 			</if>
 		</if>
 		<if test="itemid!=null and itemid!=''">
-			and m.finsframework_id= #{itemid}
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
 		</if>
 		GROUP BY m.fid
 		UNION ALL
 		SELECT m.fequipment_no fname,i.fname insname,0 insid FROM tb_welding_machine m 
-		inner join tb_insframework i on i.fid = m.finsframework_id where
-		    m.fid NOT IN (SELECT m.fid FROM tb_welding_machine m 
-		    inner join tb_insframework i on i.fid = m.finsframework_id 
-		    INNER JOIN tb_work w ON w.fmachine_id=m.fid where 1=1 
-			<if test="dto!=null and dto!=''">
-				<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-					and w.fstarttime &gt;= #{dto.dtoTime1}
-				</if>
-				<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-					and w.fendtime &lt;= #{dto.dtoTime2}
-				</if>
+		inner join tb_insframework i on i.fid = m.finsframework_id
+		LEFT JOIN tb_insframework ins on ins.fid = i.fparent
+        LEFT JOIN tb_insframework insf on insf.fid = ins.fparent where 1=1
+        <if test="itemid!=null and itemid!=''">
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
+		</if>
+	    and m.fid NOT IN (SELECT m.fid FROM tb_welding_machine m 
+	    inner join tb_insframework i on i.fid = m.finsframework_id 
+		LEFT JOIN tb_insframework ins on ins.fid = i.fparent
+        LEFT JOIN tb_insframework insf on insf.fid = ins.fparent
+	    INNER JOIN tb_work w ON w.fmachine_id=m.fid where 1=1 
+		<if test="dto!=null and dto!=''">
+			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
+				and w.fstarttime &gt;= #{dto.dtoTime1}
 			</if>
-			<if test="itemid!=null and itemid!=''">
-				and m.finsframework_id= #{itemid}
+			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
+				and w.fendtime &lt;= #{dto.dtoTime2}
 			</if>
-		    GROUP BY m.fid )
-			<if test="itemid!=null and itemid!=''">
-				and m.finsframework_id= #{itemid}
-			</if>
+		</if>
+		<if test="itemid!=null and itemid!=''">
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
+		</if>
+	    GROUP BY m.fid )
 		)temp 
 	</select>
 	
 	<!-- 查询焊机超规范焊接时长 -->
 	<select id="getWeldMachineOutCount"  resultMap="dataMap">
 		select * from (
-		SELECT m.fequipment_no fname,fname insname,SUM(w.falarmtime) insid FROM tb_welding_machine m 
+		SELECT m.fequipment_no fname,i.fname insname,SUM(w.falarmtime) insid FROM tb_welding_machine m 
 		inner join tb_insframework i on i.fid = m.finsframework_id 
+		LEFT JOIN tb_insframework ins on ins.fid = i.fparent
+        LEFT JOIN tb_insframework insf on insf.fid = ins.fparent
 		INNER JOIN tb_alarm w ON w.fmachine_id=m.fid 
 		where 1=1
 		<if test="dto!=null and dto!=''">
@@ -446,11 +750,19 @@
 				and w.fendtime &lt;= #{dto.dtoTime2}
 			</if>
 		</if>
+		<if test="itemid!=null and itemid!=''">
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
+		</if>
 		GROUP BY m.fid
 		UNION ALL
 		SELECT m.fequipment_no fname,i.fname insname,0 insid FROM tb_welding_machine m 
-		inner join tb_insframework i on i.fid = m.finsframework_id where
-		    m.fid NOT IN (SELECT m.fid FROM tb_welding_machine m 
+		inner join tb_insframework i on i.fid = m.finsframework_id
+		LEFT JOIN tb_insframework ins on ins.fid = i.fparent
+        LEFT JOIN tb_insframework insf on insf.fid = ins.fparent where 1=1
+        <if test="itemid!=null and itemid!=''">
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
+		</if>
+	    and m.fid NOT IN (SELECT m.fid FROM tb_welding_machine m 
 		    inner join tb_insframework i on i.fid = m.finsframework_id 
 		    INNER JOIN tb_alarm w ON w.fmachine_id=m.fid where 1=1
 		<if test="dto!=null and dto!=''">
@@ -461,6 +773,9 @@
 				and w.fendtime &lt;= #{dto.dtoTime2}
 			</if>
 		</if>
+		 <if test="itemid!=null and itemid!=''">
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid})
+		</if>
 		    GROUP BY m.fid )
 		)temp 
 	</select>
@@ -469,7 +784,10 @@
 	<select id="getWeldPersonInCount"  resultMap="dataMap">
 		select * from 
 		( SELECT w.fwelder_no insname,w.fname,SUM(a.fworktime) insid FROM tb_welder w 
-		 inner join tb_work a on a.fwelder_id=w.fwelder_no 
+		 inner join tb_work a on a.fwelder_id=w.fid 
+		 inner join tb_insframework i on i.fid = w.Fowner
+		 left JOIN tb_insframework ins on ins.fid = i.fparent
+         left JOIN tb_insframework insf on insf.fid = ins.fparent
 		 where 1=1
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
@@ -477,14 +795,29 @@
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
 				and a.fendtime &lt;= #{dto.dtoTime2}
+			</if>
+			<if test="dto.parent!=null and dto.parent!=''">
+				and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
 			</if>
 		</if>
 		 GROUP BY w.fid 
 		 UNION ALL
 		 SELECT w.fwelder_no insname,w.fname,0 insid FROM tb_welder w
-		 where w.fid NOT IN (
+		 inner join tb_insframework i on i.fid = w.Fowner
+		 left JOIN tb_insframework ins on ins.fid = i.fparent
+         left JOIN tb_insframework insf on insf.fid = ins.fparent
+		 where 1=1 
+		 <if test="dto!=null and dto!=''">
+			<if test="dto.parent!=null and dto.parent!=''">
+				and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
+			</if>
+		</if>
+		 and w.fid NOT IN (
 		 SELECT w.fid FROM tb_welder w 
-		 inner join tb_work a on a.fwelder_id=w.fwelder_no 
+		 inner join tb_work a on a.fwelder_id=w.fid 
+		 inner join tb_insframework i on i.fid = w.Fowner
+		 left JOIN tb_insframework ins on ins.fid = i.fparent
+         left JOIN tb_insframework insf on insf.fid = ins.fparent
 		 where 1=1
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
@@ -492,6 +825,9 @@
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
 				and a.fendtime &lt;= #{dto.dtoTime2}
+			</if>
+			<if test="dto.parent!=null and dto.parent!=''">
+				and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
 			</if>
 		</if>
 		GROUP BY w.fid ) 
@@ -502,7 +838,10 @@
 	<select id="getWeldPersonOutCount"  resultMap="dataMap">
 		select * from 
 		( SELECT w.fwelder_no insname,w.fname,SUM(a.falarmtime) insid FROM tb_welder w 
-		 inner join tb_alarm a on a.fwelder_id=w.fwelder_no 
+		 inner join tb_alarm a on a.fwelder_id=w.fid 
+		 inner join tb_insframework i on i.fid = w.Fowner
+		 left JOIN tb_insframework ins on ins.fid = i.fparent
+         left JOIN tb_insframework insf on insf.fid = ins.fparent
 		 where 1=1
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
@@ -510,14 +849,29 @@
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
 				and a.fendtime &lt;= #{dto.dtoTime2}
+			</if>
+			<if test="dto.parent!=null and dto.parent!=''">
+				and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
 			</if>
 		</if>
 		 GROUP BY w.fid 
 		 UNION ALL
 		 SELECT w.fwelder_no insname,w.fname,0 insid FROM tb_welder w
-		 where w.fid NOT IN (
+		 inner join tb_insframework i on i.fid = w.Fowner
+		 left JOIN tb_insframework ins on ins.fid = i.fparent
+         left JOIN tb_insframework insf on insf.fid = ins.fparent
+		where 1=1 
+		 <if test="dto!=null and dto!=''">
+			<if test="dto.parent!=null and dto.parent!=''">
+				and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
+			</if>
+		</if>
+		and w.fid NOT IN (
 		 SELECT w.fid FROM tb_welder w 
-		 inner join tb_alarm a on a.fwelder_id=w.fwelder_no 
+		 inner join tb_alarm a on a.fwelder_id=w.fid 
+		 inner join tb_insframework i on i.fid = w.Fowner
+		 left JOIN tb_insframework ins on ins.fid = i.fparent
+         left JOIN tb_insframework insf on insf.fid = ins.fparent
 		 where 1=1
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
@@ -525,6 +879,9 @@
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
 				and a.fendtime &lt;= #{dto.dtoTime2}
+			</if>
+			<if test="dto.parent!=null and dto.parent!=''">
+				and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
 			</if>
 		</if>
 		GROUP BY w.fid ) 
@@ -535,13 +892,19 @@
 	<select id="getWeldPieceInCount"  resultMap="dataMap">
 		select * from (
 		SELECT j.fwelded_junction_no insname,SUM(a.fworktime) insid FROM tb_welded_junction j 
-		INNER JOIN tb_work a ON j.fwelded_junction_no=a.fjunction_id WHERE 1=1 
+		INNER JOIN tb_work a ON j.fid=a.fjunction_id
+		INNER JOIN tb_insframework i on i.fid = j.fitemId
+        LEFT JOIN tb_insframework ins on ins.fid = i.fparent
+        LEFT JOIN tb_insframework insf on insf.fid = ins.fparent WHERE 1=1 
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
 				and a.fstarttime &gt;= #{dto.dtoTime1}
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
 				and a.fendtime &lt;= #{dto.dtoTime2}
+			</if>
+			<if test="dto.parent!=null and dto.parent!=''">
+				and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
 			</if>
 		</if>
 		<if test="junctionno!=null and junctionno!=''">
@@ -549,22 +912,35 @@
 		</if>
 		GROUP BY j.fid
 		UNION ALL
-		SELECT j.fwelded_junction_no insname,0 insid FROM tb_welded_junction j where
-		    j.fid NOT IN (
-		    SELECT j.fid FROM tb_welded_junction j 
-		    INNER JOIN tb_work a ON j.fwelded_junction_no=a.fjunction_id WHERE 1=1 
+		SELECT j.fwelded_junction_no insname,0 insid FROM tb_welded_junction j
+		INNER JOIN tb_insframework i on i.fid = j.fitemId
+        LEFT JOIN tb_insframework ins on ins.fid = i.fparent
+        LEFT JOIN tb_insframework insf on insf.fid = ins.fparent where 1=1
+        <if test="dto!=null and dto!=''">
+			<if test="dto.parent!=null and dto.parent!=''">
+				and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
+			</if>
+		</if>
+		and j.fid NOT IN (
+		SELECT fjunction_id FROM tb_work l
+		INNER JOIN tb_insframework i on i.fid = l.fjunction_itemid
+        LEFT JOIN tb_insframework ins on ins.fid = i.fparent
+        LEFT JOIN tb_insframework insf on insf.fid = ins.fparent WHERE 1=1 
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and a.fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= #{dto.dtoTime1}
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and a.fendtime &lt;= #{dto.dtoTime2}
+				and fendtime &lt;= #{dto.dtoTime2}
+			</if>
+			<if test="dto.parent!=null and dto.parent!=''">
+				and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
 			</if>
 		</if>
 		<if test="junctionno!=null and junctionno!=''">
-			and j.fwelded_junction_no like #{junctionno}
+			and fjunction_no like #{junctionno}
 		</if>
-		    GROUP BY j.fid)
+		    GROUP BY fjunction_id)
 		<if test="junctionno!=null and junctionno!=''">
 			and j.fwelded_junction_no like #{junctionno}
 		</if>
@@ -575,13 +951,19 @@
 	<select id="getWeldPieceOutCount"  resultMap="dataMap">
 		select * from (
 		SELECT j.fwelded_junction_no insname,SUM(a.falarmtime) insid FROM tb_welded_junction j 
-		INNER JOIN tb_alarm a ON j.fwelded_junction_no=a.fjunction_id WHERE 1=1 
+		INNER JOIN tb_alarm a ON j.fid=a.fjunction_id
+		INNER JOIN tb_insframework i on i.fid = j.fitemId
+        LEFT JOIN tb_insframework ins on ins.fid = i.fparent
+        LEFT JOIN tb_insframework insf on insf.fid = ins.fparent WHERE 1=1 
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
 				and a.fstarttime &gt;= #{dto.dtoTime1}
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
 				and a.fendtime &lt;= #{dto.dtoTime2}
+			</if>
+			<if test="dto.parent!=null and dto.parent!=''">
+				and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
 			</if>
 		</if>
 		<if test="junctionno!=null and junctionno!=''">
@@ -590,22 +972,34 @@
 		    GROUP BY j.fid   
 		UNION ALL
 		SELECT j.fwelded_junction_no insname,0 insid FROM tb_welded_junction j 
-		where j.fid NOT IN (
-		SELECT j.fid FROM tb_welded_junction j 
-		INNER JOIN tb_alarm a ON j.fwelded_junction_no=a.fjunction_id 
-		WHERE 1=1 
+		INNER JOIN tb_insframework i on i.fid = j.fitemId
+        LEFT JOIN tb_insframework ins on ins.fid = i.fparent
+        LEFT JOIN tb_insframework insf on insf.fid = ins.fparent where 1=1
+        <if test="dto!=null and dto!=''">
+			<if test="dto.parent!=null and dto.parent!=''">
+				and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
+			</if>
+		</if>
+		and j.fid NOT IN (
+		SELECT fjunction_id FROM tb_alarm l
+		INNER JOIN tb_insframework i on i.fid = l.fjunction_itemid
+        LEFT JOIN tb_insframework ins on ins.fid = i.fparent
+        LEFT JOIN tb_insframework insf on insf.fid = ins.fparent WHERE 1=1 
 		<if test="dto!=null and dto!=''">
 			<if test="dto.dtoTime1!=null and dto.dtoTime1!=''">
-				and a.fstarttime &gt;= #{dto.dtoTime1}
+				and fstarttime &gt;= #{dto.dtoTime1}
 			</if>
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
-				and a.fendtime &lt;= #{dto.dtoTime2}
+				and fendtime &lt;= #{dto.dtoTime2}
+			</if>
+			<if test="dto.parent!=null and dto.parent!=''">
+				and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
 			</if>
 		</if>
 		<if test="junctionno!=null and junctionno!=''">
-			and j.fwelded_junction_no like #{junctionno}
+			and fjunction_no like #{junctionno}
 		</if>
-		    GROUP BY j.fid)
+		    GROUP BY fjunction_id)
 		<if test="junctionno!=null and junctionno!=''">
 			and j.fwelded_junction_no like #{junctionno}
 		</if>
@@ -614,9 +1008,11 @@
 	
 	<!-- 故障报表 -->
 	<select id="getFauit"  resultMap="dataMap">
-		SELECT m.fid,m.fequipment_no fname,i.fname insname,d.fvaluename,sum(falarmtime) num FROM tb_warn l 
+		SELECT m.fid,m.fequipment_no fname,i.fname insname,d.fvaluename,sum(fwarntime) num FROM tb_warn l 
 		INNER JOIN tb_welding_machine m on m.fid = l.fmachine_id 
-		INNER JOIN tb_insframework i on i.fid = m.finsframework_id 
+		INNER JOIN tb_insframework i on i.fid = l.fmachine_itemid 
+		LEFT JOIN tb_insframework ins on ins.fid = i.fparent
+        LEFT JOIN tb_insframework insf on insf.fid = ins.fparent
 		INNER JOIN tb_dictionary d on d.fvalue = l.fstatus
 		where d.ftypeid=15 
 		<if test="value>0">
@@ -629,6 +1025,9 @@
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
 				and fendtime &lt;= #{dto.dtoTime2}
 			</if>
+			<if test="dto.parent!=null and dto.parent!=''">
+				and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
+			</if>
 		</if>
 		group by m.fid
 	</select>
@@ -637,7 +1036,9 @@
 	<select id="getFauitDetail"  resultMap="dataMap">
 		SELECT m.fequipment_no fname,i.fname insname,d.fvaluename,FWeldTime time FROM tb_live_data l 
 		INNER JOIN tb_welding_machine m ON m.fid = l.fmachine_id 
-		INNER JOIN tb_insframework i on i.fid = m.finsframework_id 
+		INNER JOIN tb_insframework i on i.fid = l.fmachine_itemid 
+		LEFT JOIN tb_insframework ins on ins.fid = i.fparent
+        LEFT JOIN tb_insframework insf on insf.fid = ins.fparent
 		INNER join tb_dictionary d on d.fvalue=l.fstatus 
 		where d.ftypeid=15
 		<if test="id!=null and id!=''">
@@ -653,27 +1054,33 @@
 			<if test="dto.dtoTime2!=null and dto.dtoTime2!=''">
 				and FWeldTime &lt;= #{dto.dtoTime2}
 			</if>
+			<if test="dto.parent!=null and dto.parent!=''">
+				and (i.fid=#{dto.parent} or ins.fid=#{dto.parent} or insf.fid=#{dto.parent} or insf.fparent=#{dto.parent})
+			</if>
 		</if>
 	</select>
 	
 	<!-- 	焊工工作排行榜 -->
 	<select id="getWorkRank" resultMap="dataMap">
-		select sum(fworktime) /60/60 hour,w.fname,w.fwelder_no welderno,i.fname insname FROM  tb_work l  left JOIN  tb_welder w on w.fwelder_no = l.fwelder_id 
-		INNER join tb_insframework i on i.fid = l.fitemid INNER join tb_insframework ins on ins.fid = i.fparent 
+		select sum(fworktime) /60/60 hour,w.fname,w.fwelder_no welderno,i.fname insname FROM  tb_work l
+		left JOIN  tb_welder w on w.fid = l.fwelder_id 
+		INNER join tb_insframework i on i.fid = l.fwelder_itemid INNER join tb_insframework ins on ins.fid = i.fparent 
 		where fstarttime &gt;= #{time} and fendtime &lt; date_sub(date_sub(#{time},interval -1 day),interval 0 minute)
 		<if test="parent!=null and parent!=''">
 			AND ins.fid=#{parent}
 		</if>
-		group by w.fname ORDER by hour 
+		group by w.fname ORDER by hour desc
 		LIMIT 10
 	</select>
 	
 	<!-- 获取工作的焊机数-->
 	<select id="getWorkMachineCount" resultMap="dataMap">
 		select count(DISTINCT(fmachine_id)) machinenum
-		from tb_work where 1=1
+		from tb_work w INNER JOIN tb_insframework i on i.fid  = w.fmachine_itemid left JOIN tb_insframework ins on ins.fid = i.fparent
+        left JOIN tb_insframework insf on insf.fid = ins.fparent
+		where fmachine_id!=0
 		<if test="itemid!=null and itemid!=''">
-			and fitemid= #{itemid}
+			and (i.fid=#{itemid} or ins.fid=#{itemid} or insf.fid=#{itemid} or insf.fparent=#{itemid}) 
 		</if>
 		and fstarttime &gt;= #{time} and fendtime &lt; date_sub(date_sub(#{time},interval -1 day),interval 0 minute)
 	</select>
@@ -681,7 +1088,7 @@
 	<!-- 查询组织机构正常焊接时长 -->
 	<select id="getItemWeldTime"  resultMap="dataMap">
 		select * from (select i.fid,i.fname,SUM(fworktime)/60/60 hour,DATE_FORMAT( fstarttime,'%Y-%m-%d' ) time from tb_insframework i 
-		inner join tb_work w on w.fitemid=i.fid
+		inner join tb_work w on w.fmachine_itemid=i.fid
 		where i.ftype=23
 		<if test="dto!=null and dto!=''">
 			<if test="dto.parent!=null and dto.parent!=''">
@@ -702,7 +1109,7 @@
 	<select id="getItemOverProofTime"  resultMap="dataMap">
 		select * from (
 		select i.fid,i.fname,SUM(w.falarmtime)/60/60 hour,DATE_FORMAT( fstarttime,'%Y-%m-%d' ) time from tb_insframework i 
-		inner join tb_alarm w on w.fitemid=i.fid
+		inner join tb_alarm w on w.fmachine_itemid=i.fid
 		where i.ftype=23
 		<if test="dto!=null and dto!=''">
 			<if test="dto.parent!=null and dto.parent!=''">

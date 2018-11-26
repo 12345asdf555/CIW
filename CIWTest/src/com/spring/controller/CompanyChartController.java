@@ -8,12 +8,12 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
 import com.spring.dto.ModelDto;
 import com.spring.dto.WeldDto;
-import com.spring.model.Insframework;
 import com.spring.model.LiveData;
 import com.spring.page.Page;
 import com.spring.service.InsframeworkService;
@@ -226,10 +226,7 @@ public class CompanyChartController {
 			if(iutil.isNull(afreshLogin)){
 				return "0";
 			}
-			int types = insm.getUserInsfType(uid);
-			if(types==21){
-				parentId = insm.getUserInsfId(uid).toString();
-			}
+			parentId = insm.getUserInsfId(uid).toString();
 		}
 		BigInteger parent = null;
 		String s = (String)request.getSession().getAttribute("s");
@@ -249,26 +246,55 @@ public class CompanyChartController {
 			dto.setSearch(search);
 		}
 		page = new Page(pageIndex,pageSize,total);
-		List<ModelDto> list = lm.getCompanyhour(page,dto, parent);
+		int types = insm.getTypeById(parent),temptype = types;
+		String insftype = "fid";
+		if(types==20){
+			temptype = 21;
+			insftype = "companyid";
+		}else if(types==21){
+			temptype = 22;
+			insftype = "caustid";
+		}else if(types==22){
+			temptype = 23;
+		}
+		List<LiveData> insf = null;
+		if(iutil.isNull(request.getParameter("page"))){
+			insf = lm.getAllInsf(page, parent, temptype);
+		}else{
+			insf = lm.getAllInsf(parent, temptype);
+		}
 		long total = 0;
-		if(list != null){
-			PageInfo<ModelDto> pageinfo = new PageInfo<ModelDto>(list);
+		if(insf != null){
+			PageInfo<LiveData> pageinfo = new PageInfo<LiveData>(insf);
 			total = pageinfo.getTotal();
 		}
 		JSONObject json = new JSONObject();
 		JSONArray ary = new JSONArray();
 		JSONObject obj = new JSONObject();
 		try{
-			for(ModelDto l:list){
-				String[] str = l.getJidgather().split(",");
-				if(l.getJidgather().equals("0")){
-					json.put("jidgather", "0");
-				}else{
-					json.put("jidgather", str.length);
+			List<ModelDto> list = lm.getCompanyhour(dto, parent,insftype);
+			for(int i=0;i<insf.size();i++){
+				json.put("name",insf.get(i).getFname());
+				json.put("itemid",insf.get(i).getFid());
+				int jidgather = 0;
+				double manhour = 0;
+				for(int j=0;j<list.size();j++){
+					BigInteger insfid = list.get(j).getFid();
+					if(types==20){
+						insfid = list.get(j).getCompanyid();
+					}else if(types==21){
+						insfid = list.get(j).getCaustid();
+					}
+					if(insf.get(i).getFid().equals(insfid)){
+						String[] str = list.get(j).getJidgather().split(",");
+						if(!list.get(j).getJidgather().equals("0")){
+							jidgather = str.length;
+						}
+						manhour = list.get(j).getHous();
+					}
 				}
-				json.put("manhour", l.getHous());
-				json.put("name",l.getFname());
-				json.put("itemid",l.getFid());
+				json.put("jidgather", jidgather);
+				json.put("manhour", manhour);
 				ary.add(json);
 			}
 		}catch(Exception e){
@@ -299,10 +325,7 @@ public class CompanyChartController {
 			if(iutil.isNull(afreshLogin)){
 				return "0";
 			}
-			int types = insm.getUserInsfType(uid);
-			if(types==21){
-				parentId = insm.getUserInsfId(uid).toString();
-			}
+			parentId = insm.getUserInsfId(uid).toString();
 		}
 		BigInteger parent = null;
 		if(iutil.isNull(time1)){
@@ -345,20 +368,37 @@ public class CompanyChartController {
 		JSONArray arys = new JSONArray();
 		JSONArray arys1 = new JSONArray();
 		try{
-			List<ModelDto> list = lm.getCompanyOverproof(dto,parent);
-			List<LiveData> ins = lm.getAllInsf(parent,22);
-			BigInteger[] num = null;
+			int types = insm.getTypeById(parent),temptype = types;
+			String insftype = "fid";
+			if(types==20){
+				temptype = 21;
+				insftype = "companyid";
+			}else if(types==21){
+				temptype = 22;
+				insftype = "caustid";
+			}else if(types==22){
+				temptype = 23;
+			}
+			List<ModelDto> list = lm.getCompanyOverproof(dto,parent,insftype);
+			List<LiveData> ins = lm.getAllInsf(parent,temptype);
+			double[] num = null;
 			for(ModelDto live :time){
 				json.put("weldTime",live.getWeldTime());
 				arys.add(json);
 			}
 			for(int i=0;i<ins.size();i++){
-				num = new BigInteger[time.size()];
+				num = new double[time.size()];
 				for(int j=0;j<time.size();j++){
-					num[j] = new BigInteger("0");
+					num[j] = 0;
 					for(ModelDto l:list){
-						if(ins.get(i).getFname().equals(l.getFname()) && time.get(j).getWeldTime().equals(l.getWeldTime())){
-							num[j] = l.getOverproof();
+						BigInteger id = l.getFid();
+						if(types==20){
+							id = l.getCompanyid();
+						}else if(types==21){
+							id = l.getCaustid();
+						}
+						if(ins.get(i).getFid().equals(id) && time.get(j).getWeldTime().equals(l.getWeldTime())){
+							num[j] = (double)Math.round(l.getOverproof()*100)/100;
 						}
 					}
 				}
@@ -411,10 +451,7 @@ public class CompanyChartController {
 			if(iutil.isNull(afreshLogin)){
 				return "0";
 			}
-			int types = insm.getUserInsfType(uid);
-			if(types==21){
-				parentId = insm.getUserInsfId(uid).toString();
-			}
+			parentId = insm.getUserInsfId(uid).toString();
 		}
 		BigInteger parent = null;
 		if(iutil.isNull(time1)){
@@ -460,8 +497,19 @@ public class CompanyChartController {
 		JSONArray arys = new JSONArray();
 		JSONArray arys1 = new JSONArray();
 		try{
-			List<ModelDto> list = lm.getcompanyOvertime(dto, number, parent);
-			List<LiveData> ins = lm.getAllInsf(parent,22);
+			int types = insm.getTypeById(parent),temptype = types;
+			String insftype = "fid";
+			if(types==20){
+				temptype = 21;
+				insftype = "companyid";
+			}else if(types==21){
+				temptype = 22;
+				insftype = "caustid";
+			}else if(types==22){
+				temptype = 23;
+			}
+			List<ModelDto> list = lm.getcompanyOvertime(dto, number, parent,insftype);
+			List<LiveData> ins = lm.getAllInsf(parent,temptype);
 			int[] num = null;
 			for(ModelDto live :time){
 				json.put("weldTime",live.getWeldTime());
@@ -472,7 +520,13 @@ public class CompanyChartController {
 				for(int j=0;j<time.size();j++){
 					num[j] = 0;
 					for(ModelDto l:list){
-						if(ins.get(i).getFname().equals(l.getFname()) && time.get(j).getWeldTime().equals(l.getWeldTime())){
+						BigInteger id = l.getFid();
+						if(types==20){
+							id = l.getCompanyid();
+						}else if(types==21){
+							id = l.getCaustid();
+						}
+						if(ins.get(i).getFid().equals(id) && time.get(j).getWeldTime().equals(l.getWeldTime())){
 							num[j] = Integer.parseInt(l.getOvertime().toString());
 						}
 					}
@@ -525,10 +579,7 @@ public class CompanyChartController {
 			if(iutil.isNull(afreshLogin)){
 				return "0";
 			}
-			int types = insm.getUserInsfType(uid);
-			if(types==21){
-				parentId = insm.getUserInsfId(uid).toString();
-			}
+			parentId = insm.getUserInsfId(uid).toString();
 		}
 		BigInteger parent = null;
 		if(iutil.isNull(time1)){
@@ -571,9 +622,20 @@ public class CompanyChartController {
 		JSONArray arys = new JSONArray();
 		JSONArray arys1 = new JSONArray();
 		try{
-			List<ModelDto> list = lm.getCompanyLoads(dto,parent);
-			List<ModelDto> machine = lm.getCompanyMachineCount(dto, parent);
-			List<LiveData> ins = lm.getAllInsf(parent,22);
+			int types = insm.getTypeById(parent),temptype = types;
+			String insftype = "fid";
+			if(types==20){
+				temptype = 21;
+				insftype = "companyid";
+			}else if(types==21){
+				temptype = 22;
+				insftype = "caustid";
+			}else if(types==22){
+				temptype = 23;
+			}
+			List<ModelDto> list = lm.getCompanyLoads(dto,parent,insftype);
+			List<ModelDto> machine = lm.getLiveMachineCount(dto, parent,insftype);
+			List<LiveData> ins = lm.getAllInsf(parent,temptype);
 			double[] num = null;
 			for(ModelDto live :time){
 				json.put("weldTime",live.getWeldTime());
@@ -585,7 +647,15 @@ public class CompanyChartController {
 					num[j] = 0;
 					for(ModelDto l:list){
 						for(ModelDto m:machine){
-							if(m.getWeldTime().equals(l.getWeldTime()) && m.getFid().equals(l.getIid())){
+							BigInteger id = l.getFid(),machineid = m.getFid();
+							if(types==20){
+								id = l.getCompanyid();
+								machineid = m.getCompanyid();
+							}else if(types==21){
+								id = l.getCaustid();
+								machineid = m.getCaustid();
+							}
+							if(m.getWeldTime().equals(l.getWeldTime()) && machineid.equals(id)){
 								if(ins.get(i).getFname().equals(l.getFname()) && time.get(j).getWeldTime().equals(l.getWeldTime())){
 									num[j] = (double)Math.round(l.getLoads()/m.getLoads()*100*100)/100;
 								}
@@ -641,10 +711,7 @@ public class CompanyChartController {
 			if(iutil.isNull(afreshLogin)){
 				return "0";
 			}
-			int types = insm.getUserInsfType(uid);
-			if(types==21){
-				parentId = insm.getUserInsfId(uid).toString();
-			}
+			parentId = insm.getUserInsfId(uid).toString();
 		}
 		BigInteger parent = null;
 		if(iutil.isNull(time1)){
@@ -687,9 +754,20 @@ public class CompanyChartController {
 		JSONArray arys = new JSONArray();
 		JSONArray arys1 = new JSONArray();
 		try{
-			List<ModelDto> list = lm.getCompanyNoLoads(dto,parent);
-			List<ModelDto> machine = lm.getCompanyMachineCount(dto, parent);
-			List<LiveData> ins = lm.getAllInsf(parent,22);
+			int types = insm.getTypeById(parent),temptype = types;
+			String insftype = "fid";
+			if(types==20){
+				temptype = 21;
+				insftype = "companyid";
+			}else if(types==21){
+				temptype = 22;
+				insftype = "caustid";
+			}else if(types==22){
+				temptype = 23;
+			}
+			List<ModelDto> list = lm.getCompanyNoLoads(dto,parent,insftype);
+			List<ModelDto> machine = lm.getLiveMachineCount(dto, parent,insftype);
+			List<LiveData> ins = lm.getAllInsf(parent,temptype);
 			double[] num = null;
 			for(ModelDto live :time){
 				json.put("weldTime",live.getWeldTime());
@@ -701,7 +779,15 @@ public class CompanyChartController {
 					num[j] = 0;
 					for(ModelDto l:list){
 						for(ModelDto m:machine){
-							if(m.getWeldTime().equals(l.getWeldTime()) && m.getFid().equals(l.getIid())){
+							BigInteger id = l.getFid(),machineid = m.getFid();
+							if(types==20){
+								id = l.getCompanyid();
+								machineid = m.getCompanyid();
+							}else if(types==21){
+								id = l.getCaustid();
+								machineid = m.getCaustid();
+							}
+							if(m.getWeldTime().equals(l.getWeldTime()) && machineid.equals(id)){
 								if(ins.get(i).getFname().equals(l.getFname()) && time.get(j).getWeldTime().equals(l.getWeldTime())){
 									BigInteger livecount = lm.getCountByTime(l.getIid(), l.getWeldTime(),null);
 									num[j] = (double)Math.round(l.getLoads()/livecount.doubleValue()/m.getLoads()*100*100)/100;
@@ -758,10 +844,7 @@ public class CompanyChartController {
 			if(iutil.isNull(afreshLogin)){
 				return "0";
 			}
-			int types = insm.getUserInsfType(uid);
-			if(types==21){
-				parentId = insm.getUserInsfId(uid).toString();
-			}
+			parentId = insm.getUserInsfId(uid).toString();
 		}
 		BigInteger parent = null;
 		if(iutil.isNull(time1)){
@@ -805,7 +888,15 @@ public class CompanyChartController {
 		JSONArray arys1 = new JSONArray();
 		try{
 			List<ModelDto> list = lm.getCompanyIdle(dto,parent);
-			List<LiveData> ins = lm.getAllInsf(parent,22);
+			int types = insm.getTypeById(parent),temptype = types;
+			if(types==20){
+				temptype = 21;
+			}else if(types==21){
+				temptype = 22;
+			}else if(types==22){
+				temptype = 23;
+			}
+			List<LiveData> ins = lm.getAllInsf(parent,temptype);
 			double[] num = null;
 			for(ModelDto live :time){
 				json.put("weldTime",live.getWeldTime());
@@ -817,7 +908,13 @@ public class CompanyChartController {
 				for(int j=0;j<time.size();j++){
 					num[j] = count;
 					for(ModelDto l:list){
-						if(ins.get(i).getFname().equals(l.getFname()) && time.get(j).getWeldTime().equals(l.getWeldTime())){
+						BigInteger id = l.getFid();
+						if(types==20){
+							id = l.getCompanyid();
+						}else if(types==21){
+							id = l.getCaustid();
+						}
+						if(ins.get(i).getFid().equals(id) && time.get(j).getWeldTime().equals(l.getWeldTime())){
 							num[j] = count - l.getNum().doubleValue();
 						}
 					}
@@ -911,7 +1008,7 @@ public class CompanyChartController {
 	}
 	
 	/**
-	 * 事业部下拉框
+	 * 下拉框
 	 * @return
 	 */
 	@RequestMapping("getCaust")
@@ -931,15 +1028,20 @@ public class CompanyChartController {
 			obj.put("ary", ary);
 			return obj.toString();
 		}
-		int type = insm.getUserInsfType(uid);
-		if(type==21){
-			parent = insm.getUserInsfId(uid);
+		parent = insm.getUserInsfId(uid);
+		int types = insm.getTypeById(parent),temptype = types;
+		if(types==20){
+			temptype = 21;
+		}else if(types==21){
+			temptype = 22;
+		}else if(types==22){
+			temptype = 23;
 		}
 		try{
-			List<Insframework> list = insm.getInsByType(22,parent);
-			for(Insframework i:list){
-				json.put("id", i.getId());
-				json.put("name", i.getName());
+			List<LiveData> list = lm.getAllInsf(parent, temptype);
+			for(int i=0;i<list.size();i++){
+				json.put("id", list.get(i).getFid());
+				json.put("name", list.get(i).getFname());
 				ary.add(json);
 			}
 		}catch(Exception e){
@@ -960,14 +1062,6 @@ public class CompanyChartController {
 		String time1 = request.getParameter("dtoTime1");
 		String time2 = request.getParameter("dtoTime2");
 		String parentId = request.getParameter("parent");
-		String nextparent = request.getParameter("nextparent");
-		int min = -1,max = -1;
-		if(iutil.isNull(request.getParameter("min"))){
-			min = Integer.parseInt(request.getParameter("min"));
-		}
-		if(iutil.isNull(request.getParameter("max"))){
-			max = Integer.parseInt(request.getParameter("max"));
-		}
 		WeldDto dto = new WeldDto();
 		BigInteger parent = null;
 		if(iutil.isNull(time1)){
@@ -976,15 +1070,22 @@ public class CompanyChartController {
 		if(iutil.isNull(time2)){
 			dto.setDtoTime2(time2);
 		}
-		if(iutil.isNull(nextparent)){
-			parent = new BigInteger(nextparent);
-		}else if(iutil.isNull(parentId)){
+		if(iutil.isNull(parentId)){
 			parent = new BigInteger(parentId);
+		}else{
+			parent = insm.getUserInsframework();
 		}
 		pageIndex = Integer.parseInt(request.getParameter("page"));
 		pageSize = Integer.parseInt(request.getParameter("rows"));
 		page = new Page(pageIndex,pageSize,total);
-		List<ModelDto> list = lm.companyEfficiency(page, parent, dto, min, max);
+		int types = insm.getTypeById(parent);
+		String insftype = "fid";
+		if(types==20){
+			insftype = "companyid";
+		}else if(types==21){
+			insftype = "caustid";
+		}
+		List<ModelDto> list = lm.companyEfficiency(page, parent, dto,insftype);
 		PageInfo<ModelDto> pageinfo = new PageInfo<ModelDto>(list);
 		long total = pageinfo.getTotal();
 		JSONObject json = new JSONObject();
@@ -992,8 +1093,17 @@ public class CompanyChartController {
 		JSONObject obj = new JSONObject();
 		try{
 			for(ModelDto m : list){
-				json.put("id",m.getFid());
-				json.put("iname",m.getIname());
+				BigInteger id = m.getFid();
+				String name = m.getFname();
+				if(types==20){
+					id = m.getCompanyid();
+					name = m.getCompanyname();
+				}else if(types==21){
+					id = m.getCaustid();
+					name = m.getCaustname();
+				}
+				json.put("id",id);
+				json.put("iname",name);
 				json.put("wname",m.getWname());
 				json.put("wid",m.getFwelder_id());
 				String[] str = m.getJidgather().split(",");
@@ -1031,10 +1141,7 @@ public class CompanyChartController {
 			if(iutil.isNull(afreshLogin)){
 				return "0";
 			}
-			int types = insm.getUserInsfType(uid);
-			if(types==21){
-				parentId = insm.getUserInsfId(uid).toString();
-			}
+			parentId = insm.getUserInsfId(uid).toString();
 		}
 		if(iutil.isNull(time1)){
 			dto.setDtoTime1(time1);
@@ -1085,10 +1192,7 @@ public class CompanyChartController {
 			if(iutil.isNull(afreshLogin)){
 				return "0";
 			}
-			int types = insm.getUserInsfType(uid);
-			if(types==21){
-				parentId = insm.getUserInsfId(uid).toString();
-			}
+			parentId = insm.getUserInsfId(uid).toString();
 		}
 		if(iutil.isNull(time1)){
 			dto.setDtoTime1(time1);
@@ -1113,6 +1217,149 @@ public class CompanyChartController {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+		obj.put("rows", ary);
+		return obj.toString();
+	}
+	
+	/**
+	 * 获取工效图表信息
+	 * @param request
+	 * @param parent
+	 * @return
+	 */
+	@RequestMapping("/getCaustEfficiencyChart")
+	@ResponseBody
+	public String getCaustEfficiency(HttpServletRequest request,@RequestParam BigInteger parent){
+		JSONObject obj = new JSONObject();
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		try{
+			String time1 = request.getParameter("dtoTime1");
+			String time2 = request.getParameter("dtoTime2");
+			String parentid = request.getParameter("parent");
+			WeldDto dto = new WeldDto();
+			if(iutil.isNull(time1)){
+				dto.setDtoTime1(time1);
+			}
+			if(iutil.isNull(time2)){
+				dto.setDtoTime2(time2);
+			}
+			if(iutil.isNull(parentid)){
+				parent = new BigInteger(parentid);
+			}else{
+				parent = insm.getUserInsframework();
+			}
+			List<ModelDto> list = lm.getEfficiencyChartNum(dto, parent);
+			List<ModelDto> efficiency = null;
+			String[] num1 = new String[10];
+			double[] num2 = new double[10];
+			int oldnum = 0,newnum = 0,maxnum = 0;
+			for(ModelDto m:list){
+				if(m!=null){
+					if(m.getAvgnum()==0){
+						m.setAvgnum(2);
+						if(m.getMinnum()>0){
+							num1[0] = m.getMinnum()-1+"-"+(m.getMinnum()+m.getAvgnum());
+						}else{
+							num1[0] = m.getMinnum()+"-"+(m.getMinnum()+m.getAvgnum());
+						}
+						for(int i=1;i<10;i++){
+							oldnum = m.getMinnum()+m.getAvgnum()*i+1;
+							newnum = m.getMinnum()+m.getAvgnum()*(i+1);
+							num1[i] = oldnum+"-"+newnum;
+						}
+					}else{
+						if(m.getMinnum()>0){
+							num1[0] = m.getMinnum()-1+"-"+(m.getMinnum()+m.getAvgnum());
+						}else{
+							num1[0] = m.getMinnum()+"-"+(m.getMinnum()+m.getAvgnum());
+						}
+						for(int i=1;i<9;i++){
+							oldnum = m.getMinnum()+m.getAvgnum()*i+1;
+							newnum = m.getMinnum()+m.getAvgnum()*(i+1);
+							num1[i] = oldnum+"-"+newnum;
+						}
+						maxnum = m.getMinnum()+m.getAvgnum()*10+10;
+						num1[9] = newnum+"-"+maxnum;
+					}
+					efficiency = lm.getEfficiencyChart(dto, parent, m.getMinnum(), m.getAvgnum());
+					for(ModelDto e:efficiency){
+						double sum = e.getSum1()+e.getSum2()+e.getSum3()+e.getSum4()+e.getSum5()+e.getSum6()+e.getSum7()+e.getSum8()+e.getSum9()+e.getSum10();
+						num2[0] = e.getSum1()/sum*100;num2[1] = e.getSum2()/sum*100;
+						num2[2] = e.getSum3()/sum*100;num2[3] = e.getSum4()/sum*100;
+						num2[4] = e.getSum5()/sum*100;num2[5] = e.getSum6()/sum*100;
+						num2[6] = e.getSum7()/sum*100;num2[7] = e.getSum7()/sum*100;
+						num2[8] = e.getSum9()/sum*100;num2[9] = e.getSum10()/sum*100;
+					}
+					for(int i=0;i<num2.length;i++){
+						num2[i] = (double)Math.round(num2[i]*100)/100;
+					}
+					json.put("num1", num1);
+					json.put("num2", num2);
+					ary.add(json);
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		obj.put("ary", ary);
+		return obj.toString();
+	}
+	
+	/**
+	 * 获取焊口分类信息
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/getItemHousClassify")
+	@ResponseBody
+	public String getItemHousClassify(HttpServletRequest request){
+		String parentId = request.getParameter("item");
+		String searchStr = request.getParameter("searchStr");
+		if(!iutil.isNull(parentId)){
+			//处理用户数据权限
+			BigInteger uid = lm.getUserId(request);
+			String afreshLogin = (String)request.getAttribute("afreshLogin");
+			if(iutil.isNull(afreshLogin)){
+				return "0";
+			}
+			parentId = insm.getUserInsfId(uid).toString();
+		}
+		BigInteger parent = null;
+		if(iutil.isNull(parentId)){
+			parent = new BigInteger(parentId);
+		}else{
+			parent = insm.getUserInsframework();
+		}
+		pageIndex = Integer.parseInt(request.getParameter("page"));
+		pageSize = Integer.parseInt(request.getParameter("rows"));
+		page = new Page(pageIndex,pageSize,total);
+		List<ModelDto> list = lm.getHousClassify(page, parent, searchStr);
+		PageInfo<ModelDto> pageinfo = new PageInfo<ModelDto>(list);
+		long total = pageinfo.getTotal();
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		JSONObject obj = new JSONObject();
+		try{
+			String s = "";
+			for(ModelDto m : list){
+				json.put("fid",m.getFid());
+				json.put("material",m.getMaterial());
+				json.put("nextmaterial",m.getNextmaterial());
+				json.put("wall_thickness",m.getWallThickness());
+				json.put("nextwall_thickness",m.getNextwallThickness());
+				json.put("external_diameter",m.getExternalDiameter());
+				json.put("nextExternal_diameter",m.getNextexternaldiameter());
+				ary.add(json);
+				s = " (fmaterial='"+list.get(0).getMaterial()+"' and fexternal_diameter='"+list.get(0).getExternalDiameter()+
+						"' and fwall_thickness='"+list.get(0).getWallThickness()+"' and fnextExternal_diameter='"+list.get(0).getNextexternaldiameter()+
+						"' and fnextwall_thickness ='"+list.get(0).getNextwallThickness()+"' and Fnext_material ='"+list.get(0).getNextmaterial()+"')";
+			}
+			request.getSession().setAttribute("s", s);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		obj.put("total", total);
 		obj.put("rows", ary);
 		return obj.toString();
 	}

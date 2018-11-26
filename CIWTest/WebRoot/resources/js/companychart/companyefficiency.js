@@ -22,7 +22,7 @@ function showcompanyEfficiencyChart(){
 	 $.ajax({  
          type : "post",  
          async : false,
-         url : "caustChart/getCaustEfficiencyChart"+chartStr,
+         url : "companyChart/getCaustEfficiencyChart"+chartStr,
          data : {},  
          dataType : "json", //返回数据形式为json  
          success : function(result) {  
@@ -152,20 +152,17 @@ function CompanyEfficiencyDatagrid(){
 		showPageList : false,
 		columns : [ [ {
 			field : 'id',
-			title : '事业部id',
+			title : '部门id',
 			width : 100,
 			halign : "center",
 			align : "left",
 			hidden:true
 		}, {
 			field : 'iname',
-			title : '事业部',
+			title : '所属部门',
 			width : 100,
 			halign : "center",
-			align : "left"//,
-//			formatter : function(value,row,index){
-//				return "<a href='caustChart/goCaustEfficiency?nextparent="+row.id+"'>"+value+"</a>";
-//			}
+			align : "left"
 		}, {
 			field : 'wname',
 			title : '焊工姓名',

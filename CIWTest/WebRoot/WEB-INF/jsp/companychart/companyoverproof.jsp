@@ -58,7 +58,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		按组织机构和日期对超规范焊接趋势统计：<br/>
 		统计时间段内的超规范焊接趋势；<br/>
 		X轴：日期<br/>
-		Y轴：超标时长(s)<br/></div>
+		Y轴：超标时长(h)<br/></div>
 		<div id="companyOverproofChart" style="height:50%;width:65%;margin-left:21%;margin-right:21%;margin-bottom:10px;"></div>
 		
 	    <table id="companyOverproofTable" style="table-layout: fixed; width:100%;"></table>

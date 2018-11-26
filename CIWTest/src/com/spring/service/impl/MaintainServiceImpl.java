@@ -31,8 +31,8 @@ public class MaintainServiceImpl implements MaintainService {
 	}
 
 	@Override
-	public List<WeldingMaintenance> getWeldingMaintenanceAll(String str) {
-		return wmm.getWeldingMaintenanceAll(null,str);
+	public List<WeldingMaintenance> getWeldingMaintenanceAll(BigInteger parent,String str) {
+		return wmm.getWeldingMaintenanceAll(parent,str);
 	}
 
 	@Override

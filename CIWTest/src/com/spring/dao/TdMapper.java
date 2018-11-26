@@ -19,6 +19,7 @@ public interface TdMapper {
 	String findweld(String weldid);
 	String findInsname(long uid);
 	String findPosition(String equip);
-	List<Td> allWeldname();
+	List<Td> allWeldname(@Param("parent")BigInteger parent);
 	List<Td> findMachine(String fposition);
+	Td getLiveTime(@Param("time")String time,@Param("machineid")BigInteger machineid);
 }

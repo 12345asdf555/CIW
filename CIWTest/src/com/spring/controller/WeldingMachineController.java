@@ -358,7 +358,9 @@ public class WeldingMachineController {
 		JSONArray ary = new JSONArray();
 		JSONObject obj = new JSONObject();
 		try{
-			List<Insframework> list = im.getInsAll(0);
+			//数据权限处理
+			BigInteger parent = im.getUserInsframework();
+			List<Insframework> list = im.getInsAll(0,parent);
 			for(Insframework i:list){
 				json.put("id", i.getId());
 				json.put("name", i.getName());

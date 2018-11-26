@@ -36,6 +36,7 @@ public class InsframeworkController {
 	private int pageIndex = 1;
 	private int pageSize = 10;
 	private int total = 0;
+	private BigInteger value3;
 	
 	@Autowired
 	private InsframeworkService im;
@@ -57,39 +58,6 @@ public class InsframeworkController {
 		return "insframework/insframework";
 	}
 	
-	/**
-	 * 跳转新增页面
-	 * @return
-	 */
-	@RequestMapping("/goaddInsframework")
-	public String goaddInsframework(){
-		return "insframework/addinsframework";
-	}
-	
-	/**
-	 * 跳转修改页面
-	 * @return
-	 */
-	@RequestMapping("/goeditInsframework")
-	public String goeditInsframework(HttpServletRequest request,@RequestParam String id){
-		Insframework insf = im.getInsfAllById(new BigInteger(id));
-		request.setAttribute("insf", insf);
-		return "insframework/editinsframework";
-	}
-	
-	/**
-	 * 跳转删除页面
-	 * @return
-	 */
-	@RequestMapping("/goremoveInsframework")
-	public String goremoveInsframework(HttpServletRequest request,@RequestParam String id){
-		Insframework insf = im.getInsfAllById(new BigInteger(id));
-		request.setAttribute("typename", insf.getTypename());
-		request.setAttribute("parent", im.getInsframeworkById(new BigInteger(id)));
-		request.setAttribute("insf", insf);
-		return "insframework/removeinsframework";
-	}
-	
 	@RequestMapping("/getInsframeworkList")
 	@ResponseBody
 	public String getWeldingMachine(HttpServletRequest request){
@@ -102,16 +70,18 @@ public class InsframeworkController {
 		WeldDto dto = new WeldDto();
 		if(iutil.isNull(parentId)){
 			parent = new BigInteger(parentId);
-			int type = im.getTypeById(parent);
-			if(type==20){
-				dto.setBloc("bloc");
-			}else if(type==21){
-				dto.setCompany("company");
-			}else if(type==22){
-				dto.setCaust("caust");
-			}else if(type==23){
-				dto.setItem("item");
-			}
+		}else{
+			parent = im.getUserInsframework();
+		}
+		int type = im.getTypeById(parent);
+		if(type==20){
+			dto.setBloc("bloc");
+		}else if(type==21){
+			dto.setCompany("company");
+		}else if(type==22){
+			dto.setCaust("caust");
+		}else if(type==23){
+			dto.setItem("item");
 		}
 		page = new Page(pageIndex,pageSize,total);
 		
@@ -246,11 +216,10 @@ public class InsframeworkController {
 			Object object = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			MyUser myuser = (MyUser)object;
 			List<Insframework> insparent = im.getInsByUserid(new BigInteger(myuser.getId()+""));
-			List<Insframework> instype = im.getInsByUserid(new BigInteger(myuser.getId()+""));
 			List<Insframework> ins = null;
 			for(Insframework i:insparent){
 				if(i.getType()==20){
-					ins = im.getInsAll(23);
+					ins = im.getInsAll(23,null);
 				}else if(i.getType()==21){
 					ins = im.getInsIdByParent(i.getId(),23);
 					Insframework insf = im.getInsById(i.getId());
@@ -263,7 +232,7 @@ public class InsframeworkController {
 					ins = im.getInsIdByParent(i.getId(),23);
 					if(type==22){
 						Insframework insf = new Insframework();
-						BigInteger parent = im.getParentById(instype.get(0).getId());
+						BigInteger parent = im.getParentById(i.getId());
 						insf.setId(parent);
 						insf.setName(im.getInsframeworkById(parent));
 						ins.add(ins.size(),insf);
@@ -272,7 +241,7 @@ public class InsframeworkController {
 					ins = im.getInsIdByParent(i.getId(),23);
 					if(type==23){
 						Insframework insf = new Insframework();
-						BigInteger parent = im.getParentById(instype.get(0).getId());
+						BigInteger parent = im.getParentById(i.getId());
 						insf.setId(parent);
 						insf.setName(im.getInsframeworkById(parent));
 						ins.add(ins.size(),insf);
@@ -295,7 +264,7 @@ public class InsframeworkController {
 			}
 			List<Dictionarys> dictionary = null;
 			//获取枚举值
-			for(Insframework i:instype){
+			for(Insframework i:insparent){
 				if(i.getType()==20){
 					dictionary = dm.getDicValueByValue(2, 20);
 				}else if(i.getType()==21){
@@ -381,7 +350,26 @@ public class InsframeworkController {
 	@ResponseBody
 	public void getConmpany(HttpServletResponse response){
         String str ="";  
-        StringBuilder json = new StringBuilder();  
+        StringBuilder json = new StringBuilder();
+        int type = im.getTypeById(im.getUserInsframework());
+        BigInteger value1,value2;
+        if(type==20){
+			value1=null;
+			value2=null;
+			value3=null;
+		}else if(type==21){
+			value1=im.getUserInsframework();
+			value2=null;
+			value3=null;
+		}else if(type==22){
+			value1=im.getParent(im.getUserInsframework()).getId();
+			value2=im.getUserInsframework();
+			value3=null;
+		}else{
+			value1=im.getParent(im.getParent(im.getUserInsframework()).getId()).getId();
+			value2=im.getParent(im.getUserInsframework()).getId();
+			value3=im.getUserInsframework();
+		}
         // 拼接根节点  
         Insframework b = im.getBloc();
         if(b!=null){  
@@ -390,7 +378,7 @@ public class InsframeworkController {
 	        json.append(",\"text\":\"" +b.getName()+ "\"");
 	        json.append(",\"state\":\"open\"");  
 	        // 获取根节点下的所有子节点  
-	        List<Insframework> treeList = im.getConmpany();
+	        List<Insframework> treeList = im.getConmpany(value1);
 	        // 遍历子节点下的子节点  
 	        if(treeList!=null && treeList.size()!=0){  
 	            json.append(",\"children\":[");  
@@ -403,7 +391,7 @@ public class InsframeworkController {
 	                // 该节点有子节点  
 	                // 设置为关闭状态,而从构造异步加载tree  
 	              
-	                List<Insframework> tList = im.getCause(t.getId());  
+	                List<Insframework> tList = im.getCause(t.getId(),value2);  
 	                if(tList!=null && tList.size()!=0){// 存在子节点  
 	                     json.append(",\"children\":[");  
 	                     json.append(dealJsonFormat(tList));// 存在子节点的都放在一个工具类里面处理了
@@ -435,7 +423,7 @@ public class InsframeworkController {
             json.append(",\"state\":\"open\"");
             
             // 获取根节点下的所有子节点  
-            List<Insframework> treeLists = im.getCause(tree.getId());
+            List<Insframework> treeLists = im.getCause(tree.getId(),value3);
             // 遍历子节点下的子节点  
             if(treeLists!=null && treeLists.size()!=0){  
                 json.append(",\"children\":["); 
@@ -469,7 +457,26 @@ public class InsframeworkController {
 	@ResponseBody
 	public void getMachine(HttpServletResponse response){
         String str ="";  
-        StringBuilder json = new StringBuilder();  
+        StringBuilder json = new StringBuilder();
+        int type = im.getTypeById(im.getUserInsframework());
+        BigInteger value1,value2;
+        if(type==20){
+			value1=null;
+			value2=null;
+			value3=null;
+		}else if(type==21){
+			value1=im.getUserInsframework();
+			value2=null;
+			value3=null;
+		}else if(type==22){
+			value1=im.getParent(im.getUserInsframework()).getId();
+			value2=im.getUserInsframework();
+			value3=null;
+		}else{
+			value1=im.getParent(im.getParent(im.getUserInsframework()).getId()).getId();
+			value2=im.getParent(im.getUserInsframework()).getId();
+			value3=im.getUserInsframework();
+		}
         // 拼接根节点  
         Insframework b = im.getBloc();
         if(b!=null){  
@@ -478,7 +485,7 @@ public class InsframeworkController {
 	        json.append(",\"text\":\"" +b.getName()+ "\"");
 	        json.append(",\"state\":\"open\"");  
 	        // 获取根节点下的所有子节点  
-	        List<Insframework> treeList = im.getConmpany();
+	        List<Insframework> treeList = im.getConmpany(value1);
 	        // 遍历子节点下的子节点  
 	        if(treeList!=null && treeList.size()!=0){  
 	            json.append(",\"children\":[");  
@@ -491,7 +498,7 @@ public class InsframeworkController {
 	                // 该节点有子节点  
 	                // 设置为关闭状态,而从构造异步加载tree  
 	              
-	                List<Insframework> tList = im.getCause(t.getId());  
+	                List<Insframework> tList = im.getCause(t.getId(),value2);  
 	                if(tList!=null && tList.size()!=0){// 存在子节点  
 	                     json.append(",\"children\":[");  
 	                     json.append(dealJsonFormats(tList));// 存在子节点的都放在一个工具类里面处理了
@@ -520,7 +527,7 @@ public class InsframeworkController {
             json.append(",\"state\":\"open\"");
             
             // 获取根节点下的所有子节点  
-            List<Insframework> treeLists = im.getCause(tree.getId());
+            List<Insframework> treeLists = im.getCause(tree.getId(),value3);
             // 遍历子节点下的子节点  
             if(treeLists!=null && treeLists.size()!=0){  
                 json.append(",\"children\":["); 

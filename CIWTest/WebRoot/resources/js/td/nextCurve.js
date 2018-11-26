@@ -40,6 +40,7 @@
     var chart;
     var series1;
     var chart1;
+    var time1 = 0,time2 = 0;
 	var led=["0,1,2,4,5,6","2,5","0,2,3,4,6","0,2,3,5,6","1,2,3,5","0,1,3,5,6","0,1,3,4,5,6","0,2,5","0,1,2,3,4,5,6","0,1,2,3,5,6"];
 	$(function(){
 		var width = $("#treeDiv").width();
@@ -111,6 +112,32 @@
 		          alert("数据请求失败，请联系系统管理员!");  
 		      }  
 		 });*/
+		//获取工作、焊接时间以及设备类型
+		$.ajax({
+			type : "post",
+			async : false,
+			url : "td/getLiveTime?machineid="+$("#machineid").val(),
+			data : {},
+			dataType : "json", //返回数据形式为json  
+			success : function(result) {
+				if (result) {
+					worktime = eval(result);
+					if(worktime.worktime!=null && worktime.worktime!=''){
+						time1 = worktime.worktime;
+					}
+					if(worktime.time!=null && worktime.time!=''){
+						time2 = worktime.time;
+					}
+					var t1 = secondToDate(time1);
+				    $("#la12").val(t1);
+				    var t2 = secondToDate(time2);
+				    $("#la11").val(t2);
+				}
+			},
+			error : function(errorMsg) {
+				alert("数据请求失败，请联系系统管理员!");
+			}
+		});
 	    websocket();
 	})
 
@@ -359,44 +386,52 @@
 		
 		}
 		function iview(){
+			if(redata.length==279){
 			var z=0;
 			time.length=0;
 			
 			vol.length=0;
 			ele.length=0;
-			for(var i = 0;i < redata.length;i+=69){
-				if(redata.substring(8+i, 12+i)!="0000"){
-					if(redata.substring(4+i, 8+i)==document.getElementById("in2").value){
-						ele.push(parseInt(redata.substring(12+i, 16+i)));
-						vol.push(parseFloat((parseInt(redata.substring(16+i, 20+i))/10).toFixed(2)));
-						var ttme = redata.substring(20+i, 39+i);
+			for(var i = 0;i < redata.length;i+=93){
+					if(parseInt(redata.substring(4+i, 8+i))==document.getElementById("machid").value){
+						time1++;
+					    var t1 = secondToDate(time1);
+					    $("#in12").val(t1);
+					    if(redata.substring(36 + i, 38 + i)!="00"){
+						    time2++;
+						    var t2 = secondToDate(time2);
+						    $("#in11").val(t2);
+					    }
+						ele.push(parseInt(redata.substring(38+i, 42+i)));
+						vol.push(parseFloat((parseInt(redata.substring(42+i, 46+i))/10).toFixed(2)));
+						var ttme = redata.substring(54+i, 73+i);
 //						time.push(Date.parse(redata.substring(20+i, 39+i)));
 						ttme=ttme.replace(/-/g, '/');
 						time.push(Date.parse(new Date(ttme))); 
-						machstatus.push(redata.substring(0+i, 2+i));
-						maxele = parseInt(redata.substring(41+i, 44+i));
-						minele = parseInt(redata.substring(44+i, 47+i));
-						maxvol = parseInt(redata.substring(47+i, 50+i));
-						minvol = parseInt(redata.substring(50+i, 53+i));
+						machstatus.push(redata.substring(36+i, 38+i));
+						maxele = parseInt(redata.substring(75+i, 79+i));
+						minele = parseInt(redata.substring(79+i, 83+i));
+						maxvol = parseInt(redata.substring(83+i, 87+i));
+						minvol = parseInt(redata.substring(87+i, 91+i));
 						if(symbol==0){
 							elecurve();
 							volcurve();
 							symbol++;
 						}
-						document.getElementById("in5").value=(maxele+minele)/2;
-						document.getElementById("in6").value=(maxvol+minvol)/2;
-						document.getElementById("in7").value=parseInt(redata.substring(12+i, 16+i));
-						document.getElementById("in8").value=parseFloat((parseInt(redata.substring(16+i, 20+i))/10).toFixed(2));
+						document.getElementById("in5").value=parseInt(redata.substring(46+i, 50+i));
+						document.getElementById("in6").value=parseInt(redata.substring(50+i, 54+i));
+						document.getElementById("in7").value=parseInt(redata.substring(38+i, 42+i))
+						document.getElementById("in8").value=parseFloat((parseInt(redata.substring(42+i, 46+i))/10).toFixed(2));
 						for(var k=0;k<welderName.length;k++){
-							if(welderName[k].fwelder_no==redata.substring(8+i, 12+i)){
+							if(welderName[k].fid==redata.substring(0+i, 4+i)){
 								document.getElementById("in13").value=welderName[k].fname;
 							}
 						}
-						document.getElementById("in11").value=redata.substring(53+i, 61+i);
-						document.getElementById("in12").value=redata.substring(61+i, 69+i);
+/*						document.getElementById("in11").value=redata.substring(53+i, 61+i);
+						document.getElementById("in12").value=redata.substring(61+i, 69+i);*/
 
                 		if(time.length!=0&&z<time.length){
-  						var mstatus=redata.substring(0+i, 2+i);
+  						var mstatus=redata.substring(36+i, 38+i);
 						switch (mstatus){
 						case "00":
 							document.getElementById("in4").value="待机";
@@ -532,7 +567,6 @@
 	                    	 }
 	                    }
                 		}
-					}
 				}
                 z++;
 			};
@@ -549,6 +583,7 @@
 				vol[time.length] = vol[time.length-1];
 				time[time.length] = time[time.length-1]+1000;
 			}
+		}
 		}
 		
 	    //监听窗口大小变化
@@ -654,4 +689,9 @@
     		        }
   		  	})		  	
   		}
-	  
+  		function secondToDate(result) {
+  			var h = Math.floor(result / 3600) < 10 ? '0' + Math.floor(result / 3600) : Math.floor(result / 3600);
+  			var m = Math.floor((result / 60 % 60)) < 10 ? '0' + Math.floor((result / 60 % 60)) : Math.floor((result / 60 % 60));
+  			var s = Math.floor((result % 60)) < 10 ? '0' + Math.floor((result % 60)) : Math.floor((result % 60));
+  			return result = h + ":" + m + ":" + s;
+  		}

@@ -46,6 +46,8 @@ public interface DataStatisticsService {
 	 * @return
 	 */
 	DataStatistics getWorkJunctionNum(BigInteger itemid,WeldDto dto);
+
+	DataStatistics getWorkJunctionNumByWelder(BigInteger itemid,WeldDto dto);
 	
 	/**
 	 * 获取开机总时长
@@ -54,6 +56,8 @@ public interface DataStatisticsService {
 	 * @return
 	 */
 	BigInteger getStaringUpTime(BigInteger itemid,WeldDto dto);
+	BigInteger getStaringUpTimeByJunction(BigInteger itemid,WeldDto dto);
+	BigInteger getStaringUpTimeByWelder(BigInteger itemid,WeldDto dto);
 	
 	/**
 	 * 获取待机总时长
@@ -63,6 +67,10 @@ public interface DataStatisticsService {
 	 */
 	BigInteger getStandytime(BigInteger itemid,WeldDto dto);
 	
+	BigInteger getStandytimeByWelder(BigInteger itemid,WeldDto dto);
+	
+	BigInteger getStandytimeByJunction(BigInteger itemid,WeldDto dto);
+	
 	/**
 	 * 获取焊接时长，平均电流电压
 	 * @param itemid  项目部id
@@ -70,6 +78,10 @@ public interface DataStatisticsService {
 	 * @return
 	 */
 	DataStatistics getWorkTimeAndEleVol(BigInteger itemid,WeldDto dto);
+	
+	DataStatistics getWorkTimeAndEleVolByWelder(BigInteger itemid,WeldDto dto);
+	
+	DataStatistics getWorkTimeAndEleVolByJunction(BigInteger itemid,WeldDto dto);
 	
 	/**
 	 * 获取所有的焊机id，编号以及组织机构id，名称
@@ -84,7 +96,7 @@ public interface DataStatisticsService {
 	 * @param page
 	 * @return
 	 */
-	List<DataStatistics> getAllWelder(Page page);
+	List<DataStatistics> getAllWelder(Page page,BigInteger parent);
 	
 	/**
 	 * 获取所有悍缝编号及组织机构id，name
@@ -98,7 +110,7 @@ public interface DataStatisticsService {
 	 * 获取所有项目部组织机构
 	 * @return
 	 */
-	List<DataStatistics> getAllInsframe();
+	List<DataStatistics> getAllInsframe(BigInteger parent);
 
 	/**
 	 * 获取组织机构累计焊接时间
@@ -201,7 +213,7 @@ public interface DataStatisticsService {
 	 * 人员生产数据导出Excel
 	 * @return
 	 */
-	List<DataStatistics> getAllPersonData();
+	List<DataStatistics> getAllPersonData(BigInteger parent);
 
 	/**
 	 * 工件生产数据导出Excel
@@ -297,4 +309,9 @@ public interface DataStatisticsService {
 	 * @return
 	 */
 	List<DataStatistics> getItemOverProofTime(WeldDto dto);
+	
+	/**
+	 * 获取该时间段内焊丝消耗长度
+	 */
+	Double getWirelength(WeldDto dto);
 }

@@ -110,8 +110,8 @@ function webclient(){
 }
 
 function view(){
-	for(var i = 0;i < redata.length;i+=69){
-		var mstatus=redata.substring(0+i, 2+i);//故障状态
+	for(var i = 0;i < redata.length;i+=93){
+		var mstatus=redata.substring(36+i, 38+i);//故障状态
 		switch (mstatus){
 //			case "00":
 //				content("待机",i);
@@ -161,7 +161,7 @@ function content(fauit,index){
 	var insfname,str;
 	var machineno = redata.substring(4+index, 8+index);//焊机编号
 //	var welderno = redata.substring(8+index, 12+index);//焊工编号
-	var time = redata.substring(20+index, 39+index);//发生时间
+	var time = redata.substring(54+index, 73+index);//发生时间
 //	for(var i=0;i<welder_no.length;i++){
 //		if(welder_no[i]==welderno){
 //			weldername = welder_name[i];

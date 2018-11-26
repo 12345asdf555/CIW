@@ -17,10 +17,11 @@
 	<select id="getInsframeworkAll" resultMap="insMap">
 		SELECT i.fid,i.fname,i.flogogram,i.fcode,i.fparent,i.ftype,ins.fname fparentname,d.fvaluename typename FROM tb_insframework i 
 		INNER JOIN tb_dictionary d on d.fvalue = i.ftype
-		left join tb_insframework ins on ins.fid = i.fparent
+		LEFT JOIN tb_insframework ins on ins.fid = i.fparent
+		LEFT JOIN tb_insframework insf on insf.fid = ins.fparent
 		where d.ftypeid=2
 		<if test="parent!=null and parent!=''">
-			 and i.fparent=#{parent}
+			 and (i.fid=#{parent} or ins.fid=#{parent} or insf.fid=#{parent} or insf.fparent=#{parent})
 		</if>
 		<if test="str!=null and str!=''">
 			and ${str}
@@ -33,10 +34,15 @@
 	</select>
 	
 	<select id="getInsAll"  resultMap="insMap">
-		select fid, fname from tb_insframework where 1=1
+		select i.fid, i.fname from tb_insframework i left JOIN tb_insframework ins on ins.fid = i.fparent 
+		left join tb_insframework insf on insf.fid = ins.fparent where 1=1 
 		<if test="type>0">
-			and ftype&lt;#{type}
+			and i.ftype&lt;#{type}
 		</if>
+		<if test="parent!=null and parent!=''">
+			and (i.fid=#{parent} or ins.fid=#{parent} or insf.fid=#{parent} or insf.fparent=#{parent})
+		</if>
+		order by i.ftype
 	</select>
 	
 	<select id="getInsframework" resultMap="insMap">
@@ -61,11 +67,17 @@
 	<!-- 查看公司级 -->
 	<select id="getConmpany" resultMap="insMap">
 		SELECT fid,fname FROM tb_insframework WHERE ftype=21
+		<if test="value1!=null and value1!=''">
+			and fid=#{value1}
+		</if>
 	</select>
 	
 	<!-- 查看事业部级 -->
 	<select id="getCause" resultMap="insMap">
 		SELECT fid,fname FROM tb_insframework WHERE fparent = #{id}
+		<if test="value2!=null and value2!=''">
+			and fid=#{value2}
+		</if>
 	</select>
 	
 	<!-- 获取用户所属层级 -->

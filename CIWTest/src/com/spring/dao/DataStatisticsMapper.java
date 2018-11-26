@@ -19,21 +19,35 @@ public interface DataStatisticsMapper  extends Mapper<DataStatistics>{
 	
 	DataStatistics getWorkJunctionNum(@Param("itemid") BigInteger itemid,@Param("dto") WeldDto dto);
 	
+	DataStatistics getWorkJunctionNumByWelder(@Param("itemid") BigInteger itemid,@Param("dto") WeldDto dto);
+	
 	BigInteger  getStaringUpTime(@Param("itemid") BigInteger itemid,@Param("dto") WeldDto dto);
+	
+	BigInteger  getStaringUpTimeByJunction(@Param("itemid") BigInteger itemid,@Param("dto") WeldDto dto);
+	
+	BigInteger  getStaringUpTimeByWelder(@Param("itemid") BigInteger itemid,@Param("dto") WeldDto dto);
 	
 	DataStatistics getParameter();
 	
 	BigInteger getStandytime(@Param("itemid") BigInteger itemid,@Param("dto") WeldDto dto);
+
+	BigInteger getStandytimeByWelder(@Param("itemid") BigInteger itemid,@Param("dto") WeldDto dto);
+
+	BigInteger getStandytimeByJunction(@Param("itemid") BigInteger itemid,@Param("dto") WeldDto dto);
 	
 	DataStatistics getWorkTimeAndEleVol(@Param("itemid") BigInteger itemid,@Param("dto") WeldDto dto);
 	
+	DataStatistics getWorkTimeAndEleVolByWelder(@Param("itemid") BigInteger itemid,@Param("dto") WeldDto dto);
+	
+	DataStatistics getWorkTimeAndEleVolByJunction(@Param("itemid") BigInteger itemid,@Param("dto") WeldDto dto);
+	
 	List<DataStatistics> getAllMachine(@Param("item") BigInteger item);
 	
-	List<DataStatistics> getAllWelder();
+	List<DataStatistics> getAllWelder(@Param("parent") BigInteger parent);
 	
 	List<DataStatistics> getAllJunction(@Param("junctionno") String junctionno);
 	
-	List<DataStatistics> getAllInsframe();
+	List<DataStatistics> getAllInsframe(@Param("parent") BigInteger parent);
 	
 	List<DataStatistics> getWeldItemInCount(@Param("dto") WeldDto dto);
 	
@@ -62,4 +76,6 @@ public interface DataStatisticsMapper  extends Mapper<DataStatistics>{
 	List<DataStatistics> getItemWeldTime(@Param("dto")WeldDto dto);
 	
 	List<DataStatistics> getItemOverProofTime(@Param("dto")WeldDto dto);
+	
+	Double getWirelength(@Param("dto")WeldDto dto);
 }

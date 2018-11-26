@@ -341,20 +341,10 @@ public class UserController {
 			//获取用户id
 			Object object = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			MyUser myuser = (MyUser)object;
-			List<Insframework> instype = im.getInsByUserid(new BigInteger(myuser.getId()+""));
-			List<Insframework> ins = null;
-			for(Insframework i:instype){
-				if(i.getType()==20){
-					ins = im.getInsAll(0);
-				}else if(i.getType()==21){
-					ins = im.getInsIdByParent(i.getId(),0);
-					Insframework insf = im.getInsById(i.getId());
-					ins.add(ins.size(),insf);
-				}else{
-					ins = im.getInsIdByParent(i.getId(),0);
-				}
-			}
-			for(Insframework i:ins){
+			List<Insframework> insframework = im.getInsByUserid(BigInteger.valueOf(myuser.getId()));
+			BigInteger parent = insframework.get(0).getId();
+			List<Insframework> list = im.getInsAll(0,parent);
+			for(Insframework i:list){
 				json.put("insid", i.getId());
 				json.put("insname", i.getName());
 				ary.add(json);

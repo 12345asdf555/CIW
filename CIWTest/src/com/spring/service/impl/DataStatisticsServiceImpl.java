@@ -73,20 +73,20 @@ public class DataStatisticsServiceImpl implements DataStatisticsService {
 	}
 
 	@Override
-	public List<DataStatistics> getAllWelder(Page page) {
+	public List<DataStatistics> getAllWelder(Page page,BigInteger parent) {
 		PageHelper.startPage(page.getPageIndex(), page.getPageSize());
-		return ds.getAllWelder();
+		return ds.getAllWelder(parent);
 	}
 
 	@Override
-	public List<DataStatistics> getAllJunction(Page page, String junctionno) {
+	public List<DataStatistics> getAllJunction(Page page,String junctionno) {
 		PageHelper.startPage(page.getPageIndex(), page.getPageSize());
 		return ds.getAllJunction(junctionno);
 	}
 
 	@Override
-	public List<DataStatistics> getAllInsframe() {
-		return ds.getAllInsframe();
+	public List<DataStatistics> getAllInsframe(BigInteger parent) {
+		return ds.getAllInsframe(parent);
 	}
 
 	@Override
@@ -151,72 +151,60 @@ public class DataStatisticsServiceImpl implements DataStatisticsService {
 
 	@Override
 	public List<DataStatistics> getAllItemData() {
-		// TODO Auto-generated method stub
 		return ds.getItemMachineCount(null);
 	}
 
 	@Override
 	public List<DataStatistics> getAllMachineData(BigInteger itemid) {
-		// TODO Auto-generated method stub
 		return ds.getAllMachine(itemid);
 	}
 
 	@Override
-	public List<DataStatistics> getAllPersonData() {
-		// TODO Auto-generated method stub
-		return ds.getAllWelder();
+	public List<DataStatistics> getAllPersonData(BigInteger parent) {
+		return ds.getAllWelder(parent);
 	}
 
 	public List<DataStatistics> getAllJunctionData(String junctionno) {
-		// TODO Auto-generated method stub
 		return ds.getAllJunction(junctionno);
 	}
 
 	@Override
 	public List<DataStatistics> getWeldItemInCountData(WeldDto dto) {
-		// TODO Auto-generated method stub
 		return ds.getWeldItemInCount(dto);
 	}
 
 	@Override
 	public List<DataStatistics> getWeldItemOutCountData(WeldDto dto) {
-		// TODO Auto-generated method stub
 		return ds.getWeldItemOutCount(dto);
 	}
 
 	@Override
 	public List<DataStatistics> getWeldMachineInCountData(WeldDto dto, BigInteger itemid) {
-		// TODO Auto-generated method stub
 		return ds.getWeldMachineInCount(dto, itemid);
 	}
 
 	@Override
 	public List<DataStatistics> getWeldMachineOutCountData(WeldDto dto, BigInteger itemid) {
-		// TODO Auto-generated method stub
 		return ds.getWeldMachineOutCount(dto, itemid);
 	}
 
 	@Override
 	public List<DataStatistics> getWeldPersonInCountData(WeldDto dto) {
-		// TODO Auto-generated method stub
 		return ds.getWeldPersonInCount(dto);
 	}
 
 	@Override
 	public List<DataStatistics> getWeldPersonOutCountData(WeldDto dto) {
-		// TODO Auto-generated method stub
 		return ds.getWeldPersonOutCount(dto);
 	}
 
 	@Override
 	public List<DataStatistics> getWeldWorkpieceInCountData(WeldDto dto, String junctionno) {
-		// TODO Auto-generated method stub
 		return ds.getWeldPieceInCount(dto, junctionno);
 	}
 
 	@Override
 	public List<DataStatistics> getWeldWorkpieceOutCountData(WeldDto dto, String junctionno) {
-		// TODO Auto-generated method stub
 		return ds.getWeldPieceOutCount(dto, junctionno);
 	}
 
@@ -238,5 +226,46 @@ public class DataStatisticsServiceImpl implements DataStatisticsService {
 	@Override
 	public List<DataStatistics> getItemOverProofTime(WeldDto dto) {
 		return ds.getItemOverProofTime(dto);
+	}
+
+	@Override
+	public BigInteger getStaringUpTimeByJunction(BigInteger itemid, WeldDto dto) {
+		return ds.getStaringUpTimeByJunction(itemid, dto); 
+	}
+
+	@Override
+	public BigInteger getStaringUpTimeByWelder(BigInteger itemid, WeldDto dto) {
+		return ds.getStaringUpTimeByWelder(itemid, dto); 
+	}
+
+	@Override
+	public DataStatistics getWorkJunctionNumByWelder(BigInteger itemid, WeldDto dto) {
+		return ds.getWorkJunctionNumByWelder(itemid, dto);
+	}
+
+	@Override
+	public DataStatistics getWorkTimeAndEleVolByWelder(BigInteger itemid, WeldDto dto) {
+		return ds.getWorkTimeAndEleVolByWelder(itemid, dto);
+	}
+
+	@Override
+	public DataStatistics getWorkTimeAndEleVolByJunction(BigInteger itemid, WeldDto dto) {
+		return ds.getWorkTimeAndEleVolByJunction(itemid, dto);
+	}
+
+	@Override
+	public BigInteger getStandytimeByWelder(BigInteger itemid, WeldDto dto) {
+		return ds.getStandytimeByWelder(itemid, dto);
+	}
+
+	@Override
+	public BigInteger getStandytimeByJunction(BigInteger itemid, WeldDto dto) {
+		return ds.getStandytimeByJunction(itemid, dto);
+	}
+
+	@Override
+	public Double getWirelength(WeldDto dto) {
+		// TODO Auto-generated method stub
+		return ds.getWirelength(dto);
 	}
 }

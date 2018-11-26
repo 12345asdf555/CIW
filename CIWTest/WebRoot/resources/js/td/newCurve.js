@@ -101,12 +101,12 @@ $(function(){
 						var	str = '<div style="width:25%;height:20%;float:left">'+
 						'<div style="width:30%;height:100%;float:left"><img id='+f+' src="resources/images/WDgj.png" onclick="javascript:imgfun(this.id)" width="100%" height="70%"></div>'+
 						'<div style="float:left">'+
-						'<div><label id="lab1'+fmch[f].fequipment_no+'">设备编号：'+fmch[f].fequipment_no+'</label></div>'+
-						'<div><label id="lab2'+fmch[f].fequipment_no+'">焊缝编号：--</label></div>'+
-						'<div><label id="lab3'+fmch[f].fequipment_no+'">操作人员：--</label></div>'+
-						'<div><label id="lab4'+fmch[f].fequipment_no+'">焊接电流：--A</label></div>'+
-						'<div><label id="lab5'+fmch[f].fequipment_no+'">焊接电压：--V</label></div>'+
-						'<div><label id="lab6'+fmch[f].fequipment_no+'">焊机状态：关机</label></div>'+
+						'<div><label id="lab1'+fmch[f].fid+'">设备编号：'+fmch[f].fequipment_no+'</label></div>'+
+						'<div><label id="lab2'+fmch[f].fid+'">焊缝编号：--</label></div>'+
+						'<div><label id="lab3'+fmch[f].fid+'">操作人员：--</label></div>'+
+						'<div><label id="lab4'+fmch[f].fid+'">焊接电流：--A</label></div>'+
+						'<div><label id="lab5'+fmch[f].fid+'">焊接电压：--V</label></div>'+
+						'<div><label id="lab6'+fmch[f].fid+'">焊机状态：关机</label></div>'+
 						'</div>'+
 						'</div>';
 						$("#bodys").append(str);
@@ -120,7 +120,7 @@ $(function(){
 	}
 	
 	function imgfun(id){
-		var url = "td/goNextcurve?value="+fmch[id].fequipment_no;
+		var url = "td/goNextcurve?value="+fmch[id].fequipment_no+"&machid="+fmch[id].fid;
 		var img = new Image();
 	    img.src = url;  // 设置相对路径给Image, 此时会发送出请求
 	    url = img.src;  // 此时相对路径已经变成绝对路径
@@ -199,120 +199,120 @@ $(function(){
 	}
 
 	function iview(){
-		for(var i = 0;i < redata.length;i+=69){
-			if(redata.substring(8+i, 12+i)!="0000"){
+		if(redata.length==279){
+		for(var i = 0;i < redata.length;i+=93){
 				for(var f=0;f<fmch.length;f++){
-					if((document.getElementById("lab1"+fmch[f].fequipment_no).innerText)==("设备编号："+redata.substring(4+i, 8+i))){
+					if(fmch[f].fid==parseInt(redata.substring(4+i, 8+i))){
 						for(var k=0;k<welderName.length;k++){
-							if(welderName[k].fwelder_no==redata.substring(8+i, 12+i)){
-								document.getElementById("lab3"+fmch[f].fequipment_no).innerHTML="操作人员："+welderName[k].fname;
+							if(welderName[k].fid==parseInt(redata.substring(0+i, 4+i))){
+								document.getElementById("lab3"+fmch[f].fid).innerHTML="操作人员："+welderName[k].fname;
 							}
 						}
-						document.getElementById("lab4"+fmch[f].fequipment_no).innerHTML="焊接电流："+parseInt(redata.substring(12+i, 16+i))+"A";
-						document.getElementById("lab5"+fmch[f].fequipment_no).innerHTML="焊接电压："+parseFloat((parseInt(redata.substring(16+i, 20+i))/10).toFixed(2))+"V";
-						var mstatus=redata.substring(0+i, 2+i);
+						document.getElementById("lab4"+fmch[f].fid).innerHTML="焊接电流："+parseInt(redata.substring(38+i, 42+i))+"A";
+						document.getElementById("lab5"+fmch[f].fid).innerHTML="焊接电压："+parseFloat((parseInt(redata.substring(42+i, 46+i))/10).toFixed(2))+"V";
+						var mstatus=redata.substring(36+i, 38+i);
 						switch (mstatus){
 						case "00":
-							document.getElementById("lab6"+fmch[f].fequipment_no).innerHTML="焊机状态：待机";
-							document.getElementById("lab6"+fmch[f].fequipment_no).style.backgroundColor="#84baed";
+							document.getElementById("lab6"+fmch[f].fid).innerHTML="焊机状态：待机";
+							document.getElementById("lab6"+fmch[f].fid).style.backgroundColor="#84baed";
 							document.getElementById(f).src="resources/images/i_blue.png";
 							break;
 						case "01":
-							document.getElementById("lab6"+fmch[f].fequipment_no).innerHTML="焊机状态：E-010 焊枪开关OFF等待";
-							document.getElementById("lab6"+fmch[f].fequipment_no).style.backgroundColor="#FF0000";
+							document.getElementById("lab6"+fmch[f].fid).innerHTML="焊机状态：E-010 焊枪开关OFF等待";
+							document.getElementById("lab6"+fmch[f].fid).style.backgroundColor="#FF0000";
 							document.getElementById(f).src="resources/images/ROBOTdj.png";
 							break;
 						case "02":
-							document.getElementById("lab6"+fmch[f].fequipment_no).innerHTML="焊机状态：E-000工作停止";
-							document.getElementById("lab6"+fmch[f].fequipment_no).style.backgroundColor="#FF0000";
+							document.getElementById("lab6"+fmch[f].fid).innerHTML="焊机状态：E-000工作停止";
+							document.getElementById("lab6"+fmch[f].fid).style.backgroundColor="#FF0000";
 							document.getElementById(f).src="resources/images/ROBOTdj.png";
 							break;
 						case "03":
-							document.getElementById("lab6"+fmch[f].fequipment_no).innerHTML="焊机状态：焊接";
-							document.getElementById("lab6"+fmch[f].fequipment_no).style.backgroundColor="#00FF00";
+							document.getElementById("lab6"+fmch[f].fid).innerHTML="焊机状态：焊接";
+							document.getElementById("lab6"+fmch[f].fid).style.backgroundColor="#00FF00";
 							document.getElementById(f).src="resources/images/i_green.png";
 							break;						
 						case "04":
-							document.getElementById("lab6"+fmch[f].fequipment_no).innerHTML="焊机状态：电流过低";
-							document.getElementById("lab6"+fmch[f].fequipment_no).style.backgroundColor="#FF0000";
+							document.getElementById("lab6"+fmch[f].fid).innerHTML="焊机状态：电流过低";
+							document.getElementById("lab6"+fmch[f].fid).style.backgroundColor="#FF0000";
 							document.getElementById(f).src="resources/images/ROBOTdj.png";
 							break;
 							
 						case "05":
-							document.getElementById("lab6"+fmch[f].fequipment_no).innerHTML="焊机状态：收弧";
-							document.getElementById("lab6"+fmch[f].fequipment_no).style.backgroundColor="#00FF00";
+							document.getElementById("lab6"+fmch[f].fid).innerHTML="焊机状态：收弧";
+							document.getElementById("lab6"+fmch[f].fid).style.backgroundColor="#00FF00";
 							document.getElementById(f).src="resources/images/i_green.png";
 							break;
 						case "06":
-							document.getElementById("lab6"+fmch[f].fequipment_no).innerHTML="焊机状态：电流过高";
-							document.getElementById("lab6"+fmch[f].fequipment_no).style.backgroundColor="#FF0000";
+							document.getElementById("lab6"+fmch[f].fid).innerHTML="焊机状态：电流过高";
+							document.getElementById("lab6"+fmch[f].fid).style.backgroundColor="#FF0000";
 							document.getElementById(f).src="resources/images/ROBOTdj.png";
 							break;
 						case "07":
-							document.getElementById("lab6"+fmch[f].fequipment_no).innerHTML="焊机状态：启弧";
-							document.getElementById("lab6"+fmch[f].fequipment_no).style.backgroundColor="#00FF00";
+							document.getElementById("lab6"+fmch[f].fid).innerHTML="焊机状态：启弧";
+							document.getElementById("lab6"+fmch[f].fid).style.backgroundColor="#00FF00";
 							document.getElementById(f).src="resources/images/i_green.png";
 							break;
 						case "08":
-							document.getElementById("lab6"+fmch[f].fequipment_no).innerHTML="焊机状态：电压过低";
-							document.getElementById("lab6"+fmch[f].fequipment_no).style.backgroundColor="#FF0000";
+							document.getElementById("lab6"+fmch[f].fid).innerHTML="焊机状态：电压过低";
+							document.getElementById("lab6"+fmch[f].fid).style.backgroundColor="#FF0000";
 							document.getElementById(f).src="resources/images/ROBOTdj.png";
 							break;
 						case "09":
-							document.getElementById("lab6"+fmch[f].fequipment_no).innerHTML="焊机状态：电压过高";
-							document.getElementById("lab6"+fmch[f].fequipment_no).style.backgroundColor="#FF0000";
+							document.getElementById("lab6"+fmch[f].fid).innerHTML="焊机状态：电压过高";
+							document.getElementById("lab6"+fmch[f].fid).style.backgroundColor="#FF0000";
 							document.getElementById(f).src="resources/images/ROBOTdj.png";
 							break;
 						case "10":
-							document.getElementById("lab6"+fmch[f].fequipment_no).innerHTML="焊机状态：E-100控制电源异常";
-							document.getElementById("lab6"+fmch[f].fequipment_no).style.backgroundColor="#FF0000";
+							document.getElementById("lab6"+fmch[f].fid).innerHTML="焊机状态：E-100控制电源异常";
+							document.getElementById("lab6"+fmch[f].fid).style.backgroundColor="#FF0000";
 							document.getElementById(f).src="resources/images/ROBOTdj.png";
 							break;
 						case "15":
-							document.getElementById("lab6"+fmch[f].fequipment_no).innerHTML="焊机状态：E-150一次输入电压过高";
-							document.getElementById("lab6"+fmch[f].fequipment_no).style.backgroundColor="#FF0000";
+							document.getElementById("lab6"+fmch[f].fid).innerHTML="焊机状态：E-150一次输入电压过高";
+							document.getElementById("lab6"+fmch[f].fid).style.backgroundColor="#FF0000";
 							document.getElementById(f).src="resources/images/ROBOTdj.png";
 							break;
 						case "16":
-							document.getElementById("lab6"+fmch[f].fequipment_no).innerHTML="焊机状态：E-160一次输入电压过低";
-							document.getElementById("lab6"+fmch[f].fequipment_no).style.backgroundColor="#FF0000";
+							document.getElementById("lab6"+fmch[f].fid).innerHTML="焊机状态：E-160一次输入电压过低";
+							document.getElementById("lab6"+fmch[f].fid).style.backgroundColor="#FF0000";
 							document.getElementById(f).src="resources/images/ROBOTdj.png";
 							break;
 						case "20":
-							document.getElementById("lab6"+fmch[f].fequipment_no).innerHTML="焊机状态：E-200一次二次电流检出异常";
-							document.getElementById("lab6"+fmch[f].fequipment_no).style.backgroundColor="#FF0000";
+							document.getElementById("lab6"+fmch[f].fid).innerHTML="焊机状态：E-200一次二次电流检出异常";
+							document.getElementById("lab6"+fmch[f].fid).style.backgroundColor="#FF0000";
 							document.getElementById(f).src="resources/images/ROBOTdj.png";
 							break;
 						case "21":
-							document.getElementById("lab6"+fmch[f].fequipment_no).innerHTML="焊机状态：E-210电压检出异常";
-							document.getElementById("lab6"+fmch[f].fequipment_no).style.backgroundColor="#FF0000";
+							document.getElementById("lab6"+fmch[f].fid).innerHTML="焊机状态：E-210电压检出异常";
+							document.getElementById("lab6"+fmch[f].fid).style.backgroundColor="#FF0000";
 							document.getElementById(f).src="resources/images/ROBOTdj.png";
 							break;
 						case "22":
-							document.getElementById("lab6"+fmch[f].fequipment_no).innerHTML="焊机状态：E-220逆变电路反馈异常";
-							document.getElementById("lab6"+fmch[f].fequipment_no).style.backgroundColor="#FF0000";
+							document.getElementById("lab6"+fmch[f].fid).innerHTML="焊机状态：E-220逆变电路反馈异常";
+							document.getElementById("lab6"+fmch[f].fid).style.backgroundColor="#FF0000";
 							document.getElementById(f).src="resources/images/ROBOTdj.png";
 							break;
 						case "30":
-							document.getElementById("lab6"+fmch[f].fequipment_no).innerHTML="焊机状态：E-300温度异常";
-							document.getElementById("lab6"+fmch[f].fequipment_no).style.backgroundColor="#FF0000";
+							document.getElementById("lab6"+fmch[f].fid).innerHTML="焊机状态：E-300温度异常";
+							document.getElementById("lab6"+fmch[f].fid).style.backgroundColor="#FF0000";
 							document.getElementById(f).src="resources/images/ROBOTdj.png";
 							break;
 						case "70":
-							document.getElementById("lab6"+fmch[f].fequipment_no).innerHTML="焊机状态：E-700输出过流异常";
-							document.getElementById("lab6"+fmch[f].fequipment_no).style.backgroundColor="#FF0000";
+							document.getElementById("lab6"+fmch[f].fid).innerHTML="焊机状态：E-700输出过流异常";
+							document.getElementById("lab6"+fmch[f].fid).style.backgroundColor="#FF0000";
 							document.getElementById(f).src="resources/images/ROBOTdj.png";
 							break;
 						case "71":
-							document.getElementById("lab6"+fmch[f].fequipment_no).innerHTML="焊机状态：E-710输入缺相异常";
-							document.getElementById("lab6"+fmch[f].fequipment_no).style.backgroundColor="#FF0000";
+							document.getElementById("lab6"+fmch[f].fid).innerHTML="焊机状态：E-710输入缺相异常";
+							document.getElementById("lab6"+fmch[f].fid).style.backgroundColor="#FF0000";
 							document.getElementById(f).src="resources/images/ROBOTdj.png";
 							break;
 						}
 					}
 				}
-			}
 		};
+	}
 	}
 	
     //监听窗口大小变化

@@ -19,7 +19,7 @@ public interface MaintainService {
 	 * 获取所有维修记录
 	 * @return
 	 */
-	List<WeldingMaintenance> getWeldingMaintenanceAll(String str);
+	List<WeldingMaintenance> getWeldingMaintenanceAll(BigInteger parent,String str);
 
 	/**
 	 * 获取维修结束时间

@@ -57,6 +57,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td align="center" width="50%">
 							<label id="la2">设备编号</label>
 							<input id="in2" value="${value}" readonly="readonly" type="text" disabled="true" style="text-align:center;color:#000000;width:200px;height:32px;font-size:18px;background-color:#EEEEEE;border:0px;">
+							<input id="machid" value="${machid}" type="hidden">
 						</td>
 					</tr>
 					<tr>
@@ -117,7 +118,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<label id="la11">焊接时间:</label>
 			</td>
 			<td>
-			<input id="in11" readonly="readonly">
+			<input id="in11" readonly="readonly" value="00:00:00">
 			</td>
 			</tr>
 						<tr>
@@ -125,7 +126,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<label id="la12">工作时间:</label>
 			</td>
 			<td>
-			<input id="in12" readonly="readonly">
+			<input id="in12" readonly="readonly" value="00:00:00">
 			</td>
 			</tr>
 						<tr>

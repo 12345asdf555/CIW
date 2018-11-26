@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ import com.spring.dao.WeldingMachineMapper;
 import com.spring.dao.WeldingMaintenanceMapper;
 import com.spring.dto.WeldDto;
 import com.spring.model.Insframework;
+import com.spring.model.MyUser;
 import com.spring.model.WeldingMachine;
 import com.spring.model.WeldingMaintenance;
 import com.spring.page.Page;
@@ -88,13 +90,13 @@ public class InsframeworkServiceImpl implements InsframeworkService {
 	}
 
 	@Override
-	public List<Insframework> getConmpany() {
-		return im.getConmpany();
+	public List<Insframework> getConmpany(BigInteger value1) {
+		return im.getConmpany(value1);
 	}
 
 	@Override
-	public List<Insframework> getCause(BigInteger id) {
-		return im.getCause(id);
+	public List<Insframework> getCause(BigInteger id,BigInteger value2) {
+		return im.getCause(id,value2);
 	}
 
 	@Override
@@ -174,8 +176,21 @@ public class InsframeworkServiceImpl implements InsframeworkService {
 	}
 
 	@Override
-	public List<Insframework> getInsAll(int type) {
-		return im.getInsAll(type);
+	public List<Insframework> getInsAll(int type,BigInteger parent) {
+		return im.getInsAll(type,parent);
+	}
+
+	@Override
+	public BigInteger getUserInsframework() {
+		try{
+			//获取用户id
+			MyUser myuser = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			long uid = myuser.getId();
+			List<Insframework> insframework = im.getInsByUserid(BigInteger.valueOf(uid));
+			return insframework.get(0).getId();
+		}catch(Exception e){
+			return null;
+		}
 	}
 
 }

@@ -71,12 +71,12 @@ public class MainController {
 		JSONArray ary2 = new JSONArray();
 		JSONObject json1 = new JSONObject();
 		JSONObject json2 = new JSONObject();
-		List<Insframework> company = is.getConmpany();
+		List<Insframework> company = is.getConmpany(null);
 		for(Insframework i:company){
 			json1.put("companyid", i.getId());
 			json1.put("companyname", i.getName());
 			ary1.add(json1);
-			List<Insframework> caust = is.getCause(i.getId());
+			List<Insframework> caust = is.getCause(i.getId(),null);
 			for(Insframework j:caust){
 				json2.put("companyid", i.getId());
 				json2.put("caustid", j.getId());
