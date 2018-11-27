@@ -211,7 +211,7 @@ function chushihua(){
 	$("#fweld_tuny_vol1").numberbox('setValue',0);
 	$("#farc_tuny_vol1").numberbox('setValue',0);
 	$("#frequency").numberbox('setValue',30);
-	$("#gasflow").numberbox('setValue',5);
+	$("#gasflow").numberbox('setValue',15);
 }
 
 function gfsd() {
@@ -424,8 +424,12 @@ function save(value){
       	 return;
        }
        if($('#frequency').numberbox('getValue')<(5)||$('#frequency').numberbox('getValue')>(320)){
-        	 alert("双脉冲频率范围：5~320");
-        	 return;
+    	 alert("双脉冲频率范围：5~320");
+    	 return;
+       }
+       if($('#gasflow').numberbox('getValue')<(5)||$('#gasflow').numberbox('getValue')>(50)){
+    	 alert("气体流量范围：5~50");
+    	 return;
        }
    	var url2 = "";
    	var finitial;
