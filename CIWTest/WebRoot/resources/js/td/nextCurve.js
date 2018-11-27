@@ -95,7 +95,7 @@
 		          alert("数据请求失败，请联系系统管理员!");  
 		      }  
 		 });
-/*		$.ajax({  
+/*		$.ajax({
 		      type : "post",  
 		      async : false,
 		      url : "wps/Spe?machine="+document.getElementById("in2")+"&chanel="+"",  
