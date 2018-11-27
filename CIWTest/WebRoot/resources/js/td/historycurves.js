@@ -19,12 +19,12 @@ function Junction(){
 	setParam();
 	$("#dg").datagrid( {
 		fitColumns : true,				
-		height : $("#dgtb").height()/2,
-		width : $("#dgtb").width(),
+		height : $("body").height()/2,
+		width : $("body").width(),
 		idField : 'id',
 		pageSize : 10,
 		pageList : [ 10, 20, 30, 40, 50 ],
-		url : "weldedjunction/getWeldingJun"+chartStr+"&wjno="+$("#wjno").val()+"&welderid="+$("#welderid").val(),
+		url : "weldedjunction/getWeldingJun"+chartStr+"&wjno="+$("#wjno").val()+"&welderid="+$("#welderid").val()+"&machine="+$("#machine").val(),
 		singleSelect : true,
 		rownumbers : true,
 		showPageList : false,
@@ -105,7 +105,6 @@ function Junction(){
             if ((index % 2)!=0){
             	//处理行代背景色后无法选中
             	var color=new Object();
-                color.class="rowColor";
                 return color;
             }
         },
@@ -130,7 +129,7 @@ function loadChart(row){
 	setParam();
 	$.ajax({
 		   type: "post", 
-		   url: "rep/historyCurve"+chartStr+"&fid="+row.weldedJunctionno+"&mach="+row.machid+"&welderid="+$("#welderid").val(),
+		   url: "rep/historyCurve"+chartStr+"&fid="+encodeURI(row.weldedJunctionno)+"&mach="+row.machid+"&welderid="+$("#welderid").val(),
 		   dataType: "json",
 		   data: {},
 		   success: function (result) {
@@ -168,7 +167,7 @@ function eleChart(){
             text : '电流'
         },
         tooltip : {
-            trigger : 'axis',
+            trigger : 'axis'
         },
         toolbox : {
             show : true,
@@ -223,7 +222,7 @@ function eleChart(){
       	                color: "#A020F0"
       	            }
       	        }
-      	    },
+      	    }
         } ]
     };
     myChart.setOption(option);
@@ -238,7 +237,7 @@ function volChart(){
             text : '电压'
         },
         tooltip : {
-            trigger : 'axis',
+            trigger : 'axis'
         },
         toolbox : {
             show : true,
@@ -294,7 +293,7 @@ function volChart(){
       	                color: "#87CEFA"
       	            }
       	        }
-      	    },
+      	    }
         } ]
     };
     myChart.setOption(option);

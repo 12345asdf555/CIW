@@ -186,7 +186,7 @@
 	</select>
 	
 	<select id="historyData" resultType="Report">
-		SELECT `felectricity` fstandardele,`fvoltage` fstandardvol,`FWeldTime` fweldingtime,`fstatus` fstatus FROM `tb_live_data` WHERE fjunction_id=#{fid} and fmachine_id=#{mach} and fstatus='3'
+		SELECT `felectricity` fstandardele,`fvoltage` fstandardvol,`FWeldTime` fweldingtime,`fstatus` fstatus FROM `tb_live_data` WHERE fjunction_no=#{fid} and fmachine_id=#{mach} and fstatus='3'
 		<if test="welderid!=null and welderid!=''">
 			and `fwelder_id`=#{welderid}
 		</if>

@@ -209,7 +209,7 @@ public class CatWeldController {
 			request.setAttribute("welderid", request.getParameter("fid"));
 		}
 		if(iutil.isNull(request.getParameter("wjno"))){
-			request.setAttribute("wjno", "00"+request.getParameter("wjno"));
+			request.setAttribute("wjno", request.getParameter("wjno"));
 		}
 		return "td/HistoryCurve";
 	}

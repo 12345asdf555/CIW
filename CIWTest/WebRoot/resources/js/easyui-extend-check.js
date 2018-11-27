@@ -314,7 +314,7 @@ $(function(){
 								async : false,
 								url : 'weldedjunction/wjNoValidate',
 								data : {
-									"wjno" : "00"+value
+									"wjno" : value
 								},
 								success : function(data){
 									result = data;

@@ -55,7 +55,7 @@ public class WeldedJunctionControll {
 	public String goEditWeldedJunction(HttpServletRequest request){
 		BigInteger id = new BigInteger(request.getParameter("id"));
 		WeldedJunction wj = wjm.getWeldedJunctionById(id);
-		wj.setWeldedJunctionno(wj.getWeldedJunctionno().substring(2, 8));
+		wj.setWeldedJunctionno(wj.getWeldedJunctionno());
 		request.setAttribute("wj", wj);
 		return "weldingjunction/editweldedjunction";
 	}
@@ -64,7 +64,7 @@ public class WeldedJunctionControll {
 	public String goRemoveWeldedJunction(HttpServletRequest request){
 		BigInteger id = new BigInteger(request.getParameter("id"));
 		WeldedJunction wj = wjm.getWeldedJunctionById(id);
-		wj.setWeldedJunctionno(wj.getWeldedJunctionno().substring(2, 8));
+		wj.setWeldedJunctionno(wj.getWeldedJunctionno());
 		request.setAttribute("wj", wj);
 		return "weldingjunction/removeweldedjunction";
 	}
@@ -75,7 +75,7 @@ public class WeldedJunctionControll {
 			request.setAttribute("welderid", request.getParameter("fid"));
 		}
 		if(iutil.isNull(request.getParameter("wjno"))){
-			request.setAttribute("wjno", "00"+request.getParameter("wjno"));
+			request.setAttribute("wjno", request.getParameter("wjno"));
 		}
 		return "td/HistoryCurve";
 	}
@@ -84,7 +84,7 @@ public class WeldedJunctionControll {
 	public String goShowMoreJunction(HttpServletRequest request,@RequestParam String id){
 		try{
 			WeldedJunction wj = wjm.getWeldedJunctionById(new BigInteger(id));
-			wj.setWeldedJunctionno(wj.getWeldedJunctionno().substring(2, 8));
+			wj.setWeldedJunctionno(wj.getWeldedJunctionno());
 			request.setAttribute("wj", wj);
 		}catch(Exception e){
 			e.printStackTrace();
@@ -114,7 +114,7 @@ public class WeldedJunctionControll {
 		try{
 			for(WeldedJunction w:list){
 				json.put("id", w.getId());
-				json.put("weldedJunctionno", w.getWeldedJunctionno().substring(2, 8));
+				json.put("weldedJunctionno", w.getWeldedJunctionno());
 				json.put("serialNo", w.getSerialNo());
 				json.put("pipelineNo", w.getPipelineNo());
 				json.put("roomNo", w.getRoomNo());
@@ -185,7 +185,7 @@ public class WeldedJunctionControll {
 		JSONObject obj = new JSONObject();
 		try{
 			for(WeldedJunction w:list){
-				json.put("weldedJunctionno", w.getWeldedJunctionno().substring(2, 8));
+				json.put("weldedJunctionno", w.getWeldedJunctionno());
 				json.put("maxElectricity", w.getMaxElectricity());
 				json.put("minElectricity", w.getMinElectricity());
 				json.put("maxValtage", w.getMaxValtage());
@@ -212,7 +212,7 @@ public class WeldedJunctionControll {
 			MyUser user = (MyUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			wj.setCreater(new BigInteger(user.getId()+""));
 			wj.setUpdater(new BigInteger(user.getId()+""));
-			wj.setWeldedJunctionno("00"+request.getParameter("weldedJunctionno"));
+			wj.setWeldedJunctionno(request.getParameter("weldedJunctionno"));
 			wj.setSerialNo(request.getParameter("serialNo"));
 			wj.setUnit(request.getParameter("unit"));
 			wj.setArea(request.getParameter("area"));
@@ -266,7 +266,7 @@ public class WeldedJunctionControll {
 			MyUser user = (MyUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			wj.setUpdater(new BigInteger(user.getId()+""));
 			wj.setId(new BigInteger(request.getParameter("id")));
-			wj.setWeldedJunctionno("00"+request.getParameter("weldedJunctionno"));
+			wj.setWeldedJunctionno(request.getParameter("weldedJunctionno"));
 			wj.setSerialNo(request.getParameter("serialNo"));
 			wj.setUnit(request.getParameter("unit"));
 			wj.setArea(request.getParameter("area"));
@@ -394,7 +394,7 @@ public class WeldedJunctionControll {
 				json.put("id", w.getId());
 				json.put("machid",w.getMachid());
 				json.put("machine_num", w.getMachine_num());
-				json.put("weldedJunctionno", w.getWeldedJunctionno().substring(2, 8));
+				json.put("weldedJunctionno", w.getWeldedJunctionno());
 				json.put("dyne", w.getDyne());
 				json.put("maxElectricity", w.getMaxElectricity());
 				json.put("minElectricity", w.getMinElectricity());

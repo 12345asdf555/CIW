@@ -110,7 +110,7 @@ function dgDatagrid(){
 			align : "left",
 			formatter:function(value,row,index){
 			var str = "";
-			str += '<a id="wj" class="easyui-linkbutton" href="weldedjunction/getWeldJun?wjno='+row.weldedJunctionno+'"/>';
+			str += '<a id="wj" class="easyui-linkbutton" href="weldedjunction/getWeldJun?wjno='+encodeURI(row.weldedJunctionno)+'"/>';
 			return str;
 			}
 		}] ],
@@ -118,7 +118,6 @@ function dgDatagrid(){
             if ((index % 2)!=0){
             	//处理行代背景色后无法选中
             	var color=new Object();
-                color.class="rowColor";
                 return color;
             }
         },
