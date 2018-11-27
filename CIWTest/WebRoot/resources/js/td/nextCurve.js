@@ -83,7 +83,7 @@
 		$.ajax({  
 		      type : "post",  
 		      async : false,
-		      url : "td/allWeldname?status="+$("#status").val(),  
+		      url : "td/allWeldname?status="+$("#status").val(),
 		      data : {},  
 		      dataType : "json", //返回数据形式为json  
 		      success : function(result) {

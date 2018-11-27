@@ -348,11 +348,19 @@ public class InsframeworkController {
 	 */
 	@RequestMapping("/getConmpany")
 	@ResponseBody
-	public void getConmpany(HttpServletResponse response){
+	public void getConmpany(HttpServletResponse response,HttpServletRequest request){
         String str ="";  
         StringBuilder json = new StringBuilder();
-        int type = im.getTypeById(im.getUserInsframework());
         BigInteger value1,value2;
+        int status = 0, type = 0;
+        if(iutil.isNull(request.getParameter("status"))){
+			status = Integer.parseInt(request.getParameter("status"));
+		}else{
+	        type = im.getTypeById(im.getUserInsframework());
+		}
+		if(status!=0){
+			type = 20;
+		}
         if(type==20){
 			value1=null;
 			value2=null;

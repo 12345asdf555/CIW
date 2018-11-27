@@ -30,12 +30,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script type="text/javascript" src="resources/js/highcharts.js"></script>
 	<script type="text/javascript" src="resources/js/exporting.js"></script>
 	<script type="text/javascript" src="resources/js/td/newCurve.js"></script>
-	<script type="text/javascript" src="resources/js/insframework/insframeworktree.js"></script>
+	<!-- <script type="text/javascript" src="resources/js/insframework/insframeworktree.js"></script> -->
 
   </head>
   
 <body class="easyui-layout">
 	<jsp:include  page="../insframeworktree.jsp"/>
+	<input type="hidden" id="status" value="${status}">
 	<div id="bodys" region="center"  hide="true"  split="true" title="实时界面" style="background: #eee; height: 335px;">
 	</div>
 </body>

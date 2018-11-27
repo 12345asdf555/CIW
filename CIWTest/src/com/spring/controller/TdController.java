@@ -72,6 +72,7 @@ public class TdController {
 		long uid = myuser.getId();
 		String insname = tdService.findInsname(tdService.findIns(uid));
 		request.setAttribute("insname", insname);*/
+		request.setAttribute("status", request.getParameter("status"));
 		return "td/newCurve";
 	}
 	
@@ -81,6 +82,7 @@ public class TdController {
 		String machid = request.getParameter("machid");
 		request.setAttribute("value", value);
 		request.setAttribute("machid", machid);
+		request.setAttribute("status", request.getParameter("status"));
 		return "td/nextCurve";
 	}
 	
@@ -553,9 +555,16 @@ public class TdController {
 	@RequestMapping("/allWeldname")
 	@ResponseBody
 	public String allWeldname(HttpServletRequest request){
-		MyUser myuser = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		List<Insframework> insframework = insm.getInsByUserid(BigInteger.valueOf(myuser.getId()));
-		BigInteger parent = insframework.get(0).getId();
+		int status = 0;
+		BigInteger parent = null;
+		if(iutil.isNull(request.getParameter("status"))){
+			status = Integer.parseInt(request.getParameter("status"));
+		}
+		if(status==0){
+			MyUser myuser = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			List<Insframework> insframework = insm.getInsByUserid(BigInteger.valueOf(myuser.getId()));
+			parent = insframework.get(0).getId();
+		}
 		List<Td> fwn = tdService.allWeldname(parent);	
 		JSONObject obj = new JSONObject();
 		JSONObject json = new JSONObject();

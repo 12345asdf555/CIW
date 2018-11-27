@@ -41,6 +41,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   
 <body class="easyui-layout">
+	<input type="hidden" id="status" value="${status}">
+	<input  name="machineid" id="machineid" type="hidden" value="${machid }"/>
+	<input  name="afresh" id="afresh" type="hidden" value="${afreshLogin }"/>
 	<div id="bodys" region="center"  hide="true"  split="true" title="实时界面" style="background: #eee; height: 335px;">
 		<div class="x-component x-fieldset-header-text x-component-default" style="width:25%;height:25%;float:left;">点击示意图返回<br/>
 			<img id="mrjpg" src="resources/images/WDgj.png" onclick="javascript:back()" width="32%" height="70%" style="margin-left:20px">

@@ -42,12 +42,23 @@ $(function(){
 			})
 		}
 	});
-	$("#myTree").tree({  
+	$("#myTree").tree({
+		url : 'insframework/getConmpany?status=' + $("#status").val(), //请求路径
+		onLoadSuccess : function(node, data) {
+			var tree = $(this);
+			if (data) {
+				$(data).each(function(index, d) {
+					if (this.state == 'closed') {
+						tree.tree('expandAll');
+					}
+				});
+			}
+		} ,
 		onClick : function(node){
 			$("#bodys").empty();
 			getMachine(node.id);
-		 }
-	})
+		}
+	});
 	$.ajax({  
 	      type : "post",  
 	      async : false,
@@ -66,7 +77,7 @@ $(function(){
 	$.ajax({  
 	      type : "post",  
 	      async : false,
-	      url : "td/allWeldname",  
+	      url : "td/allWeldname?status="+$("#status").val(),  
 	      data : {},  
 	      dataType : "json", //返回数据形式为json  
 	      success : function(result) {
@@ -120,7 +131,7 @@ $(function(){
 	}
 	
 	function imgfun(id){
-		var url = "td/goNextcurve?value="+fmch[id].fequipment_no+"&machid="+fmch[id].fid;
+		var url = "td/goNextcurve?value="+fmch[id].fequipment_no+"&machid="+fmch[id].fid+"&status="+$("#status").val();
 		var img = new Image();
 	    img.src = url;  // 设置相对路径给Image, 此时会发送出请求
 	    url = img.src;  // 此时相对路径已经变成绝对路径
