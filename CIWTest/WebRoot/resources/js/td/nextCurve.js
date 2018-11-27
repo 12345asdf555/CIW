@@ -83,7 +83,7 @@
 		$.ajax({  
 		      type : "post",  
 		      async : false,
-		      url : "td/allWeldname",  
+		      url : "td/allWeldname?status="+$("#status").val(),  
 		      data : {},  
 		      dataType : "json", //返回数据形式为json  
 		      success : function(result) {
@@ -419,7 +419,7 @@
 							symbol++;
 						}
 						document.getElementById("in5").value=parseInt(redata.substring(46+i, 50+i));
-						document.getElementById("in6").value=parseInt(redata.substring(50+i, 54+i));
+						document.getElementById("in6").value=parseFloat((parseInt(redata.substring(50+i, 54+i))/10).toFixed(2));
 						document.getElementById("in7").value=parseInt(redata.substring(38+i, 42+i))
 						document.getElementById("in8").value=parseFloat((parseInt(redata.substring(42+i, 46+i))/10).toFixed(2));
 						for(var k=0;k<welderName.length;k++){
