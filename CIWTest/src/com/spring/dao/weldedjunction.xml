@@ -164,4 +164,8 @@
 	<delete id="deleteJunction" parameterType="java.math.BigInteger">
 		delete from tb_welded_junction where fid=#{id}
 	</delete>
+	
+	<select id="allWeldedJunction" resultMap="wjMap">
+		select fid,fwelded_junction_no from tb_welded_junction where 1=1
+	</select>
 </mapper>
