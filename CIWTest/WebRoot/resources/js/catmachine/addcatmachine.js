@@ -39,7 +39,7 @@ function addWeldingMachine(){
 	statusId[0].checked =  'checked';
 	url = "weldingMachine/addcatmachine";
 }
-
+var oldnextTime;
 function editWeldingMachine(){
 	flag = 2;
 	$('#fm').form('clear');
