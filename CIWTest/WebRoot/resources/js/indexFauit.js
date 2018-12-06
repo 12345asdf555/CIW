@@ -110,7 +110,7 @@ function webclient(){
 }
 
 function view(){
-	for(var i = 0;i < redata.length;i+=93){
+	for(var i = 0;i < redata.length;i+=95){
 		var mstatus=redata.substring(36+i, 38+i);//故障状态
 		switch (mstatus){
 //			case "00":

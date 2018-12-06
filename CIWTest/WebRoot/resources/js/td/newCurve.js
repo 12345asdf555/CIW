@@ -190,6 +190,7 @@ $(function(){
 			},5000);*/
 		};
 		socket.onmessage = function(msg) {
+			counts=0;
 			redata=msg.data;
 			iview();
 			symbol++;
@@ -226,8 +227,8 @@ $(function(){
 	}
 
 	function iview(){
-		if(redata.length==279){
-		for(var i = 0;i < redata.length;i+=93){
+		if(redata.length==285){
+		for(var i = 0;i < redata.length;i+=95){
 				for(var f=0;f<fmch.length;f++){
 					if(fmch[f].fid==parseInt(redata.substring(4+i, 8+i))){
 						for(var k=0;k<welderName.length;k++){
