@@ -7,6 +7,7 @@ var ele = new Array();
 var vol = new Array();
 var work = new Array();
 var wait = new Array();
+var allWeldedJunction;
 var dglength;
 var websocketURL;
 var welderName;
@@ -83,6 +84,21 @@ $(function(){
 	      success : function(result) {
 	          if (result) {
 	        	  welderName=eval(result.rows);
+	          }  
+	      },
+	      error : function(errorMsg) {  
+	          alert("数据请求失败，请联系系统管理员!");  
+	      }  
+	 });
+	$.ajax({  
+	      type : "post",  
+	      async : false,
+	      url : "weldedjunction/getAllWeldedJunction",  
+	      data : {},  
+	      dataType : "json", //返回数据形式为json  
+	      success : function(result) {
+	          if (result) {
+	        	  allWeldedJunction=eval(result.rows);
 	          }  
 	      },
 	      error : function(errorMsg) {  
@@ -174,6 +190,7 @@ $(function(){
 			},5000);*/
 		};
 		socket.onmessage = function(msg) {
+			counts=0;
 			redata=msg.data;
 			iview();
 			symbol++;
@@ -210,13 +227,19 @@ $(function(){
 	}
 
 	function iview(){
-		if(redata.length==279){
-		for(var i = 0;i < redata.length;i+=93){
+		if(redata.length==285){
+		for(var i = 0;i < redata.length;i+=95){
 				for(var f=0;f<fmch.length;f++){
 					if(fmch[f].fid==parseInt(redata.substring(4+i, 8+i))){
 						for(var k=0;k<welderName.length;k++){
 							if(welderName[k].fid==parseInt(redata.substring(0+i, 4+i))){
 								document.getElementById("lab3"+fmch[f].fid).innerHTML="操作人员："+welderName[k].fname;
+							}
+						}
+						for(var wj=0;wj<allWeldedJunction.length;wj++){
+							if(allWeldedJunction[wj].id == parseInt(redata.substring(12+i, 16+i))){
+								document.getElementById("lab2"+fmch[f].fid).innerHTML="焊缝编号："+allWeldedJunction[wj].weldedJunctionno;
+								break;
 							}
 						}
 						document.getElementById("lab4"+fmch[f].fid).innerHTML="焊接电流："+parseInt(redata.substring(38+i, 42+i))+"A";

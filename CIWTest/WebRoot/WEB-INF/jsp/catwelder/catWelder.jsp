@@ -122,7 +122,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<input class="easyui-textbox"  id="ifpase"  name="ifpase"/>
 				</div>
 				<div class="fitem">
-					<lable>IC卡有效期</lable>
+					<lable><span class="required">*</span>IC卡有效期</lable>
 					<input class="easyui-datetimebox" id="icworkime"  name="icworkime"/>
 					<lable>半年确认时间</lable>
 					<input class="easyui-datetimebox" id="halfyearsure"  name="halfyearsure"/>

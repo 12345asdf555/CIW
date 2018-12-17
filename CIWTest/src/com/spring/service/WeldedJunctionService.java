@@ -78,4 +78,10 @@ public interface WeldedJunctionService {
 	 * 时间段内焊接结束时间
 	 */
 	String getLasttime(WeldDto dto, BigInteger machineid, String welderid,String junid);
+
+	/**
+	 * 获取所有焊缝的fid和编号
+	 * @return
+	 */
+	List<WeldedJunction> getWeldedJunctionAll();
 }

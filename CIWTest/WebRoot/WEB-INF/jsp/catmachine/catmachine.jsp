@@ -89,7 +89,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<select class="easyui-combobox" name="manuno" id="manuno" data-options="required:true,editable:false""></select>
 				</div>
 				<div class="fitem">
-					<lable><span class="required">*</span>出厂编号</lable>
+					<lable></span>出厂编号</lable>
 					<select class="easyui-textbox" name="manufacturerNo" id="manufacturerNo" ></select>
 				</div>
 				<div class="fitem">
@@ -101,7 +101,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<input class="easyui-textbox" name="position" id="position"/>
 				</div>
 				<div class="fitem">
-					<lable><span class="required">*</span>使用工段</lable>
+					<lable>使用工段</lable>
 					<input class="easyui-textbox" name="action" id="action" />
 				</div>
 				<div class="fitem">

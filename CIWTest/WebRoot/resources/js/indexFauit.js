@@ -105,12 +105,12 @@ function webclient(){
     };
 	//发生了错误事件
 	socket.onerror = function() {
-		aler("发生异常，正在尝试重新连接服务器！！！");
+		alert("发生异常，正在尝试重新连接服务器！！！");
 	}
 }
 
 function view(){
-	for(var i = 0;i < redata.length;i+=93){
+	for(var i = 0;i < redata.length;i+=95){
 		var mstatus=redata.substring(36+i, 38+i);//故障状态
 		switch (mstatus){
 //			case "00":

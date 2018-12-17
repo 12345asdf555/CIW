@@ -79,4 +79,10 @@ public class WeldedJunctionServiceImpl implements WeldedJunctionService{
 		return wjm.getLasttime(dto,machineid,welderid,junid);
 	}
 
+	@Override
+	public List<WeldedJunction> getWeldedJunctionAll() {
+		// TODO Auto-generated method stub
+		return wjm.allWeldedJunction();
+	}
+
 }

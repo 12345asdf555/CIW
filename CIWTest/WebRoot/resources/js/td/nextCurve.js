@@ -17,6 +17,7 @@
 	var machstatus = new Array();
 	var work = new Array();
 	var wait = new Array();
+	var allWeldedJunction;
 	var dglength;
 	var websocketURL;
 	var welderName;
@@ -89,6 +90,21 @@
 		      success : function(result) {
 		          if (result) {
 		        	  welderName=eval(result.rows);
+		          }  
+		      },
+		      error : function(errorMsg) {  
+		          alert("数据请求失败，请联系系统管理员!");  
+		      }  
+		 });
+		$.ajax({  
+		      type : "post",  
+		      async : false,
+		      url : "weldedjunction/getAllWeldedJunction",  
+		      data : {},  
+		      dataType : "json", //返回数据形式为json  
+		      success : function(result) {
+		          if (result) {
+		        	  allWeldedJunction=eval(result.rows);
 		          }  
 		      },
 		      error : function(errorMsg) {  
@@ -386,13 +402,13 @@
 		
 		}
 		function iview(){
-			if(redata.length==279){
+			if(redata.length==285){
 			var z=0;
 			time.length=0;
 			
 			vol.length=0;
 			ele.length=0;
-			for(var i = 0;i < redata.length;i+=93){
+			for(var i = 0;i < redata.length;i+=95){
 					if(parseInt(redata.substring(4+i, 8+i))==document.getElementById("machid").value){
 						time1++;
 					    var t1 = secondToDate(time1);
@@ -418,10 +434,20 @@
 							volcurve();
 							symbol++;
 						}
+						for(var wj=0;wj<allWeldedJunction.length;wj++){
+							if(allWeldedJunction[wj].id == parseInt(redata.substring(12+i, 16+i))){
+								document.getElementById("in14").value=allWeldedJunction[wj].weldedJunctionno;
+							}
+						}
 						document.getElementById("in5").value=parseInt(redata.substring(46+i, 50+i));
 						document.getElementById("in6").value=parseFloat((parseInt(redata.substring(50+i, 54+i))/10).toFixed(2));
 						document.getElementById("in7").value=parseInt(redata.substring(38+i, 42+i))
 						document.getElementById("in8").value=parseFloat((parseInt(redata.substring(42+i, 46+i))/10).toFixed(2));
+						if(parseInt(redata.substring(91+i, 95+i))==255){
+							document.getElementById("in15").value="自由调节状态";
+						}else{
+							document.getElementById("in15").value=parseInt(redata.substring(91+i, 95+i));
+						}
 						for(var k=0;k<welderName.length;k++){
 							if(welderName[k].fid==redata.substring(0+i, 4+i)){
 								document.getElementById("in13").value=welderName[k].fname;
