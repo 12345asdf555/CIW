@@ -62,7 +62,7 @@ function loadxmlDoc(file) {
 
 var resourceary = [];
 function anaylsis(ipurl){
-	var object = loadxmlDoc(ipurl+"ConfigFile/menu.xml");
+	var object = loadxmlDoc(ipurl+"ConfigFile/ciwxzMenu.xml");
 	var menuinfo = object.getElementsByTagName("Menuinfo");
 	for(var m = 1; m <= menuinfo.length; m++){
 		for (var i = 0; i < menuinfo.length; i++) {
