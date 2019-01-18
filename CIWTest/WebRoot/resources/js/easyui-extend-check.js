@@ -351,6 +351,33 @@ $(function(){
                     	return /^1[3-8]+\d{9}$/.test(value);
                     },     
                     message: '请输入正确的手机号码'    
-                }
+                },
+				
+				emailValidate : {
+					validator : function(value, param){
+						if(flag){
+							var oldemail = $("#oldemail").val();
+							if((oldemail!=null || oldemail!="") && oldemail == value){
+								return true;
+							}
+							var result = "";
+							$.ajax({
+								type : 'post',
+								async : false,
+								url : 'hierarchy/emailValidate',
+								data : {
+									"email" : value
+								},
+								success : function(data){
+									result = data;
+								}
+							});
+							return result;
+						}else{
+							return true;
+						}
+					},
+					message : '邮箱已经被占用'
+				}
 			})
 })

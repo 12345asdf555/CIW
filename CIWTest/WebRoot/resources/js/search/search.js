@@ -5,6 +5,43 @@ var condition="";
 var content="";
 var joint = "";
 var flag = true;
+
+//邮件管理进入查询
+function insertSearchEmail(){
+	$("#searchdiv").dialog("open");
+	searchEmailCombobox();
+	initSearch();
+}
+//邮件管理下拉框
+function searchEmailCombobox(){
+	var optionFields = 
+		"<option value='femailname'>接收者</option>" +
+		"<option value='femailaddress'>邮箱地址</option>";
+	$(".fields").html(optionFields);
+	createSearchCombobox();
+}
+
+//新增邮件管理查询条件
+function newSearchEmail(){
+	fillcontent();
+	newSearch();
+	searchEmailCombobox();
+	initSearch();
+}
+
+//邮件管理执行查询
+function searchEmail(){
+	fillcontent();
+	if(!getContent()){
+		return;
+	}
+	$('#dg').datagrid('load', {
+		"searchStr" : searchStr
+	});
+	$("#searchdiv").dialog("close");
+	searchStr="";
+}
+
 //工时分类进入查询
 function serachClassify(){
 	$("#searchdiv").dialog("open");

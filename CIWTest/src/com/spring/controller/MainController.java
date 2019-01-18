@@ -8,13 +8,21 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.github.pagehelper.PageInfo;
+import com.spring.model.Email;
+import com.spring.model.Gather;
 import com.spring.model.Insframework;
 import com.spring.model.MyUser;
 import com.spring.model.Resources;
 import com.spring.model.User;
+import com.spring.model.Welder;
+import com.spring.page.Page;
+import com.spring.service.EmailService;
 import com.spring.service.InsframeworkService;
 import com.spring.service.ResourceService;
 import com.spring.service.UserService;
@@ -34,8 +42,15 @@ public class MainController {
 
 	@Autowired
 	private ResourceService rs;
+
+	@Autowired
+	private EmailService es;
 	
 	IsnullUtil iutil = new IsnullUtil();
+	private Page page;
+	private int pageIndex = 1;
+	private int pageSize = 10;
+	private int total = 0;
 	
 	/**
 	 * 跳转index页面进行分层
@@ -49,6 +64,15 @@ public class MainController {
 		JSONObject obj = new JSONObject();
 		obj.put("hierarchy", hierarchy);
 		return obj.toString();
+	}
+	
+	/**
+	 * 跳转邮件管理页面
+	 * @return
+	 */
+	@RequestMapping("/goEmail")
+	public String goEmail(HttpServletRequest request){
+		return "email/email";
 	}
 	
 	@RequestMapping("/getUserInsframework")
@@ -114,5 +138,103 @@ public class MainController {
 		obj.put("ary1", ary1);
 		obj.put("ary2", ary2);
 		return obj.toString();
+	}
+	
+	@RequestMapping("/getEmailList")
+	@ResponseBody
+	public String getEmailList(HttpServletRequest request){
+		JSONObject obj = new JSONObject();
+		JSONArray ary = new JSONArray();
+		JSONObject json = new JSONObject();
+		pageIndex = Integer.parseInt(request.getParameter("page"));
+		pageSize = Integer.parseInt(request.getParameter("rows"));
+		String str = request.getParameter("searchStr");
+		page = new Page(pageIndex,pageSize,total);
+		List<Email> list = es.getEmailAll(page,str);
+		long total = 0;
+		
+		if(list != null){
+			PageInfo<Email> pageinfo = new PageInfo<Email>(list);
+			total = pageinfo.getTotal();
+		}
+		try{
+			for(int i=0;i<list.size();i++){
+				json.put("femailname", list.get(i).getFemailname());
+				json.put("femailaddress", list.get(i).getFemailaddress());
+				ary.add(json);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		obj.put("total", total);
+		obj.put("rows", ary);
+		return obj.toString();
+	}
+	
+	@RequestMapping("/addEmail")
+	@ResponseBody
+	public String addEmail(@ModelAttribute("email")Email email){
+		JSONObject obj = new JSONObject();
+		try{
+			email.setFemailtype("1");
+			es.addEmail(email);
+			email.setFemailtype("2");
+			es.addEmail(email);
+			email.setFemailtype("3");
+			es.addEmail(email);
+			obj.put("success", true);
+		}catch(Exception e){
+			e.printStackTrace();
+			obj.put("success", false);
+			obj.put("msg", e.getMessage());
+		}
+		return obj.toString();
+	}
+	
+	@RequestMapping("/editEmail")
+	@ResponseBody
+	public String editEmail(HttpServletRequest request,@ModelAttribute("email")Email email){
+		JSONObject obj = new JSONObject();
+		try{
+			email.setFemailtype(request.getParameter("address"));
+			es.editEmail(email);
+			obj.put("success", true);
+		}catch(Exception e){
+			e.printStackTrace();
+			obj.put("success", false);
+			obj.put("msg", e.getMessage());
+		}
+		return obj.toString();
+	}
+	
+	@RequestMapping("/deleteEmail")
+	@ResponseBody
+	public String deleteEmail(HttpServletRequest request){
+		JSONObject obj = new JSONObject();
+		try{
+			es.deleteEmail(request.getParameter("femailaddress"));
+			obj.put("success", true);
+		}catch(Exception e){
+			e.printStackTrace();
+			obj.put("success", false);
+			obj.put("msg", e.getMessage());
+		}
+		return obj.toString();
+	}
+	
+	/**
+	 * 校验邮箱是否存在
+	 * @param name
+	 * @return
+	 */
+	@RequestMapping("/emailValidate")
+	@ResponseBody
+	public String emailValidate(HttpServletRequest request,@RequestParam String email){
+		boolean flag = true;
+		int count = es.getEmailAddressCount(email);
+		if(count > 0){
+			flag = false;
+		}
+		return flag + "";
 	}
 }
