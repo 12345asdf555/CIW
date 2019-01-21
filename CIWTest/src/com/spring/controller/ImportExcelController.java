@@ -110,17 +110,17 @@ public class ImportExcelController {
 				wm.getInsframeworkId().setId(wmm.getInsframeworkByName(name));
 				Gather gather = wm.getGatherId();
 				int count2 = 0;
-//				if(gather!=null){
-//					int count3 = g.getGatherNoByItemCount(gather.getGatherNo(), wm.getInsframeworkId().getId()+"");
-//					if(count3 == 0){
-//						obj.put("msg","导入失败，请检查您的采集序号是否存在或是否属于该部门！");
-//						obj.put("success",false);
-//						return obj.toString();
-//					}
-//					gather.setId(g.getGatherByNo(gather.getGatherNo()));
-//					wm.setGatherId(gather);
-//					count2 = wmm.getGatheridCount(wm.getInsframeworkId().getId(),gather.getGatherNo());
-//				}
+				if(gather!=null){
+					int count3 = g.getGatherNoByItemCount(gather.getGatherNo(), wm.getInsframeworkId().getId()+"");
+					gather.setId(g.getGatherByNo(gather.getGatherNo()));
+					wm.setGatherId(gather);
+					count2 = wmm.getGatheridCount(wm.getInsframeworkId().getId(),gather.getGatherNo());
+					if(count2>0 || count3 == 0){
+						obj.put("msg","导入失败，请检查您的采集序号是否存在或是否属于该部门！");
+						obj.put("success",false);
+						return obj.toString();
+					}
+				}
 //				if(isInteger(wm.getFmachingnumber())){
 //					wm.setFmachingnumber(wm.getFmachingnumber());
 //				}
@@ -134,9 +134,7 @@ public class ImportExcelController {
 				int count1 = wmm.getEquipmentnoCount(wm.getEquipmentNo());
 //				int count1 = wmm.getFmachingnumberCount(wm.getFmachingnumber());
 				if(count1>0){
-					obj.put("msg","导入失败，请检查您的设备编码、采集序号是否已存在！");
-					obj.put("success",false);
-					return obj.toString();
+					continue;
 				}
 //				wmm.addcatMachine(wm);
 //				wmm.addWeldingMachine(wm);
@@ -212,6 +210,9 @@ public class ImportExcelController {
 			File file  = new File(path);
 			file.delete();
 			for(Person w:cwd){
+				if(!iutil.isNull(w.getWelderno()) && !iutil.isNull(w.getName()) && !iutil.isNull(w.getFcheckintime())){
+					break;
+				}
 				w.setLeveid(dm.getvaluebyname(8,w.getLevename()));
 				w.setQuali(dm.getvaluebyname(7, w.getQualiname()));
 				w.setOwner(wmm.getInsframeworkByName(w.getInsname()));
@@ -227,6 +228,11 @@ public class ImportExcelController {
 //						return obj.toString();
 //					}
 //				}
+				if(!iutil.isNull(w.getOwner().toString())){
+					obj.put("msg","导入失败，请检查您的必填字段是否为空！");
+					obj.put("success",false);
+					return obj.toString();
+				}
 				//编码唯一
 				int count1 = ps.getUsernameCount(w.getWelderno());
 //				int count1 = cw.getweldnumCount(w.getWeldNum());
@@ -1029,7 +1035,7 @@ public class ImportExcelController {
 		Workbook workbook = create(stream);
 		Sheet sheet = workbook.getSheetAt(0);
 		
-		int rowstart = sheet.getFirstRowNum()+1;
+		int rowstart = sheet.getFirstRowNum()+2;
 		int rowEnd = sheet.getLastRowNum();
 	    
 		for(int i=rowstart;i<=rowEnd;i++){
@@ -1082,6 +1088,26 @@ public class ImportExcelController {
 					}
 					else if(k == 3){
 						p.setFirstsuretime(cellValue);//首次认证日期
+						break;
+ 					}
+					else if(k == 8){
+						p.setWorkfirsttime(cellValue);//岗位一上岗时间
+						break;
+ 					}
+					else if(k == 10){
+						p.setWorksecondtime(cellValue);//岗位二上岗时间
+						break;
+ 					}
+					else if(k == 18){
+						p.setIcworkime(cellValue);//IC卡有效期
+						break;
+ 					}
+					else if(k == 19){
+						p.setHalfyearsure(cellValue);//半年认证时间
+						break;
+ 					}
+					else if(k == 21){
+						p.setNextyear(cellValue);//次年年度确认
 						break;
  					}
 					
