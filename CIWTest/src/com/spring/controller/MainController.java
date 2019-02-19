@@ -15,12 +15,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
 import com.spring.model.Email;
-import com.spring.model.Gather;
 import com.spring.model.Insframework;
 import com.spring.model.MyUser;
 import com.spring.model.Resources;
 import com.spring.model.User;
-import com.spring.model.Welder;
 import com.spring.page.Page;
 import com.spring.service.EmailService;
 import com.spring.service.InsframeworkService;
@@ -159,8 +157,33 @@ public class MainController {
 		}
 		try{
 			for(int i=0;i<list.size();i++){
+				json.put("id", list.get(i).getFid());
 				json.put("femailname", list.get(i).getFemailname());
 				json.put("femailaddress", list.get(i).getFemailaddress());
+				json.put("femailtype", list.get(i).getFemailtype());
+				String[] emailstr = list.get(i).getFemailtype().split(",");
+				String typestr = "";
+				for(int j=0;j<emailstr.length;j++){
+					if(Integer.parseInt(emailstr[j]) == 1){
+						typestr += "员工入职半年提醒,";
+					}
+					if(Integer.parseInt(emailstr[j]) == 2){
+						typestr += "员工IC卡有效期提醒,";
+					}
+					if(Integer.parseInt(emailstr[j]) == 3){
+						typestr += "员工长时间未工作提醒,";
+					}
+					if(Integer.parseInt(emailstr[j]) == 4){
+						typestr += "焊机校验提醒,";
+					}
+					if(Integer.parseInt(emailstr[j]) == 5){
+						typestr += "焊机保养提醒,";
+					}
+				}
+				if(typestr.length()!=0){
+					typestr = typestr.substring(0, typestr.length()-1);
+				}
+				json.put("typestr", typestr);
 				ary.add(json);
 			}
 		}catch(Exception e){
@@ -176,12 +199,11 @@ public class MainController {
 	public String addEmail(@ModelAttribute("email")Email email){
 		JSONObject obj = new JSONObject();
 		try{
-			email.setFemailtype("1");
-			es.addEmail(email);
-			email.setFemailtype("2");
-			es.addEmail(email);
-			email.setFemailtype("3");
-			es.addEmail(email);
+			String[] emailstr = email.getFemailtype().split(",");
+			for(int i=0;i<emailstr.length;i++){
+				email.setFemailtype(emailstr[i]);
+				es.addEmail(email);
+			}
 			obj.put("success", true);
 		}catch(Exception e){
 			e.printStackTrace();
@@ -196,8 +218,12 @@ public class MainController {
 	public String editEmail(HttpServletRequest request,@ModelAttribute("email")Email email){
 		JSONObject obj = new JSONObject();
 		try{
-			email.setFemailtype(request.getParameter("address"));
-			es.editEmail(email);
+			es.deleteEmail(request.getParameter("address"));
+			String[] emailstr = email.getFemailtype().split(",");
+			for(int i=0;i<emailstr.length;i++){
+				email.setFemailtype(emailstr[i]);
+				es.addEmail(email);
+			}
 			obj.put("success", true);
 		}catch(Exception e){
 			e.printStackTrace();

@@ -1,9 +1,6 @@
 var socket;
 var redata;
-//var welder_no = new Array();
-//var welder_name = new Array();
 var machine_no = new Array();
-var insf_name = new Array();
 var ary = new Array();
 var fauitContent,timer,fauitstr;
 $(function(){
@@ -38,13 +35,12 @@ function getWelderMachine(){
 	      dataType : "json", //返回数据形式为json  
 	      success : function(result) {
 	          if (result) {
-//	        	  for(var i=0;i<result.welderary.length;i++){
-//	        		  welder_no.push(result.welderary[i].welderno);
-//	        		  welder_name.push(result.welderary[i].weldername);
-//	        	  }
 	        	  for(var i=0;i<result.machineary.length;i++){
-	        		  machine_no.push(result.machineary[i].machineno);
-	        		  insf_name.push(result.machineary[i].insfname);
+	        		  machine_no.push({
+	        			  "machineid" : result.machineary[i].machineid,
+	        			  "machineno" : result.machineary[i].machineno,
+	        			  "insfname" : result.machineary[i].insfname
+	        		  });
 	        	  }
 	          }  
 	      },
@@ -56,8 +52,8 @@ function getWelderMachine(){
 
 function websocket() {
 	if(typeof(WebSocket) == "undefined") {
-		alert("您的浏览器不支持WebSocket");
-		return;
+    	WEB_SOCKET_SWF_LOCATION = "resources/js/WebSocketMain.swf";
+    	WEB_SOCKET_DEBUG = true;
 	}
 	webclient();
 };
@@ -113,9 +109,6 @@ function view(){
 	for(var i = 0;i < redata.length;i+=95){
 		var mstatus=redata.substring(36+i, 38+i);//故障状态
 		switch (mstatus){
-//			case "00":
-//				content("待机",i);
-//				break;
 			case "01":
 				content("E-010 焊枪开关OFF等待",i);
 				break;
@@ -157,35 +150,25 @@ function view(){
 };
 
 function content(fauit,index){
-//	var weldername;
-	var insfname,str;
-	var machineno = redata.substring(4+index, 8+index);//焊机编号
-//	var welderno = redata.substring(8+index, 12+index);//焊工编号
+	var machineno="",insfname="",str;
+	var machineid = redata.substring(4+index, 8+index);//焊机编号
 	var time = redata.substring(54+index, 73+index);//发生时间
-//	for(var i=0;i<welder_no.length;i++){
-//		if(welder_no[i]==welderno){
-//			weldername = welder_name[i];
-//			break;
-//		}
-//	}
 	for(var j=0;j<machine_no.length;j++){
-		if(machine_no[j]==machineno){
-			insfname = insf_name[j];
+		if(machine_no[j].machineid==parseInt(machineid)){
+			machineno = machine_no[j].machineno;
+			insfname = machine_no[j].insfname;
 			break;
 		}
 	}
-//	if(!weldername){
-//		weldername == "未知";
-//	}
-	if(!insfname){
-		insfname == "未知";
+	if(!machineno){
+		machineno = "未知";
 	}
-//	str = "<span style='color:red'>！</span> 焊机编号："+ machineno +"，焊机归属："+ insfname +"，焊工编号："+ welderno +"，焊工名称："
-//	+ weldername +"，<span style='color:#0254ad'><a href='javascript:openLive()'>故障代码及名称："+ fauit +"</a></span>，发生时间："+ time+"&nbsp;&nbsp;&nbsp;";
+	if(!insfname){
+		insfname = "未知";
+	}
 	str = "<span style='color:red'>！</span> 焊机编号："+ machineno +"，焊机归属："+ insfname +"<span style='color:#0254ad'><a href='javascript:openLive()'>，故障代码及名称："+ fauit +"</a></span>，发生时间："+ time+"&nbsp;&nbsp;&nbsp;";
 	ary.push(str);
 	fauitstr = str;
-	console.log("str数据："+fauitstr);
 }
 
 function  openLive(){
@@ -201,12 +184,6 @@ window.setTimeout(function() {
 		$("#content").append(ary[i]);
 	}
 	ary.length = 0;
-//	for(var i=0;i<num;i++){
-//		ary.shift();//从前端开始删除数组
-//	}
-//	if(!$("#content").html()){
-//		$("#content").append("云智能焊接管控系统欢迎您");
-//	}
 	timer = window.setInterval(move, 10);
     fauitContent.onmouseover = function () {
         window.clearInterval(timer);
@@ -222,11 +199,8 @@ function move() {
     }else{
 	    fauitContent.scrollLeft++;
 		if(fauitContent.scrollLeft+$("#fauitContent").width()>=$("#content").width()){//当前数据是否已经显示完成
-	//		if(ary.length>0){
-				$("#content").append(ary[ary.length-1]);
-				console.log(ary[ary.length-1]);
-//				fauitstr = "";
-	//		}
+			$("#content").append(ary[ary.length-1]);
+			console.log(ary[ary.length-1]);
 		}
     }
 }

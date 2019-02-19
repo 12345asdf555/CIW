@@ -69,6 +69,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<input type="hidden" id="oldemail"/>
 					<input class="easyui-textbox" name="femailaddress" id="femailaddress" data-options="required:true,validType:['email','emailValidate']"/>
 				</div>
+				<div class="fitem">
+					<lable><input type="checkbox" name="femailtype" value="1" style="width:20px;"/></lable>
+					员工入职半年提醒
+				</div>
+				<div class="fitem">
+					<lable><input type="checkbox" name="femailtype" value="2" style="width:20px;"/></lable>
+					员工IC卡有效期提醒
+				</div>
+				<div class="fitem">
+					<lable><input type="checkbox" name="femailtype" value="3" style="width:20px;"/></lable>
+					员工长时间未工作提醒
+				</div>
+				<div class="fitem">
+					<lable><input type="checkbox" name="femailtype" value="4" style="width:20px;"/></lable>
+					焊机校验提醒
+				</div>
+				<div class="fitem">
+					<lable><input type="checkbox" name="femailtype" value="5" style="width:20px;"/></lable>
+					焊机保养提醒
+				</div>
 			</form>
 		</div>
 		<div id="dlg-buttons">
@@ -86,6 +106,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<div class="fitem">
 					<lable>邮箱地址</lable>
 					<input class="easyui-textbox" name="femailaddress" id="femailaddress" readonly="readonly"/>
+				</div>
+				<div class="fitem">
+					<lable><input type="checkbox" name="femailtype" value="1" style="width:20px;" disabled="disabled"/></lable>
+					员工入职半年提醒
+				</div>
+				<div class="fitem">
+					<lable><input type="checkbox" name="femailtype" value="2" style="width:20px;" disabled="disabled"/></lable>
+					员工IC卡有效期提醒
+				</div>
+				<div class="fitem">
+					<lable><input type="checkbox" name="femailtype" value="3" style="width:20px;" disabled="disabled"/></lable>
+					员工长时间未工作提醒
+				</div>
+				<div class="fitem">
+					<lable><input type="checkbox" name="femailtype" value="4" style="width:20px;" disabled="disabled"/></lable>
+					焊机校验提醒
+				</div>
+				<div class="fitem">
+					<lable><input type="checkbox" name="femailtype" value="5" style="width:20px;" disabled="disabled"/></lable>
+					焊机保养提醒
 				</div>
 			</form>
 		</div>

@@ -1,9 +1,18 @@
 package com.spring.model;
 
+import java.math.BigInteger;
+
 public class Email {
+	private BigInteger fid;
 	private String femailname;
 	private String femailaddress;
 	private String 	femailtype;
+	public BigInteger getFid() {
+		return fid;
+	}
+	public void setFid(BigInteger fid) {
+		this.fid = fid;
+	}
 	public String getFemailname() {
 		return femailname;
 	}
