@@ -38,6 +38,7 @@ public class WeldingMachine {
 	private BigInteger updater;
 	private int mvalueid;
 	private String mvaluename;
+	private int modelid;
 	@Transient
 	private Gather gatherId;
 	@Transient
@@ -48,6 +49,12 @@ public class WeldingMachine {
 	private String statusname;
 	
 	
+	public int getModelid() {
+		return modelid;
+	}
+	public void setModelid(int modelid) {
+		this.modelid = modelid;
+	}
 	public int getMvalueid() {
 		return mvalueid;
 	}

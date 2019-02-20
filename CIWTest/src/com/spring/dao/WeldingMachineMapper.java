@@ -67,6 +67,7 @@ public interface WeldingMachineMapper extends Mapper<WeldingMachine>{
 	List<WeldingMachine> getMachineByIns(@Param("id")BigInteger id);
 	
 	List<WeldingMachine> getMachineGather();
-
+	
+	List<WeldingMachine> getMachineModel(@Param("type")int type);
 	
 }
