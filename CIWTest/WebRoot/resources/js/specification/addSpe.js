@@ -431,7 +431,7 @@ function save(value) {
 	} else {
 		fcontroller = 0;
 	}
-	if ($("#finitial").is(":checked") == true) {
+	if ($("#fmode").is(":checked") == true) {
 		fmode = 1;
 	} else {
 		fmode = 0;

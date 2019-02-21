@@ -4114,6 +4114,8 @@ function CPVEWGET(data) {
 		$("#fweld_tuny_vol1").numberbox('setValue', parseInt(data.substring(86, 88), 16));
 		$("#farc_tuny_vol1").numberbox('setValue', parseInt(data.substring(90, 92), 16));
 	}
+	$("#frequency").numberbox('setValue', (parseInt(data.substring(92, 96), 16) / 10).toFixed(1));
+	$("#gasflow").numberbox('setValue',(parseInt(data.substring(96,100),16)/10).toFixed(1));
 }
 function CPVEWINIT(value) {
 	$('#farc').combobox('clear');
@@ -4213,10 +4215,10 @@ function CPVEWINIT(value) {
 	$('#itorch').hide();
 	$('#dmodel').show();
 	$('#imodel').show();
-	$('#dgasflow').hide();
+/*	$('#dgasflow').hide();
 	$('#igasflow').hide();
 	$('#dfrequency').hide();
-	$('#ifrequency').hide();
+	$('#ifrequency').hide();*/
 	if(value==1){
 		$('#fchanel').combobox('clear');
 		$('#fchanel').combobox('loadData', {});//清空option选项   
@@ -4282,14 +4284,14 @@ function CPVEWCHECK() {
 		alert("电弧特性范围：-99~99");
 		return false;
 	}
-/*	if ($('#frequency').numberbox('getValue') < (0.5) || $('#frequency').numberbox('getValue') > (32)) {
+	if ($('#frequency').numberbox('getValue') < (0.5) || $('#frequency').numberbox('getValue') > (32)) {
 		alert("双脉冲频率范围：0.5~32");
 		return false;
 	}
 	if ($('#gasflow').numberbox('getValue') < (0.5) || $('#gasflow').numberbox('getValue') > (5)) {
 		alert("气体流量范围：0.5~5");
 		return;
-	}*/
+	}
 	if ($('#fweld_tuny_ele').numberbox('getValue') < (0) || $('#fweld_tuny_ele').numberbox('getValue') > (50)) {
 		alert("焊接电流微调范围：0~50");
 		return false;
@@ -5458,6 +5460,8 @@ function CPVETGET(data) {
 		$("#fweld_tuny_vol1").numberbox('setValue', parseInt(data.substring(86, 88), 16));
 		$("#farc_tuny_vol1").numberbox('setValue', parseInt(data.substring(90, 92), 16));
 	}
+	$("#frequency").numberbox('setValue', (parseInt(data.substring(92, 96), 16) / 10).toFixed(1));
+	$("#gasflow").numberbox('setValue',(parseInt(data.substring(96,100),16)/10).toFixed(1));
 }
 function CPVETINIT(value) {
 	$('#farc').combobox('clear');
@@ -5539,10 +5543,10 @@ function CPVETINIT(value) {
 	$('#itorch').hide();
 	$('#dmodel').show();
 	$('#imodel').show();
-	$('#dgasflow').hide();
+/*	$('#dgasflow').hide();
 	$('#igasflow').hide();
 	$('#dfrequency').hide();
-	$('#ifrequency').hide();
+	$('#ifrequency').hide();*/
 	if(value==1){
 		$('#fchanel').combobox('clear');
 		$('#fchanel').combobox('loadData', {});//清空option选项   

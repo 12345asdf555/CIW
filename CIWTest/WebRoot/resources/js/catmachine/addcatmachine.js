@@ -96,7 +96,7 @@ function saveWeldingMachine() {
 	var url2 = "";
 	if (flag == 1) {
 		messager = "新增成功！";
-		url2 = url + "?tId=" + tid + "&iId=" + iid + "&sId=" + sid + "&isnetworking=" + isnetworking + "&manuno=" + manuno;
+		url2 = url + "?tId=" + tid + "&iId=" + iid + "&sId=" + sid + "&isnetworking=" + isnetworking + "&manuno=" + manuno + "&gatherId=" + gatherId;
 	} else {
 		messager = "修改成功！";
 		url2 = url + "&symbol=" + symbol + "&tId=" + tid + "&iId=" + iid + "&sId=" + sid + "&isnetworking=" + isnetworking + "&manuno=" + manuno + "&gatherId=" + gatherId;
