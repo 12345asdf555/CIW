@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.spring.dao.WpsMapper;
-import com.spring.model.User;
 import com.spring.model.Wps;
 import com.spring.page.Page;
 import com.spring.service.WpsService;

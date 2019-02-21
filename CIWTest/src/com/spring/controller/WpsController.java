@@ -1,16 +1,6 @@
 package com.spring.controller;
 
-import java.awt.Robot;
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.math.BigInteger;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.SocketAddress;
 import java.nio.channels.SocketChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,8 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
 import com.spring.model.MyUser;
-import com.spring.model.Td;
-import com.spring.model.User;
 import com.spring.model.Wps;
 import com.spring.page.Page;
 import com.spring.service.TdService;
@@ -144,53 +132,18 @@ public class WpsController {
 		JSONArray ary = new JSONArray();
 		JSONObject obj = new JSONObject();
 		try{
-			/*if(findAll.size()==0){
-				json.put("FWPSNum", 1);//通道号
-				json.put("Fweld_I", 62);//初期条件
-				json.put("Fweld_V", 62);//溶孔深度
-				json.put("Fweld_I_MAX",102);//一元个别
-				json.put("Fweld_I_MIN", 111);//收弧模式
-				json.put("Fweld_V_MAX", 0);//电弧特性
-				json.put("Fweld_V_MIN", 0);//模式
-				json.put("Fweld_Alter_I", 91);//材料
-				json.put("Fweld_Alter_V", 121);//气体
-				json.put("Fweld_PreChannel", 132);//半径
-				json.put("ftime", 30.0);
-				json.put("fadvance", 1.0);
-				json.put("fhysteresis", 1.0);
-				json.put("fini_ele", 100.0);//初期电流
-				json.put("fweld_ele", 100.0);//焊接电流
-				json.put("farc_ele", 100.0);//收弧电流
-				json.put("fweld_tuny_ele", 0.0);//焊接微调电流
-				json.put("fweld_tuny_vol", 0.0);//焊接微调电压
-				json.put("farc_tuny_ele", 0.0);//收弧微调电流
-				if(Integer.valueOf(cla.toString())==102){
-					json.put("fini_vol", 19.0);//初期电压
-					json.put("fweld_vol", 19.0);//焊接电压
-					json.put("farc_vol", 19.0);//收弧电压
-					json.put("fweld_tuny_vol", 0.0);//焊接微调电压
-					json.put("Fdiameter", 0.0);//收弧微调电压
-				}else{
-					json.put("fini_vol", 0.0);//初期电压
-					json.put("fweld_vol", 0.0);//焊接电压
-					json.put("farc_vol", 0.0);//收弧电压
-					json.put("fweld_tuny_vol", 0.0);//焊接微调电压
-					json.put("Fdiameter", 0.0);//收弧微调电压
-				}
-				ary.add(json);
-			}else{*/
 			for(Wps wps:findAll){
 				json.put("FID", wps.getFid());
 				json.put("FWPSNum", wps.getWelderid());
-				json.put("Fweld_I", wps.getFinitial());
-				json.put("Fweld_V", wps.getFcontroller());
-				json.put("Fweld_I_MAX",wps.getInsname());
-				json.put("Fweld_I_MIN", wps.getWeldername());
-				json.put("Fweld_V_MAX", wps.getFweld_v_max());
-				json.put("Fweld_V_MIN", wps.getFmode());
-				json.put("Fweld_Alter_I", wps.getUpdatename());
-				json.put("Fweld_Alter_V", wps.getFback());
-				json.put("Fweld_PreChannel", wps.getFname());
+				json.put("finitial", wps.getFinitial());
+				json.put("fcontroller", wps.getFcontroller());
+				json.put("fselect",wps.getInsname());
+				json.put("farc", wps.getWeldername());
+				json.put("fcharacter", wps.getFweld_v_max());
+				json.put("fmode", wps.getFmode());
+				json.put("fmaterial", wps.getUpdatename());
+				json.put("fgas", wps.getFback());
+				json.put("fdiameter", wps.getFname());
 				json.put("ftime", wps.getFtime());
 				json.put("fadvance", wps.getFadvance());
 				json.put("fhysteresis", wps.getFhysteresis());
@@ -209,6 +162,8 @@ public class WpsController {
 				json.put("Fdiameter", wps.getFdiameter());
 				json.put("frequency", wps.getFrequency());
 				json.put("gasflow", wps.getGasflow());
+				json.put("ftorch", wps.getFtorch());
+				json.put("fprocessid", wps.getFprocessid());
 				ary.add(json);
 			}
 		}catch(Exception e){
@@ -227,19 +182,20 @@ public class WpsController {
 		JSONObject json = new JSONObject();
 		JSONArray ary = new JSONArray();
 		JSONObject obj = new JSONObject();
+		String str="";
 		try{
 			for(Wps wps:findAll){
-				json.put("FID", wps.getFid());
+				str += wps.getWelderid()+",";
 				json.put("FWPSNum", wps.getWelderid());
-				json.put("Fweld_I", wps.getFinitial());
-				json.put("Fweld_V", wps.getFcontroller());
-				json.put("Fweld_I_MAX",wps.getInsname());
-				json.put("Fweld_I_MIN", wps.getWeldername());
-				json.put("Fweld_V_MAX", wps.getFweld_v_max());
-				json.put("Fweld_V_MIN", wps.getFmode());
-				json.put("Fweld_Alter_I", wps.getUpdatename());
-				json.put("Fweld_Alter_V", wps.getFback());
-				json.put("Fweld_PreChannel", wps.getFname());
+				json.put("finitial", wps.getFinitial());
+				json.put("fcontroller", wps.getFcontroller());
+				json.put("fselect",wps.getInsname());
+				json.put("farc", wps.getWeldername());
+				json.put("fcharacter", wps.getFweld_v_max());
+				json.put("fmode", wps.getFmode());
+				json.put("fmaterial", wps.getUpdatename());
+				json.put("fgas", wps.getFback());
+				json.put("fdiameter", wps.getFname());
 				json.put("ftime", wps.getFtime());
 				json.put("fadvance", wps.getFadvance());
 				json.put("fhysteresis", wps.getFhysteresis());
@@ -258,12 +214,15 @@ public class WpsController {
 				json.put("Fdiameter", wps.getFdiameter());
 				json.put("frequency", wps.getFrequency());
 				json.put("gasflow", wps.getGasflow());
+				json.put("ftorch", wps.getFtorch());
+				json.put("fprocessid", wps.getFprocessid());
 				ary.add(json);
 			}
 		}catch(Exception e){
 			e.getMessage();
 		}
 		obj.put("rows", ary);
+		obj.put("chanelNum", str);
 		return obj.toString();
 	}
 	
@@ -348,8 +307,10 @@ public class WpsController {
 		double fweld_tuny_vol = Double.valueOf(request.getParameter("fweld_tuny_vol"));
 		double farc_tuny_vol = Double.valueOf(request.getParameter("farc_tuny_vol"));
 		BigInteger machine=new BigInteger(request.getParameter("machine"));
-		double frequency = Double.valueOf(request.getParameter("fweld_tuny_vol"));
+		double frequency = Double.valueOf(request.getParameter("frequency"));
 		double gasflow = Double.valueOf(request.getParameter("gasflow"));
+		int fprocess = Integer.valueOf(request.getParameter("fprocess"));
+		int ftorch = Integer.valueOf(request.getParameter("ftorch"));
 		try{
 			wps.setFweld_i_max(chanel);
 			wps.setFweld_i_min(finitial);
@@ -366,13 +327,13 @@ public class WpsController {
 			wps.setFhysteresis(fhysteresis);
 			wps.setFini_ele(fini_ele);
 			wps.setFini_vol(fini_vol);
-			wps.setFini_vol(fini_vol1);
+			wps.setFini_vol1(fini_vol1);
 			wps.setFweld_ele(fweld_ele);
 			wps.setFweld_vol(fweld_vol);
-			wps.setFweld_vol(fweld_vol1);
+			wps.setFweld_vol1(fweld_vol1);
 			wps.setFarc_ele(farc_ele);
 			wps.setFarc_vol(farc_vol);
-			wps.setFarc_vol(farc_vol1);
+			wps.setFarc_vol1(farc_vol1);
 			wps.setFweld_tuny_ele(fweld_tuny_ele);
 			wps.setFweld_tuny_vol(fweld_tuny_vol);
 			wps.setFarc_tuny_ele(farc_tuny_ele);
@@ -382,6 +343,8 @@ public class WpsController {
 			wps.setFupdater(myuser.getId());
 			wps.setFrequency(frequency);
 			wps.setGasflow(gasflow);
+			wps.setFprocessid(fprocess);
+			wps.setFtorch(ftorch);
 			if(wpsService.findCount(machine,chanel.toString())<=0){
 				wpsService.saveSpe(wps);
 			}else{
@@ -436,7 +399,7 @@ public class WpsController {
 /*		return "redirect:/user/AllUser";*/
 	}
 	
-	@RequestMapping("/findCount")
+/*	@RequestMapping("/findCount")
 	@ResponseBody
 	public String findCount(HttpServletRequest request){
 		Wps wps = new Wps();
@@ -448,7 +411,7 @@ public class WpsController {
 		BigInteger mac = new BigInteger(request.getParameter("mac"));
 		try{
 			int co;
-			if(null!=ch&&""!=ch){
+			if(ch==null&&"".equals(ch)){
 				co=1;
 			}else{
 				co = wpsService.findCount(mac,ch);
@@ -476,7 +439,24 @@ public class WpsController {
 		}
 		obj.put("rows", ary);
 		return obj.toString();
-/*		return "redirect:/user/AllUser";*/
+	}*/
+	
+	@RequestMapping("/findCount")
+	@ResponseBody
+	public String findCount(HttpServletRequest request){
+		JSONObject obj = new JSONObject();
+		String chanel = request.getParameter("chanel");
+		BigInteger mac = new BigInteger(request.getParameter("mac"));
+		int count = 0;
+		try{
+			count = wpsService.findCount(mac,chanel);
+			obj.put("success", true);
+		}catch(Exception e){
+			obj.put("success", false);
+			obj.put("errorMsg", e.getMessage());
+		}
+		obj.put("count", count);
+		return obj.toString();
 	}
 	
 	@RequestMapping("/addWps")

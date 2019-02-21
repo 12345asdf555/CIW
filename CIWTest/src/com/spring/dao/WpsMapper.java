@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.spring.model.Wps;
-import com.spring.page.Page;
 
 public interface WpsMapper {
 	List<Wps> findAll(@Param("parent")BigInteger parent,@Param("str")String str);

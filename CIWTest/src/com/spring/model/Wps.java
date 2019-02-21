@@ -50,6 +50,9 @@ public class Wps {
 	private String fmode;
 	private double frequency;
 	private double gasflow;
+	private int ftorch;
+	private int fprocessid;
+	private String fprocessname;
 	public Wps(){
 		super();
 	}
@@ -203,7 +206,7 @@ public class Wps {
 	public void setFdiameter(double fdiameter){
 		this.fdiameter = fdiameter;
 	}
-	public Wps(long fid,BigInteger insid,BigInteger macid,String insname,BigInteger welderid,String weldername,String updatename,String fwpsnum,int fweld_i,int fweld_v,int fweld_i_max,int fweld_i_min,int fweld_v_max,int fweld_v_min,int fweld_alter_i,int fweld_alter_v,int fweld_prechannel,Date fcreatedate,Date fupdatedate,long fcreater,long fupdater,long fowner,String fback,String fname,double fdiameter,double ftime,double fadvance,double fhysteresis,double fini_ele,double fini_vol,double fini_vol1,double fweld_ele,double fweld_vol,double fweld_vol1,double farc_ele,double farc_vol,double farc_vol1,double fweld_tuny_ele,double fweld_tuny_vol,double farc_tuny_ele,String finitial,String fcontroller,String fmode) {
+	public Wps(long fid,BigInteger insid,BigInteger macid,String insname,BigInteger welderid,String weldername,String updatename,String fwpsnum,int fweld_i,int fweld_v,int fweld_i_max,int fweld_i_min,int fweld_v_max,int fweld_v_min,int fweld_alter_i,int fweld_alter_v,int fweld_prechannel,Date fcreatedate,Date fupdatedate,long fcreater,long fupdater,long fowner,String fback,String fname,double fdiameter,double ftime,double fadvance,double fhysteresis,double fini_ele,double fini_vol,double fini_vol1,double fweld_ele,double fweld_vol,double fweld_vol1,double farc_ele,double farc_vol,double farc_vol1,double fweld_tuny_ele,double fweld_tuny_vol,double farc_tuny_ele,String finitial,String fcontroller,String fmode,int ftorch,int fprocessid,String fprocessname) {
 		super();
 		this.macid = macid;
 		this.insname = insname;
@@ -247,6 +250,9 @@ public class Wps {
 		this.finitial = finitial;
 		this.fcontroller = fcontroller;
 		this.fmode = fmode;
+		this.ftorch = ftorch;
+		this.fprocessid = fprocessid;
+		this.fprocessname = fprocessname;
 	}
 	public double getFtime() {
 		return ftime;
@@ -367,5 +373,23 @@ public class Wps {
 	}
 	public void setGasflow(double gasflow) {
 		this.gasflow = gasflow;
+	}
+	public int getFtorch() {
+		return ftorch;
+	}
+	public void setFtorch(int ftorch) {
+		this.ftorch = ftorch;
+	}
+	public int getFprocessid() {
+		return fprocessid;
+	}
+	public void setFprocessid(int fprocessid) {
+		this.fprocessid = fprocessid;
+	}
+	public String getFprocessname() {
+		return fprocessname;
+	}
+	public void setFprocessname(String fprocessname) {
+		this.fprocessname = fprocessname;
 	}
 }

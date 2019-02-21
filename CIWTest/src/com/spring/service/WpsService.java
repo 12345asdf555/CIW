@@ -3,7 +3,6 @@ package com.spring.service;
 import java.math.BigInteger;
 import java.util.List;
 
-import com.spring.model.User;
 import com.spring.model.Wps;
 import com.spring.page.Page;
 

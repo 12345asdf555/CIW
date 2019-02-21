@@ -31,7 +31,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script type="text/javascript" src="resources/js/specification/addSpe.js"></script>
 	<script type="text/javascript" src="resources/js/specification/destroySpe.js"></script>
 	<script type="text/javascript" src="resources/js/specification/specificationtree.js"></script>
-		<script type="text/javascript" src="resources/js/specification/control.js"></script>
+	<script type="text/javascript" src="resources/js/specification/control.js"></script>
+	<script type="text/javascript" src="resources/js/specification/differentMachine.js"></script>
+	<script type="text/javascript" src="resources/js/specification/comboboxCheck.js"></script>
 	<script type="text/javascript" src="resources/js/swfobject.js"></script>
 	<script type="text/javascript" src="resources/js/web_socket.js"></script>
 	<style type="text/css">
@@ -62,7 +64,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            		<tr>
 			  				<td class="leftTd"><lable>通道号：</lable></td>
 			  				<td class="rightTd">
-			  					<select class="easyui-combobox" name="chanel" id="chanel" data-options="editable:false">
+			  					<select class="easyui-combobox" name="fchanel" id="fchanel" data-options="editable:false">
 				                	<option value="1">通道号1</option>
 								    <option value="2">通道号2</option>
 								    <option value="3">通道号3</option>
@@ -137,8 +139,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            		<tr>
 			  				<td class="leftTd"><lable><span class="required">*</span>电弧特性：</lable></td>
 			  				<td class="rightTd"><input id="fcharacter" name="fcharacter" class="easyui-numberbox">(±1)</td>
-			  				<td class="leftTd"><lable>柔软电弧模式：</lable></td>
-			  				<td class="rightTd"><input name="fmode" id="fmode" type="checkbox" value="1"></td>
+			  				<td id="dmodel" class="leftTd"><lable>柔软电弧模式：</lable></td>
+			  				<td id="imodel" class="rightTd"><input name="fmode" id="fmode" type="checkbox" value="1"></td>
+			  				<td id="dtorch" class="leftTd"><lable>水冷焊枪：</lable></td>
+			  				<td id="itorch" class="rightTd"><input name="ftorch" id="ftorch" type="checkbox" value="0"></td>
 			  			</tr>
 	            	</table>
 	            </div>
@@ -146,7 +150,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            	<table>
 	            		<tr>
 			  				<td class="leftTd"><lable><span class="required">*</span>点焊时间：</lable></td>
-			  				<td class="rightTd"><input name="ftime" id="ftime" value="30.0" class="easyui-numberbox" data-options="precision:1">(0.1s)</td>
+			  				<td class="rightTd"><input name="ftime" id="ftime" value="30.0" class="easyui-numberbox" data-options="precision:1">(s)</td>
 			  				<td class="leftTd"><lable><span class="required">*</span>焊丝材质：</lable></td>
 			  				<td class="rightTd">
 			  					<select class="easyui-combobox" name="fmaterial" id="fmaterial" data-options="editable:false">
@@ -163,7 +167,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            	<table>
 	            		<tr>
 			  				<td class="leftTd"><lable><span class="required">*</span>提前送气：</lable></td>
-			  				<td class="rightTd"> <input name="fadvance" id="fadvance" class="easyui-numberbox" data-options="precision:1">(0.1s)</td>
+			  				<td class="rightTd"> <input name="fadvance" id="fadvance" class="easyui-numberbox" data-options="precision:1">(s)</td>
 			  				<td class="leftTd"><lable><span class="required">*</span>气体：</lable></td>
 			  				<td class="rightTd">
 			  					<select class="easyui-combobox" name="fgas" id="fgas" data-options="editable:false">
@@ -179,7 +183,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            	<table>
 			            		<tr>
 		  				<td class="leftTd"><lable><span class="required">*</span>滞后送气：</lable></td>
-		  				<td class="rightTd"><input name="fhysteresis" id="fhysteresis" class="easyui-numberbox" data-options="precision:1">(0.1s)</td>
+		  				<td class="rightTd"><input name="fhysteresis" id="fhysteresis" class="easyui-numberbox" data-options="precision:1">(s)</td>
 		  				<td class="leftTd"><lable><span class="required">*</span>焊丝直径：</lable></td>
 		  				<td class="rightTd">
 		  					<select class="easyui-combobox" name="fdiameter" id="fdiameter" data-options="editable:false">
@@ -273,10 +277,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            <div id="xinzeng" >
 	            	<table>
 	            		<tr>
-			  				<td class="leftTd"><lable><span class="required">*</span>双脉冲频率：</lable></td>
-			  				<td class="rightTd"><input name="frequency" id="frequency" class="easyui-numberbox" data-options="required:true">(Hz)</td>
-			  				<td class="leftTd"><lable><span class="required">*</span>气体流量：</lable></td>
-			  				<td class="rightTd"><input name="gasflow" id="gasflow" class="easyui-numberbox" value="0" data-options="required:true">(L/min)</td>
+			  				<td id="dfrequency" class="leftTd"><lable><span class="required">*</span>双脉冲频率：</lable></td>
+			  				<td id="ifrequency" class="rightTd"><input name="frequency" id="frequency" class="easyui-numberbox" data-options="required:true,precision:1">(Hz)</td>
+			  				<td id="dgasflow" class="leftTd"><lable><span class="required">*</span>气体流量：</lable></td>
+			  				<td id="igasflow" class="rightTd"><input name="gasflow" id="gasflow" class="easyui-numberbox" value="0" data-options="required:true,precision:1">(L/min)</td>
+			  				<td class="leftTd"><lable><span class="required">*</span>焊接过程：</lable></td>
+			  				<td class="rightTd"><select class="easyui-combobox" name="fweldprocess" id="fweldprocess" data-options="editable:false"></select></td>
 			  			</tr>
 	            	</table>
 	            </div>
@@ -288,7 +294,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			  					<a href="javascript:suoqu();" class="easyui-linkbutton" iconCls="icon-ok">索取规范</a>
 			  					<a href="javascript:save(0);" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
 			  					<a href="javascript:xiafa();" class="easyui-linkbutton" iconCls="icon-ok">下发规范</a>
-			  					<a href="javascript:chushihua();" class="easyui-linkbutton" iconCls="icon-ok">恢复默认值</a>
+			  					<a href="javascript:chushihua(0);" class="easyui-linkbutton" iconCls="icon-ok">恢复默认值</a>
 			  					<a href="javascript:copy(1);" class="easyui-linkbutton" iconCls="icon-ok">焊机参数复制</a>
 			  					<a href="javascript:copy(0);" class="easyui-linkbutton" iconCls="icon-ok">单通道复制</a></td>
 			  				<td class="rightTd"></td>
@@ -321,12 +327,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</div>
 			</form>
 	    </div>
-	    <div id="divro" class="easyui-dialog" style="width:400px;height:400px" closed="true" buttons="#dlg-ro"algin="center">
+	    <div id="divro" class="easyui-dialog" style="width:500px;height:490px" closed="true" buttons="#dlg-ro"algin="center">
 	    	<div style="text-align:center;height:25px">
 	    		<lable id="mu"></lable>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	    		所属班组：<select class="easyui-combobox" name="item" id="item" data-options="editable:false" onChange="changeValue(current,old)"></select>
 	    	</div>
-	    	<div id="tab" style="text-align:center;height:300px">
+	    	<div id="tab" style="text-align:center;height:385px;width:485px">
 	    		<table id="ro" style="table-layout:fixed;width:100%;" ></table>
 	    	</div>
         </div>
@@ -335,7 +341,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<a href="javascript:$('#divro').dialog('close');" class="easyui-linkbutton" iconCls="icon-cancel" >取消</a>
 		</div>
 		
-		<div id="divro1" class="easyui-dialog" style="width:400px;height:400px" closed="true" buttons="#dlg-ro1"algin="center">
+		<div id="divro1" class="easyui-dialog" style="width:600px;height:400px" closed="true" buttons="#dlg-ro1"algin="center">
 	        <table id="ro1" style="table-layout:fixed;width:100%;" ></table>
         </div>
         <div id="dlg-ro1">
