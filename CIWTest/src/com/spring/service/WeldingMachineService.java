@@ -137,4 +137,11 @@ public interface WeldingMachineService {
 	 * @return
 	 */
 	List<WeldingMachine> getMachineGather();
+	
+	/**
+	 * 根据焊机厂商查找焊接型号
+	 * @param type 厂商id
+	 * @return
+	 */
+	List<WeldingMachine> getMachineModel(int type);
 }

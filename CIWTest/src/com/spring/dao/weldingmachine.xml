@@ -30,7 +30,8 @@
 		<result property="creater" column="fcreater" />
 		<result property="updater" column="fupdater" />
         <result property="mvalueid" column="mid"></result>  
-        <result property="mvaluename" column="mname"></result>  
+        <result property="mvaluename" column="mname"></result> 
+        <result property="modelid" column="modelid"></result>   
         <association property="insframeworkId" column="finsframework_id" javaType="com.spring.model.Insframework">  
             <id property="id" column="iid"></id> 
             <result property="name" column="iname"></result>  
@@ -52,7 +53,7 @@
 
 	<select id="getWeldingMachineAll" resultMap="wmMap"  parameterType="java.lang.String">
 		SELECT 
-		w.fid fid,w.fIP fIP,w.fmodel model,fstatus_id, i.fid iid,ftype_id,g.fid gid,dic.fvalue mid, fequipment_no,fgather_no ,fjoin_time,i.fname iname
+		w.fid fid,w.fIP fIP,w.fmodel modelid,dict.fvaluename model,fstatus_id, i.fid iid,ftype_id,g.fid gid,dic.fvalue mid, fequipment_no,fgather_no ,fjoin_time,i.fname iname
 		,dic.fvaluename mname,fisnetworking,fposition,d.fvaluename statusname,di.fvaluename typename,w.fprevention fprevention_no,w.ftest ftest_no
 		,w.fmanunumbers fmanunumbers_no,w.fsection fsection_no,w.fauthentication fauthentication_no
 		FROM tb_welding_machine w
@@ -62,8 +63,9 @@
         INNER JOIN tb_dictionary d ON d.fvalue = w.fstatus_id
         INNER JOIN tb_dictionary di ON di.fvalue = w.ftype_id
         INNER JOIN tb_dictionary dic ON dic.fvalue = w.fmanufacturer_id
+        INNER JOIN tb_dictionary dict ON dict.fvalue = w.fmodel
 		left JOIN tb_gather g ON g.fid = w.fgather_id
-		where (d.ftypeid=3 and di.ftypeid=4 and dic.ftypeid=14)
+		where (d.ftypeid=3 and di.ftypeid=4 and dic.ftypeid=14 and dict.ftypeid=17)
 		<if test="parent!=null and parent!=''">
 			and (i.fid=#{parent} or ins.fid=#{parent} or insf.fid=#{parent} or insf.fparent=#{parent})
 		</if>
@@ -88,7 +90,7 @@
 	
 	<select id="getAllMachine" resultMap="wmMap">
 		SELECT 
-		w.fid fid,w.fIP fIP,w.fmodel model,fstatus_id, i.fid iid,ftype_id,g.fid gid,dic.fvalue mid, fequipment_no,fgather_no ,fjoin_time,i.fname iname
+		w.fid fid,w.fIP fIP,dict.fvaluename model,fstatus_id, i.fid iid,ftype_id,g.fid gid,dic.fvalue mid, fequipment_no,fgather_no ,fjoin_time,i.fname iname
 		,dic.fvaluename mname,fisnetworking,fposition,d.fvaluename statusname,di.fvaluename typename
 		FROM tb_welding_machine w
 		LEFT JOIN tb_insframework i ON w.finsframework_id = i.fid
@@ -97,22 +99,33 @@
         INNER JOIN tb_dictionary dic ON dic.fvalue = w.fmanufacturer_id
         INNER JOIN tb_dictionary d ON d.fvalue = w.fstatus_id
         INNER JOIN tb_dictionary di ON di.fvalue = w.ftype_id
+        INNER JOIN tb_dictionary dict ON dict.fvalue = w.fmodel
 		left JOIN tb_gather g ON g.fid = w.fgather_id
-		where (d.ftypeid=3 and di.ftypeid=4 and dic.ftypeid=14) 
+		where (d.ftypeid=3 and di.ftypeid=4 and dic.ftypeid=14 and dict.ftypeid=17)
 		ORDER BY w.fid
 	</select>
 	
 	<select id="getWeldingMachineById"  resultMap="wmMap"  parameterType="java.math.BigInteger">
         SELECT 
-		w.fid fid,w.fIP fIP,fmodel model,fstatus_id, i.fid iid,g.fid gid,ftype_id,dic.fvalue mid, fequipment_no,fgather_no ,fjoin_time,i.fname iname
+		w.fid fid,w.fIP fIP,dict.fvaluename model,fstatus_id, i.fid iid,g.fid gid,ftype_id,dic.fvalue mid, fequipment_no,fgather_no ,fjoin_time,i.fname iname
 		,dic.fvaluename mname,fisnetworking,fposition,d.fvaluename statusname,di.fvaluename typename
 		FROM tb_welding_machine w
 		INNER JOIN tb_insframework i ON w.finsframework_id = i.fid
         INNER JOIN tb_dictionary dic ON dic.fvalue = w.fmanufacturer_id
         INNER JOIN tb_dictionary d ON d.fvalue = w.fstatus_id
         INNER JOIN tb_dictionary di ON di.fvalue = w.ftype_id
+        INNER JOIN tb_dictionary dict ON dict.fvalue = w.fmodel
 		left JOIN tb_gather g ON g.fid = w.fgather_id
-		where (d.ftypeid=3 and di.ftypeid=4 and dic.ftypeid=14) and w.fid = #{wid}
+		where (d.ftypeid=3 and di.ftypeid=4 and dic.ftypeid=14 and dict.ftypeid=17) and w.fid = #{wid}
+	</select>
+	
+	<select id="getMachineModel" resultMap="wmMap">
+		SELECT *,em.ftype_value ftype_id,d.fvaluename typename FROM tb_equipment_manufacturer em 
+		INNER JOIN tb_dictionary d on d.fvalue = em.ftype_value 
+		WHERE d.ftypeid = 17 
+		<if test="type!=0">
+			and em.ftype = #{type}
+		</if>
 	</select>
 	
 	<select id="getEquipmentno" resultMap="wmMap">
@@ -149,7 +162,7 @@
 		 inner join tb_insframework ins  on ins.fid = i.fparent
 		 WHERE fmanufacturer_id = #{mid}
 		<if test="id!=null and id!=''">
-			 	and (ins.fparent = #{id} or ins.fid = #{id} or i.fid = #{id})
+			 and (ins.fparent = #{id} or ins.fid = #{id} or i.fid = #{id})
 		</if>
 	</select>
 	

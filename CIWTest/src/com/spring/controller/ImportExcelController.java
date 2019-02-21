@@ -41,8 +41,6 @@ import com.spring.model.Insframework;
 import com.spring.model.MaintenanceRecord;
 import com.spring.model.MyUser;
 import com.spring.model.Person;
-import com.spring.dao.CatWeldMapper;
-import com.spring.model.CatWeld;
 import com.spring.model.WeldedJunction;
 import com.spring.model.WeldingMachine;
 import com.spring.model.WeldingMaintenance;
@@ -50,7 +48,6 @@ import com.spring.service.DictionaryService;
 import com.spring.service.GatherService;
 import com.spring.service.MaintainService;
 import com.spring.service.PersonService;
-import com.spring.service.CatWeldService;
 import com.spring.service.WeldedJunctionService;
 import com.spring.service.WeldingMachineService;
 import com.spring.util.IsnullUtil;
@@ -62,11 +59,9 @@ import net.sf.json.JSONObject;
  * @author gpyf16
  *
  */
-
 @Controller
 @RequestMapping(value = "/import", produces = { "text/json;charset=UTF-8" })
 public class ImportExcelController {
-	private static byte[] creat;
 	@Autowired
 	private WeldingMachineService wmm;
 	@Autowired
@@ -79,8 +74,6 @@ public class ImportExcelController {
 	private DictionaryService dm;
 	@Autowired
 	private WeldedJunctionService wjs;
-	@Autowired
-	private CatWeldService cw;
 	IsnullUtil iutil = new IsnullUtil();
 	
 	/**
@@ -106,11 +99,12 @@ public class ImportExcelController {
 				wm.setTypeId(dm.getvaluebyname(4,wm.getTypename()));
 				wm.setStatusId(dm.getvaluebyname(3,wm.getStatusname()));
 				wm.setMvalueid(dm.getvaluebyname(14, wm.getMvaluename()));
+				wm.setModel(dm.getvaluebyname(17, wm.getModel())+"");
 				String name = wm.getInsframeworkId().getName();
 				wm.getInsframeworkId().setId(wmm.getInsframeworkByName(name));
 				Gather gather = wm.getGatherId();
 				int count2 = 0;
-				if(gather!=null){
+				if(gather!=null && iutil.isNull(wm.getGatherId().getGatherNo())){
 					int count3 = g.getGatherNoByItemCount(gather.getGatherNo(), wm.getInsframeworkId().getId()+"");
 					gather.setId(g.getGatherByNo(gather.getGatherNo()));
 					wm.setGatherId(gather);

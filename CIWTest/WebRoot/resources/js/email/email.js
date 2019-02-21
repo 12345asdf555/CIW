@@ -15,6 +15,13 @@ function dgDatagrid(){
 		rownumbers : true,
 		showPageList : false,
 		columns : [ [ {
+			field : 'id',
+			title : '序号',
+			width : 50,
+			halign : "center",
+			align : "left",
+			hidden:true
+		},{
 			field : 'femailname',
 			title : '接收者',
 			width : 100,
@@ -23,9 +30,22 @@ function dgDatagrid(){
 		}, {
 			field : 'femailaddress',
 			title : '邮箱地址',
-			width : 150,
+			width : 200,
 			halign : "center",
 			align : "left"
+		}, {
+			field : 'typestr',
+			title : '权限',
+			width : 500,
+			halign : "center",
+			align : "left"
+		}, {
+			field : 'femailtype',
+			title : '权限',
+			width : 150,
+			halign : "center",
+			align : "left",
+			hidden : true
 		}, {
 			field : 'edit',
 			title : '编辑',
@@ -81,6 +101,10 @@ function editEmail(){
 		$('#dlg').window('open');
 		$('#oldemail').val(row.femailaddress);
 		$('#fm').form('load', row);
+		var str = row.femailtype.split(",");
+		for(var i=0;i<str.length;i++){
+			$("input[name='femailtype'][value="+str[i]+"]").prop("checked",true);
+		}
 		url = "hierarchy/editEmail?address="+ row.femailaddress;
 	}
 }
@@ -112,6 +136,7 @@ function saveEmail(){
 					$('#dlg').dialog('close');
 					$('#dg').datagrid('reload');
 				}
+				$("#fm").form("disableValidation");
 			}
 			
 		},  
@@ -132,6 +157,10 @@ function removeEmail(){
 		$('#rdlg').window('open');
 		$('#rfm').form('load', row);
 		url =  "hierarchy/deleteEmail?femailaddress="+row.femailaddress;
+		var str = row.femailtype.split(",");
+		for(var i=0;i<str.length;i++){
+			$("input[name='femailtype'][value="+str[i]+"]").prop("checked",true);
+		}
 	}
 }
 

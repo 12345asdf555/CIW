@@ -145,4 +145,9 @@ public class WeldingMachineServiceImpl implements WeldingMachineService {
 		return wmm.getMachineGather();
 	}
 
+	@Override
+	public List<WeldingMachine> getMachineModel(int type) {
+		return wmm.getMachineModel(type);
+	}
+
 }

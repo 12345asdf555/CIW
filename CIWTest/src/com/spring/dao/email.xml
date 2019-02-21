@@ -4,11 +4,11 @@
 <mapper namespace="com.spring.dao.EmailMapper">
 	
 	<select id="getEmailAll" resultType="Email">
-		SELECT * FROM tb_catemailinf WHERE 1=1 
+		SELECT fid,femailname,femailaddress,GROUP_CONCAT(femailtype) femailtype FROM tb_catemailinf WHERE 1=1 
 		<if test="str!=null and str!=''">
 			and ${str}
 		</if>
-		group by femailaddress order by fid
+		group by femailaddress
 	</select>
 	
 	<select id="getEmailAddressCount" resultType="java.lang.Integer">

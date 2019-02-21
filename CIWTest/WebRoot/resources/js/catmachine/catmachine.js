@@ -118,6 +118,13 @@ function weldingMachineDatagrid(){
 			halign : "center",
 			align : "left"
 		},{
+			field : 'modelid',
+			title : '型号id',
+			width : 100,
+			halign : "center",
+			align : "left",
+			hidden: true
+		}, {
 			field : 'statusId',
 			title : '状态id',
 			width : 100,

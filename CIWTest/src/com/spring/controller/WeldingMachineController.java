@@ -223,6 +223,7 @@ public class WeldingMachineController {
 					json.put("iId", wm.getInsframeworkId().getId());
 				}
 				json.put("model",wm.getModel());
+				json.put("modelid", wm.getModelid());
 				if(wm.getGatherId()!=null && !("").equals(wm.getGatherId())){
 					json.put("gatherId", wm.getGatherId().getGatherNo());
 					json.put("gid", wm.getGatherId().getId());
@@ -338,6 +339,35 @@ public class WeldingMachineController {
 			for(Dictionarys d:dictionary){
 				json.put("id", d.getValue());
 				json.put("name", d.getValueName());
+				ary.add(json);
+			}
+		}catch(Exception e){
+			e.getMessage();
+		}
+		obj.put("ary", ary);
+		return obj.toString();
+	}
+	
+	/**
+	 * 获取设备型号
+	 * @return
+	 */
+	@RequestMapping("/getModelAll")
+	@ResponseBody
+	public String getModelAll(HttpServletRequest request){
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		JSONObject obj = new JSONObject();
+		try{
+			int type = 0;
+			String typeid = request.getParameter("type");
+			if(iutil.isNull(typeid)){
+				type = Integer.parseInt(typeid);
+			}
+			List<WeldingMachine> list = wmm.getMachineModel(type); 
+			for(int i=0;i<list.size();i++){
+				json.put("id", list.get(i).getTypeId());
+				json.put("name", list.get(i).getTypename());
 				ary.add(json);
 			}
 		}catch(Exception e){
