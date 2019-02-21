@@ -70,4 +70,6 @@ public interface WeldingMachineMapper extends Mapper<WeldingMachine>{
 	
 	List<WeldingMachine> getMachineModel(@Param("type")int type);
 	
+	List<WeldingMachine> getAllMachineModel();
+	
 }

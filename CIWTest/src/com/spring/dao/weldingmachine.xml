@@ -19,6 +19,7 @@
 		<result property="fprevention" column="fprevention_no" />
 		<result property="fgather" column="gather_no" />
 		<result property="model" column="model" />
+		<result property="modelname" column="modelname" />
 		<result property="equipmentNo" column="fequipment_no" />		
 		<result property="position" column="fposition" />
 		<result property="isnetworking" column="fisnetworking" />
@@ -244,4 +245,10 @@
 		where 1=1
 	</select>
 	
+	<select id="getAllMachineModel"  resultMap="wmMap">
+		SELECT m.fid,m.fequipment_no,m.fmanufacturer_id mid,m.fmodel model,d.fvaluename mname,di.fvaluename modelname FROM tb_welding_machine m
+		LEFT JOIN tb_dictionary d ON d.fvalue=m.fmanufacturer_id
+		LEFT JOIN tb_dictionary di ON di.fvalue=m.fmodel
+		WHERE 1=1 ORDER BY m.fid ASC
+	</select>
 </mapper>

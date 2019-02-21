@@ -172,7 +172,7 @@ $(document).ready(function() {
 });
 
 function chushihua(value) {
-	if (machineModel == 174) {
+	/*if (machineModel == 174) {
 		EPWINIT(value);
 	} else if (machineModel == 175) {
 		EPSINIT(value);
@@ -182,12 +182,15 @@ function chushihua(value) {
 		WBPINIT(value);
 	} else if (machineModel == 178) {
 		WBLINIT(value);
-	} else if (machineModel == 171) {
-		CPVEWINIT(value);
 	} else if (machineModel == 172) {
 		CPVESINIT(value);
+	} else */if (machineModel == 171) {
+		CPVEWINIT(value);
 	} else if (machineModel == 173) {
 		CPVETINIT(value);
+	} else{
+		alert("目前只支持CPVE-500和CPVE-250参数管理");
+		return;
 	}
 	if(value==0){
 		comboboxCheck(machineModel);
@@ -377,7 +380,7 @@ function gfsd() {
 
 //提交
 function save(value) {
-	if (machineModel == 174) {
+	/*if (machineModel == 174) {
 		if (EPWCHECK() == false) {
 			return;
 		}
@@ -397,18 +400,21 @@ function save(value) {
 		if (WBLCHECK() == false) {
 			return;
 		}
-	} else if (machineModel == 171 || machineModel == 179) {
-		if (CPVEWCHECK() == false) {
-			return;
-		}
 	} else if (machineModel == 172) {
 		if (CPVESCHECK() == false) {
+			return;
+		}
+	} else */if (machineModel == 171) {
+		if (CPVEWCHECK() == false) {
 			return;
 		}
 	} else if (machineModel == 173) {
 		if (CPVETCHECK() == false) {
 			return;
 		}
+	} else{
+		alert("目前只支持CPVE-500和CPVE-250参数管理");
+		return;
 	}
 	var url2 = "";
 	var finitial;
@@ -722,7 +728,7 @@ function suoqu() {
 						alert("此通道没有规范，请尝试新建规范，可恢复默认值进行参考");
 					}
 				} else {
-					if (machineModel == 174) {
+					/*if (machineModel == 174) {
 						EPWGET(da);
 					} else if (machineModel == 175) {
 						EPSGET(da);
@@ -732,12 +738,15 @@ function suoqu() {
 						WBPGET(da);
 					} else if (machineModel == 178) {
 						WBLGET(da);
-					} else if (machineModel == 171) {
-						CPVEWGET(da);
 					} else if (machineModel == 172) {
 						CPVESGET(da);
+					} else */if (machineModel == 171) {
+						CPVEWGET(da);
 					} else if (machineModel == 173) {
 						CPVETGET(da);
+					} else {
+						alert("目前只支持CPVE-500和CPVE-250参数管理");
+						return;
 					}
 					symbol++;
 					socketfc.close();
@@ -751,7 +760,7 @@ function suoqu() {
 }
 
 function xiafa() {
-	if (machineModel == 174) {
+	/*if (machineModel == 174) {
 		if (EPWCHECK() == false) {
 			return;
 		}else{
@@ -781,17 +790,17 @@ function xiafa() {
 		}else{
 			WBL(null, null);
 		}
-	} else if (machineModel == 171 || machineModel == 179) {
-		if (CPVEWCHECK() == false) {
-			return;
-		}else{
-			CPVEW(null, null);
-		}
 	} else if (machineModel == 172) {
 		if (CPVESCHECK() == false) {
 			return;
 		}else{
 			CPVES(null, null);
+		}
+	} else */if (machineModel == 171) {
+		if (CPVEWCHECK() == false) {
+			return;
+		}else{
+			CPVEW(null, null);
 		}
 	} else if (machineModel == 173) {
 		if (CPVETCHECK() == false) {
@@ -799,6 +808,9 @@ function xiafa() {
 		}else{
 			CPVET(null, null);
 		}
+	} else {
+		alert("目前只支持CPVE-500和CPVE-250参数管理");
+		return;
 	}
 }
 
@@ -981,7 +993,7 @@ function savecopy() {
 		var yshuary = new Array();
 		for(var q=0;q<rows.length;q++){
 			for(var n=0;n<yshu1.length;n++){
-				if (machineModel == 174) {
+				/*if (machineModel == 174) {
 					yshuary.push(EPW(yshu1[n], rows[q].gatherId));
 				} else if (machineModel == 175) {
 					yshuary.push(EPS(yshu1[n], rows[q].gatherId));
@@ -991,12 +1003,15 @@ function savecopy() {
 					yshuary.push(WBP(yshu1[n], rows[q].gatherId));
 				} else if (machineModel == 178) {
 					yshuary.push(WBL(yshu1[n], rows[q].gatherId));
-				} else if (machineModel == 171) {
-					yshuary.push(CPVEW(yshu1[n], rows[q].gatherId));
 				} else if (machineModel == 172) {
 					yshuary.push(CPVES(yshu1[n], rows[q].gatherId));
+				} else */if (machineModel == 171) {
+					yshuary.push(CPVEW(yshu1[n], rows[q].gatherId));
 				} else if (machineModel == 173) {
 					yshuary.push(CPVET(yshu1[n], rows[q].gatherId));
+				}else {
+					alert("目前只支持CPVE-500和CPVE-250参数管理");
+					return;
 				}
 			}
 		}

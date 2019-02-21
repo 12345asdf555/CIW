@@ -144,4 +144,9 @@ public interface WeldingMachineService {
 	 * @return
 	 */
 	List<WeldingMachine> getMachineModel(int type);
+	
+	/**
+	 * 获取焊机及其对应的设备型号
+	 */
+	List<WeldingMachine> getMachineModel();
 }

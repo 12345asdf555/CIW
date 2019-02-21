@@ -34,6 +34,7 @@ public class WeldingMachine {
 	private int typeId;
 	private int statusId;
 	private String model;
+	private String modelname;
 	private BigInteger creater;
 	private BigInteger updater;
 	private int mvalueid;
@@ -228,5 +229,11 @@ public class WeldingMachine {
 	}
 	public void setFprevention(String fprevention) {
 		this.fprevention = fprevention;
+	}
+	public String getModelname() {
+		return modelname;
+	}
+	public void setModelname(String modelname) {
+		this.modelname = modelname;
 	}
 }

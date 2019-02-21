@@ -150,4 +150,9 @@ public class WeldingMachineServiceImpl implements WeldingMachineService {
 		return wmm.getMachineModel(type);
 	}
 
+	@Override
+	public List<WeldingMachine> getMachineModel() {
+		// TODO Auto-generated method stub
+		return wmm.getAllMachineModel();
+	}
 }
