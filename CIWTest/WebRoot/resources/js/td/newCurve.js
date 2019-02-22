@@ -342,6 +342,16 @@ $(function(){
 							document.getElementById("lab6"+fmch[f].fid).style.backgroundColor="#FF0000";
 							document.getElementById(f).src="resources/images/ROBOTdj.png";
 							break;
+						case "98":
+							document.getElementById("lab6"+fmch[f].fid).innerHTML="焊机状态：超规范停机";
+							document.getElementById("lab6"+fmch[f].fid).style.backgroundColor="#FF0000";
+							document.getElementById(f).src="resources/images/ROBOTdj.png";
+							break;
+						case "99":
+							document.getElementById("lab6"+fmch[f].fid).innerHTML="焊机状态：超规范报警";
+							document.getElementById("lab6"+fmch[f].fid).style.backgroundColor="#FF0000";
+							document.getElementById(f).src="resources/images/ROBOTdj.png";
+							break;
 						}
 					}
 				}

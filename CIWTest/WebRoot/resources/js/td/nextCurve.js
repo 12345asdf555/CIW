@@ -529,6 +529,16 @@
 							document.getElementById("in4").style.backgroundColor="#FF0000";
 							document.getElementById("mrjpg").src="resources/images/ROBOTdj.png";
 							break;
+						case "98":
+							document.getElementById("in4").value="超规范停机";
+							document.getElementById("in4").style.backgroundColor="#FF0000";
+							document.getElementById("mrjpg").src="resources/images/ROBOTdj.png";
+							break;
+						case "99":
+							document.getElementById("in4").value="超规范报警";
+							document.getElementById("in4").style.backgroundColor="#FF0000";
+							document.getElementById("mrjpg").src="resources/images/ROBOTdj.png";
+							break;
 						}
 	                    var x = time[z],
 	                        y = ele[z],

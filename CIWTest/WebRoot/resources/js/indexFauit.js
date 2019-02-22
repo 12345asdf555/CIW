@@ -142,6 +142,11 @@ function view(){
 			case "71":
 				content("E-710输入缺相异常",i);
 				break;
+			case "98":
+				content("超规范停机",i);
+				break;
+			case "99":
+				content("超规范报警",i);
 			default:
 				fauitstr = "";
 				break;
@@ -181,7 +186,7 @@ window.setTimeout(function() {
 		num = ary.length;
 	}
 	for(var i=0;i<num;i++){
-		$("#content").append(ary[i]);
+		$("#scrollcontent").append(ary[i]);
 	}
 	ary.length = 0;
 	timer = window.setInterval(move, 10);
@@ -193,14 +198,18 @@ window.setTimeout(function() {
     };
 }, 5000);
 
+var timeflag=0;
 function move() {
     if(!fauitstr){
-    	$("#content").html("");
+    	timeflag++;
+    	if(timeflag>=300){
+    		$("#scrollcontent").html("");
+    		timeflag=0;
+    	}
     }else{
 	    fauitContent.scrollLeft++;
-		if(fauitContent.scrollLeft+$("#fauitContent").width()>=$("#content").width()){//当前数据是否已经显示完成
-			$("#content").append(ary[ary.length-1]);
-			console.log(ary[ary.length-1]);
+		if(fauitContent.scrollLeft+$("#fauitContent").width()>=$("#scrollcontent").width()){//当前数据是否已经显示完成
+			$("#scrollcontent").append(ary.pop());
 		}
     }
 }
