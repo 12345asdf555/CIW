@@ -4118,6 +4118,18 @@ function CPVEWGET(data) {
 	$("#gasflow").numberbox('setValue',(parseInt(data.substring(96,100),16)/10).toFixed(1));
 }
 function CPVEWINIT(value) {
+	if(value==1){
+		$('#fchanel').combobox('clear');
+		$('#fchanel').combobox('loadData', {});//清空option选项   
+		var str = "";
+		for (var i = 1; i < 31; i++) {
+			str += '<option value="' + i + '">通道号' + i + '</option>';
+		}
+		$('#fchanel').html(str);
+		$('#fchanel').combobox('select', 1);
+		$('#fchanel').combobox();
+		return;
+	}
 	$('#farc').combobox('clear');
 	$('#farc').combobox('loadData', [ {
 		"text" : "无",
@@ -4140,8 +4152,8 @@ function CPVEWINIT(value) {
 		"text" : "MAG",
 		"value" : "122"
 	}, {
-		"text" : "MIG",
-		"value" : "123"
+		"text" : "MIG_2O2",
+		"value" : "124"
 	} ]);
 	$('#fdiameter').combobox('clear');
 	$('#fdiameter').combobox('loadData', [ {
@@ -4219,17 +4231,6 @@ function CPVEWINIT(value) {
 	$('#igasflow').hide();
 	$('#dfrequency').hide();
 	$('#ifrequency').hide();*/
-	if(value==1){
-		$('#fchanel').combobox('clear');
-		$('#fchanel').combobox('loadData', {});//清空option选项   
-		var str = "";
-		for (var i = 1; i < 31; i++) {
-			str += '<option value="' + i + '">通道号' + i + '</option>';
-		}
-		$('#fchanel').html(str);
-		$('#fchanel').combobox('select', 1);
-		$('#fchanel').combobox();
-	}
 }
 function CPVEWCHECK() {
 	if ($('#ftime').numberbox('getValue') < 0.1 || $('#ftime').numberbox('getValue') > 10) {
@@ -4826,8 +4827,8 @@ function CPVESINIT(value) {
 		"text" : "MAG",
 		"value" : "122"
 	}, {
-		"text" : "MIG",
-		"value" : "123"
+		"text" : "MIG_2O2",
+		"value" : "124"
 	} ]);
 	$('#fdiameter').combobox('clear');
 	$('#fdiameter').combobox('loadData', [ {

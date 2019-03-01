@@ -114,7 +114,8 @@ $(document).ready(function() {
 					dataType : "json", //返回数据形式为json  
 					success : function(result) {
 						if (result) {
-							comboboxCheck(machineModel);
+							chushihua(0);
+//							comboboxCheck(machineModel);
 							yshu = eval(result.rows);
 							if (yshu.length != 0) {
 								$('#fchanel').combobox('select', yshu[0].FWPSNum);

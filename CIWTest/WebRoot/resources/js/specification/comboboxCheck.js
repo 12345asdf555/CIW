@@ -461,8 +461,8 @@ function CPVESGET_combobox(){
 			}else if(fmaterial == 92){
 				$('#fgas').combobox('clear');
 				$('#fgas').combobox('loadData', [ {
-					"text" : "MIG",
-					"value" : "123"
+					"text" : "MIG_2O2",
+					"value" : "124"
 				} ]);
 			}else if(fmaterial == 93){
 				$('#fgas').combobox('clear');
@@ -527,8 +527,8 @@ function CPVEWGET_combobox(){
 			}else if(fmaterial == 92){
 				$('#fgas').combobox('clear');
 				$('#fgas').combobox('loadData', [ {
-					"text" : "MIG",
-					"value" : "123"
+					"text" : "MIG_2O2",
+					"value" : "124"
 				} ]);
 			}else if(fmaterial == 93){
 				$('#fgas').combobox('clear');
@@ -582,7 +582,7 @@ function CPVETGET_combobox(){
 		onChange : function() {
 		}
 	})
-	$('#fweldprocess').combobox('select', 0);
+	$('#fweldprocess').combobox('select', 1);
 	$('#fmaterial').combobox('clear');
 	$('#fmaterial').combobox('loadData', [ {
 		"text" : "低碳钢实芯",
