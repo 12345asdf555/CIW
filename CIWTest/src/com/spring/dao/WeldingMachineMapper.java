@@ -24,6 +24,12 @@ public interface WeldingMachineMapper extends Mapper<WeldingMachine>{
 	
 	void addcatmachine(WeldingMachine wm);
 	
+	List<WeldingMachine> findAllweldmachine();
+	
+	void addfactoryType(WeldingMachine wm);
+	
+	void deletefactory(@Param("statusId")BigInteger statusId);
+	
 	void editWeldingMachine(WeldingMachine wm);
 	
 	void editcatMachine(WeldingMachine wm);

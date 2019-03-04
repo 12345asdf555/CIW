@@ -89,6 +89,14 @@ public class WeldingMachineController {
 		return "catmachine/catmachine";
 	}
 	
+	/**
+	 * CAT厂商焊机管理
+	 * @return
+	 */
+	@RequestMapping("/gomathine")
+	public String gomathine(){
+		return "Mathine/Mathine";
+	}
 	
 	/**
 	 * 焊机设备管理
@@ -238,6 +246,57 @@ public class WeldingMachineController {
 		}
 		obj.put("total", total);
 		obj.put("rows", ary);
+		return obj.toString();
+	}
+	
+	@RequestMapping("/findAllweldmachine")
+	@ResponseBody
+	public String getAllAuthority(HttpServletRequest request){
+		
+		List<WeldingMachine> list = wmm.findAllweldmachine();
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		JSONObject obj = new JSONObject();
+		try{
+			for(WeldingMachine w:list){
+				json.put("id", w.getId());
+				json.put("weldmachinetype", w.getTypename());
+				json.put("machinevalue", w.getMvaluename());
+				ary.add(json);
+			}
+		}catch(Exception e){
+			e.getMessage();
+		}
+		obj.put("rows", ary);
+		return obj.toString();
+	}
+	
+	/**
+	 * 修改厂商焊机绑定关系
+	 * @return
+	 */
+	@RequestMapping("/getfactoryType")
+	@ResponseBody
+	public String getfactoryType(HttpServletRequest request){
+		WeldingMachine wm = new WeldingMachine();
+		JSONObject obj = new JSONObject();
+		try{
+			MyUser user = (MyUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			wm.setUpdater(new BigInteger(user.getId()+""));
+			wm.setStatusId(Integer.parseInt(request.getParameter("back")));
+			wm.setFmachingname("1");
+			wmm.deletefactory(new BigInteger(wm.getStatusId()+""));
+			String[] str = request.getParameter("str").split(",");
+			for(int i=0;i<str.length;i++){
+				wm.setTypeId(Integer.parseInt(str[i]));
+				wmm.addfactoryType(wm);
+			}
+			obj.put("success", true);
+		}catch(Exception e){
+			e.printStackTrace();
+			obj.put("success", false);
+			obj.put("errorMsg", e.getMessage());
+		}
 		return obj.toString();
 	}
 	

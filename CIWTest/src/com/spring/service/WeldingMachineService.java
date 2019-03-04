@@ -51,6 +51,22 @@ public interface WeldingMachineService {
 	
 	
 	/**
+	 * 厂商焊机型号绑定
+	 */
+	void addfactoryType(WeldingMachine wm);
+	
+	/**
+	 * 删除旧厂商焊机型号绑定
+	 */
+	void deletefactory(BigInteger statusId);
+	
+	
+	/**
+	 * 查询所有焊机型号信息
+	 */
+	List<WeldingMachine> findAllweldmachine();
+	
+	/**
 	 * CAT合并修改设备
 	 */
 	void editcatmachine(WeldingMachine wm);

@@ -145,6 +145,10 @@
 		SELECT fid,fequipment_no FROM tb_welding_machine where finsframework_id = #{id}
 	</select>
 	
+	<select id="findAllweldmachine" resultMap="wmMap">
+		select fid,fvalue mname,fvaluename typename from tb_dictionary WHERE ftypeid=17
+	</select>
+	
 	<select id="getEquipmentnoCount" resultType="java.lang.Integer">
 		SELECT count(*) FROM tb_welding_machine WHERE fequipment_no = #{eno}
 	</select>
@@ -202,6 +206,14 @@
 		fauthentication=#{fauthentication},ftest=#{ftest},fprevention=#{fprevention},fgather_no=#{fgather} where fid = #{id}
 	</update>
 	
+	<update id="addfactoryType"  parameterType="com.spring.model.WeldingMachine">
+		INSERT INTO tb_equipment_manufacturer(fname,ftype,ftype_value) VALUES (#{fmachingname},#{statusId},#{typeId})
+	</update>
+	
+	<delete id="deletefactory" parameterType="java.math.BigInteger">
+		DELETE FROM tb_equipment_manufacturer WHERE ftype = #{statusId}
+	</delete>
+	
 	<insert id="addcatmachine" parameterType="com.spring.model.WeldingMachine" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO tb_welding_machine(fIP, ftype_id, fequipment_no, fstatus_id, fposition, finsframework_id, 
 		fmanufacturer_id,fgather_id, fisnetworking, fjoin_time, fmodel, fcreater, fcreatedate, fmanunumbers, fsection, fauthentication, ftest, fprevention) VALUES 
@@ -224,6 +236,8 @@
 	<delete id="deleteWeldingMachine" parameterType="java.math.BigInteger">
 		DELETE FROM tb_welding_machine WHERE fid = #{wid}
 	</delete>
+	
+	
 	
 	<delete id="deletecatMachine" parameterType="java.math.BigInteger">
 		DELETE FROM tb_catweldmachine WHERE fid = #{wid}
