@@ -102,7 +102,7 @@ function save(){
 	var url2 = ""; 
 	var fmachingname;
 	if(flag==1){
-		messager = "新增成功！";
+		messager = "绑定成功！";
 		url2 = url+"?back="+back+"&str="+str+"&fmachingname="+"";
 	}else{
 		messager = "修改成功！";
