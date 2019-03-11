@@ -26,6 +26,11 @@ public class PersonServiceImpl implements PersonService{
 		PageHelper.startPage(page.getPageIndex(), page.getPageSize());
 		return mapper.findAll(parent,str);
 	}
+	
+	@Override
+	public List<Person> findAll(BigInteger parent) {
+		return mapper.findAll(parent,null);
+	}
 
 	@Override
 	public List<Person> findLeve(int type) {

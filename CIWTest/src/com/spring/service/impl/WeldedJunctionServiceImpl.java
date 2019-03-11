@@ -85,4 +85,8 @@ public class WeldedJunctionServiceImpl implements WeldedJunctionService{
 		return wjm.allWeldedJunction();
 	}
 
+	@Override
+	public List<WeldedJunction> getWeldedJunction(BigInteger str) {
+		return wjm.getWeldedJunctionAll(null);
+	}
 }

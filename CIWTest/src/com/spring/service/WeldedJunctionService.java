@@ -84,4 +84,9 @@ public interface WeldedJunctionService {
 	 * @return
 	 */
 	List<WeldedJunction> getWeldedJunctionAll();
+	
+	/**
+	 * 查询所有焊口(不包含分页信息)
+	 */
+	List<WeldedJunction> getWeldedJunction(BigInteger bigInteger);
 }

@@ -430,4 +430,24 @@ public class WeldedJunctionControll {
 		obj.put("rows", ary);
 		return obj.toString();
 	}
+	
+	@RequestMapping("/getWeldTask")
+	@ResponseBody
+	public String getWeldTask(HttpServletRequest request){
+		List<WeldedJunction> list = wjm.getWeldedJunction(insm.getUserInsframework());
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		JSONObject obj = new JSONObject();
+		try{
+			for(WeldedJunction w:list){
+				json.put("id", w.getId());
+				json.put("weldedJunctionno", w.getWeldedJunctionno());
+				ary.add(json);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		obj.put("rows", ary);
+		return obj.toString();
+	}
 }

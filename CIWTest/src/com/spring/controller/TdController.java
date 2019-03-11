@@ -20,6 +20,7 @@ import com.spring.model.Td;
 import com.spring.model.WeldingMachine;
 import com.spring.page.Page;
 import com.spring.service.InsframeworkService;
+import com.spring.service.LiveDataService;
 import com.spring.service.PersonService;
 import com.spring.service.TdService;
 import com.spring.service.WeldingMachineService;
@@ -46,6 +47,8 @@ public class TdController {
 	private InsframeworkService insm;
 	@Autowired
 	private WeldingMachineService ms;
+	@Autowired
+	private LiveDataService lm;
 	private Td td;
 	
 	IsnullUtil iutil = new IsnullUtil();
@@ -78,11 +81,13 @@ public class TdController {
 	
 	@RequestMapping("/goNextcurve")
 	public String goNextcurve(HttpServletRequest request){
-		String value = request.getParameter("value");
-		String machid = request.getParameter("machid");
-		request.setAttribute("value", value);
-		request.setAttribute("machid", machid);
-		request.setAttribute("status", request.getParameter("status"));
+		lm.getUserId(request);
+	    String value = request.getParameter("value");
+	    String valuename = request.getParameter("valuename");
+	    String type = request.getParameter("type");
+	    request.setAttribute("value", value);
+	    request.setAttribute("valuename", valuename);
+	    request.setAttribute("type", type);
 		return "td/nextCurve";
 	}
 	
@@ -420,25 +425,26 @@ public class TdController {
 	@RequestMapping("/getLiveWelder")
 	@ResponseBody
 	public String getLiveWelder(HttpServletRequest request){
-		/*BigInteger uid = lm.getUserId(request);*/
+		BigInteger uid = lm.getUserId(request);
 		BigInteger parent = null;
-		/*String parentId = request.getParameter("parent");
+		String parentId = request.getParameter("parent");
 		if(iutil.isNull(parentId)){
 			parent = new BigInteger(parentId);
 		}else{
-			parent = im.getUserInsfId(uid);
-		}*/
+			parent = insm.getUserInsfId(uid);
+		}
 		JSONObject obj = new JSONObject();
 		JSONObject json = new JSONObject();
 		JSONArray ary = new JSONArray();
 		try{
-			List<Person> list = ps.getWelderAll(parent);
-			/*Insframework insname = im.getInsById(parent);*/
+			List<Person> list = ps.findAll(parent);
+			Insframework insname = insm.getInsById(parent);
 			for(int i=0;i<list.size();i++){
+				json.put("fid",list.get(i).getId());
 				json.put("fname",list.get(i).getName());
 				json.put("fwelder_no", list.get(i).getWelderno());
 				json.put("fitemid", list.get(i).getInsid());
-				json.put("fitemname", list.get(i).getInsname());
+				json.put("fitemname", insname.getName());
 				ary.add(json);
 			}
 		}catch(Exception e){
@@ -583,6 +589,107 @@ public class TdController {
 		return obj.toString();
 	}
 	
+	@RequestMapping("/getLiveMachine")
+	@ResponseBody
+	public String getLiveMachine(HttpServletRequest request){
+		String parentId = request.getParameter("parent");
+		BigInteger parent = null;
+		JSONObject obj = new JSONObject();
+		JSONObject json = new JSONObject();
+		JSONArray ary = new JSONArray();
+		if(iutil.isNull(parentId)){
+			parent = new BigInteger(parentId);
+			List<Td> getAP = tdService.getAllPosition(parent);
+			try{
+				for(Td td:getAP){
+					json.put("fid",td.getId());
+					json.put("fequipment_no", td.getFequipment_no());
+					json.put("fposition", td.getFposition());
+					json.put("finsid", td.getFci());
+					json.put("finsname", td.getFcn());
+					if(td.getModel().contains("NB")){
+						json.put("model", 1);
+					}else if(td.getModel().contains("CPVE")){
+						json.put("model", 2);
+					}else if(td.getModel().contains("EP")){
+						json.put("model", 3);
+					}else if(td.getModel().contains("WB")){
+						json.put("model", 4);
+					}else{
+						json.put("model", 0);
+					}
+					ary.add(json);
+				}
+			}catch(Exception e){
+				e.getMessage();
+			}
+		}else{
+			MyUser myuser = (MyUser) SecurityContextHolder.getContext()  
+				    .getAuthentication()  
+				    .getPrincipal();
+			long uid = myuser.getId();
+			List<Insframework> insframework = insm.getInsByUserid(BigInteger.valueOf(uid));
+			parent = insframework.get(0).getId();
+			if(insframework.get(0).getType()==20){
+				List<Td> getAP = tdService.getAllPosition(parent);
+				try{
+					for(Td td:getAP){
+						json.put("fid",td.getId());
+						json.put("fequipment_no", td.getFequipment_no());
+						json.put("fposition", td.getFposition());
+						json.put("finsid", td.getFci());
+						json.put("finsname", td.getFcn());
+						if(td.getModel().contains("NB")){
+							json.put("model", 1);
+						}else if(td.getModel().contains("CPVE")){
+							json.put("model", 2);
+						}else if(td.getModel().contains("EP")){
+							json.put("model", 3);
+						}else if(td.getModel().contains("WB")){
+							json.put("model", 4);
+						}else{
+							json.put("model", 0);
+						}
+						ary.add(json);
+					}
+				}catch(Exception e){
+					e.getMessage();
+				}
+			}else{
+				List<Insframework> in = insm.getInsIdByParent(insm.getInsByUserid(BigInteger.valueOf(uid)).get(0).getId(),24);
+				List<Td> getAP = tdService.getAllPosition(parent);
+				try{
+					for(Td td:getAP){
+						for(Insframework ins:in){
+							if(td.getFci()==Integer.valueOf(ins.getId().toString())){
+								json.put("fid",td.getId());
+								json.put("fequipment_no", td.getFequipment_no());
+								json.put("fposition", td.getFposition());
+								json.put("finsid", td.getFci());
+								json.put("finsname", td.getFcn());
+								if(td.getModel().contains("NB")){
+									json.put("model", 1);
+								}else if(td.getModel().contains("CPVE")){
+									json.put("model", 2);
+								}else if(td.getModel().contains("EP")){
+									json.put("model", 3);
+								}else if(td.getModel().contains("WB")){
+									json.put("model", 4);
+								}else{
+									json.put("model", 0);
+								}
+								ary.add(json);
+							}
+						}
+					}
+				}catch(Exception e){
+					e.getMessage();
+				}
+			}
+		}
+		obj.put("rows", ary);
+		return obj.toString();
+	}
 
 	@RequestMapping("/getLiveTime")
 	@ResponseBody

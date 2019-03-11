@@ -23,6 +23,7 @@ public class Td {
 	private String fcn;
 	private double time;
 	private double worktime;
+	private String model;
 	public Td(){
 		super();
 	}
@@ -158,7 +159,7 @@ public class Td {
 	public void setWorktime(double worktime) {
 		this.worktime = worktime;
 	}
-	public Td(int id,double electricity,double voltage,String fposition,String fwelder_no,String fname,String fequipment_no,String finsframework_id,String fstatus_id,int fpt,int fpp,int fpi, int fdt,int fdp,int fdi,int fct,int fci,String fcn,String fdn,String fpn) {
+	public Td(int id,double electricity,double voltage,String fposition,String fwelder_no,String fname,String fequipment_no,String finsframework_id,String fstatus_id,int fpt,int fpp,int fpi, int fdt,int fdp,int fdi,int fct,int fci,String fcn,String fdn,String fpn,String model) {
 		super();
 		this.id = id;
 		this.electricity = electricity;
@@ -180,5 +181,12 @@ public class Td {
 		this.fcn = fcn;
 		this.fdn = fdn;
 		this.fpn = fpn;
+		this.model = model;
+	}
+	public String getModel() {
+		return model;
+	}
+	public void setModel(String model) {
+		this.model = model;
 	}
 }
