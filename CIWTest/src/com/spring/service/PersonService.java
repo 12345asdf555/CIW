@@ -4,12 +4,12 @@ import java.math.BigInteger;
 import java.util.List;
 
 import com.spring.model.Person;
+import com.spring.model.WeldingMachine;
 import com.spring.page.Page;
 
 public interface PersonService {
 
 	List<Person> findAll(Page page, BigInteger parent,String str);
-	List<Person> findAll(BigInteger parent);
 	List<Person> findLeve(int type);
 	List<Person> dic();
 	List<Person> ins();
@@ -22,10 +22,14 @@ public interface PersonService {
 	void delete(BigInteger fid);
 	void catdelete(BigInteger fid);
 	List<Person> getWelderAll(BigInteger parent);
-
+	/**
+	 * 查询所有焊工信息
+	 */
+	List<Person> getcatAllWelder(String str);
 	/**
 	 * 获取所有焊工
 	 * @return
 	 */
 	List<Person> getWelder();
+	List<Person> findAll(BigInteger parent);
 }

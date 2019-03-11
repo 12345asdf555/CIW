@@ -98,5 +98,8 @@ public class PersonServiceImpl implements PersonService{
 	public List<Person> getWelderAll(BigInteger parent) {
 		return mapper.findAll(parent,null);
 	}
-
+	@Override
+	public List<Person> getcatAllWelder(String str) {
+		return mapper.findAll(null,str);
+	}
 }

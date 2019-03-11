@@ -27,6 +27,8 @@ import com.spring.model.DataStatistics;
 import com.spring.model.Gather;
 import com.spring.model.WeldingMachine;
 import com.spring.model.WeldingMaintenance;
+import com.spring.model.Person;
+import com.spring.service.PersonService;
 import com.spring.service.DataStatisticsService;
 import com.spring.service.InsframeworkService;
 import com.spring.service.MaintainService;
@@ -48,6 +50,8 @@ public class ExportExcelController {
 	private MaintainService mm;
 	@Autowired
 	private InsframeworkService im;
+	@Autowired
+	private PersonService welderService;
 	private String filename;
 	private SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmSS");
 	IsnullUtil iutil = new IsnullUtil();
@@ -179,6 +183,77 @@ public class ExportExcelController {
 		} catch (Exception e) {
 			return null;
 		} finally {
+			file.delete();
+		}
+	}
+	
+	@RequestMapping("/exportcatwelder")
+	@ResponseBody
+	public ResponseEntity<byte[]> exportcatwelder(HttpServletRequest request,HttpServletResponse response){
+		File file = null;
+		try {
+			String str=(String) request.getSession().getAttribute("searchStr");
+			List<Person> list = welderService.getcatAllWelder(str);
+			String dtime = null;
+			String[] titles = new String[]{"工号","入职时间","钢印号","首次认证时间","部门","车间","主岗位上岗时间","主岗位上岗名称","岗位一上岗时间","岗位一上岗名称","岗位二上岗时间","岗位二上岗名称","IE211从事员","分类","姓名","技能等级","理论考试成绩","认证状态","IC卡有效期","最后年度认证","半年年度认证","次年年度认证","手机","备注"};
+			Object[][] data = new Object[list.size()][24];
+			for(int i =0; i<list.size();i++){
+				data[i][0] = list.get(i).getWelderno();
+				data[i][1] = list.get(i).getFcheckintime();
+				data[i][2] = list.get(i).getCardnum();
+				data[i][3] = list.get(i).getFirstsuretime();
+				data[i][4] = list.get(i).getInsid();
+				data[i][5] = list.get(i).getWorkship();
+				data[i][6] = list.get(i).getWorkmaintime();
+				data[i][7] = list.get(i).getWorkkmainname();
+				data[i][8] = list.get(i).getWorkfirsttime();
+				data[i][9] = list.get(i).getWorkfirstname();
+				data[i][10] = list.get(i).getWorksecondtime();
+				data[i][11] = list.get(i).getWorksecondname();
+				data[i][12] = list.get(i).getValuenamex();
+				data[i][13] = list.get(i).getValuename();
+				data[i][14] = list.get(i).getName();
+				data[i][15] = list.get(i).getLevel();
+				data[i][16] = list.get(i).getScore();
+				data[i][17] = list.get(i).getIfpase();
+				data[i][18] = list.get(i).getIcworkime();
+				data[i][19] = list.get(i).getYearsure();
+				data[i][20] = list.get(i).getNextyear();
+				data[i][21] = list.get(i).getEndTime();
+				data[i][22] = list.get(i).getCellphone();
+				data[i][23] = list.get(i).getBack();
+			}
+			filename = "焊工名单" + sdf.format(new Date()) + ".xls";
+
+			ServletContext scontext=request.getSession().getServletContext();
+			//获取绝对路径
+			String abpath=scontext.getRealPath("");
+			//String contextpath=scontext. getContextPath() ; 获取虚拟路径
+			
+			String path = abpath+"excelfiles/" + filename;
+			new CommonExcelUtil(dtime, titles, data, path, "焊工数据");
+			
+			file = new File(path);
+			HttpHeaders headers = new HttpHeaders();
+			String fileName = "";
+			
+			fileName = new String(filename.getBytes("gb2312"),"iso-8859-1");
+			
+			headers.setContentDispositionFormData("attachment", fileName);
+			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+			
+			//处理ie无法下载的问题
+			response.setContentType("application/octet-stream;charset=utf-8");
+			response.setHeader( "Content-Disposition", 
+					"attachment;filename=\""+ fileName); 
+			ServletOutputStream o = response.getOutputStream();
+			o.flush();
+			
+			return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file), headers, HttpStatus.CREATED);
+		}catch (Exception e) {
+			e.printStackTrace();
+	    	return null;
+		}  finally {
 			file.delete();
 		}
 	}
