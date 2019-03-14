@@ -65,6 +65,7 @@ public class WeldingMachineServiceImpl implements WeldingMachineService {
 		wmm.editcatMachine(wm);
 	}
 	
+	@Override
 	public List<WeldingMachine> findAllweldmachine() {
 		return wmm.findAllweldmachine();
 	}
