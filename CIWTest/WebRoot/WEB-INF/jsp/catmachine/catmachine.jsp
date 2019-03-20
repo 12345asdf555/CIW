@@ -127,8 +127,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<select class="easyui-combobox" name="gid" id="gid" data-options="validType:['checkNumber','wmGatheridValidate'],editable:false""></select>
 				</div>
 				<div class="fitem">
-					<lable><span class="required">*</span>ip地址</lable>
-					<input class="easyui-textbox" name="ip" id="ip" data-options="required:true" />
+					<lable>ip地址</lable>
+					<input class="easyui-textbox" name="ip" id="ip" />
 				</div>
 				<div class="fitem" >
 					<lable>是否联网</lable>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

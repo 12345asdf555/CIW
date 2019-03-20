@@ -37,7 +37,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	<div data-options="region:'center',title:'信息',iconCls:'icon-ok'">
        		<table id="dg" style="table-layout:fixed;width:100%"></table>
         </div>
-        <a style="font-size:20px;" href="javascript:addfactory();" iconCls="icon-newadd">厂商焊机绑定</a>
+      	  <a style="font-size:20px;" href="javascript:addfactory();" iconCls="icon-newadd">厂商焊机绑定</a>
     	<!-- 添加修改 -->
 		<div id="dlg" class="easyui-dialog" style="width: 800px; height: 500px; padding:10px 20px" closed="true" buttons="#dlg-buttons">
 			<form id="fm" class="easyui-form" method="post" data-options="novalidate:true"><br/>
